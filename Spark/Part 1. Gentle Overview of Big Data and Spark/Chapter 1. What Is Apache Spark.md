@@ -15,7 +15,7 @@
     하단의 그림처럼 Spark의 모든 측면에 대해서 배운다.  
     (하단의 이미지는 Spark가 end-users에게 제공하는 모든 componenets와 libraries이다).
     <br>
-    <img src="images/Figure_01.png" alt="Spark toolkit" width="30%">
+    <img src="images/Figure_01.png" alt="Spark toolkit" width="40%">
   </li>
 </ul>
 
