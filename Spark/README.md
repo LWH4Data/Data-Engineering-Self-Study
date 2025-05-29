@@ -1,4 +1,7 @@
-# 1. 도서의 핵심 구성 
+# 1. 도서 링크
+https://github.com/VolodymyrGavrysh/My_RoadMap_Data_Science/blob/master/kds/books/Spark-The%20Definitive%20Guide.pdf
+
+# 2. 도서의 핵심 구성 
 1. Spark의 API와 라이브러리의 기능들 위주의 설명
     - 통계와 ML 설명은 포함되지 않음.
 
@@ -16,5 +19,5 @@
 
 <br><br>
 
-# 2. 실습 데이터와 코드 저장소 (Git)
+# 3. 실습 데이터와 코드 저장소 (Git)
 https://github.com/databricks/Spark-The-Definitive-Guide
