@@ -18,14 +18,6 @@
     <img src="images/Figure_01.png" alt="Spark toolkit" width="40%">
   </li>
 </ul>
-<br>
-
-## Apache Spark's Philosophy
-<ul>
-
-
-
-</ul>
 
 <br><br>
 
@@ -77,12 +69,42 @@
 ### 1-1-2. Computing engine
 <ul>
   <li>
+    Spark는 <code>컴퓨팅 엔진</code>에만 집중하도록 설계되었으며, 데이터 저장이 아닌 <strong>계산 처리</strong>에 초점을 맞춘다.
+    <ul>
+      <li>
+        다양한 스토리지 시스템으로부터 데이터를 불러와 연산만 수행하며, 저장은 외부 시스템에 맡긴다.
+      </li>
+      <li>
+        Spark는 부족한 데이터 저장 기능을 주로 <code>Hadoop</code>과 연동하여 보완한다.
+      </li>
+    </ul>
+  </li>
 
+  <li>
+    Spark에서 사용하는 다양한 스토리지 시스템과 외부 시스템이란 다음과 같다.
+    <ul>
+      <li>예: Azure Storage, Amazon S3, Apache Hadoop, Apache Cassandra, Apache Kafka 등</li>
+      <li>이러한 저장소 간의 데이터 이동은 비용이 크기 때문에, Spark는 <code>저장소 위에서 직접 계산</code>함으로써 효율을 높임</li>
+    </ul>
+  </li>
+
+  <li>
+    저장소에 관계없이 연산 수행이 가능하도록 유저 친화적인 API를 제공하여, 사용자는 <code>데이터 위치</code>를 신경 쓸 필요가 없음
+  </li>
+
+  <li>
+    Spark는 기존 빅데이터 플랫폼(예: Hadoop)과 비교해 차별화된 설계 철학을 가짐.
+    <ul>
+      <li>
+        Hadoop은 저장 시스템(HDFS)과 컴퓨팅 시스템(MapReduce)이 강하게 결합되어 있었기 때문에 <code>외부 데이터 접근에 제약</code>이 있었음
+      </li>
+      <li>
+        Spark는 Hadoop 위에서도 동작 가능하지만, <code>클라우드 기반</code>이나 <code>다양한 저장소 환경</code>에서도 유연하게 사용 가능
+      </li>
+    </ul>
   </li>
 </ul>
-- computing engine에도 신경을 많이 씀. <br>
-- 
-
+<br>
 
 <br><br>
 # 용어 정리
