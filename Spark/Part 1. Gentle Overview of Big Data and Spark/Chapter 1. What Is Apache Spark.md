@@ -1,4 +1,4 @@
-# Chapter 1. What Is Apache Spark
+<h1>Chapter 1. What Is Apache Spark</h1>
 <ul>
   <li>
     Apache Spark는 <a href="#computer-clusters">computer clusters</a>에서 데이터 병렬 처리를 위해 사용되는 통합된 컴퓨팅 엔진이자 라이브러리들의 모음.
@@ -21,8 +21,8 @@
 
 <br><br>
 
-## 1-1. Apache Spark's Philosophy 
-### 1-1-1. Unified
+<h2>1-1. Apache Spark's Philosophy</h2>
+<h3>1-1-1. Unified</h3>
 
 <ul>
   <li>
@@ -66,7 +66,7 @@
 </ul>
 <br>
 
-### 1-1-2. Computing engine
+<h3>1-1-2. Computing engine</h3>
 <ul>
   <li>
     Spark는 <strong>컴퓨팅 엔진</strong>에만 집중하도록 설계되었으며, 데이터 저장이 아닌 <strong>계산 처리</strong>에 초점을 맞춘다.
@@ -106,8 +106,38 @@
 </ul>
 <br>
 
+<h3>1-1-3. Libraries</h3>
+<ul>
+  <li>
+    Spark의 마지막 구성 요소는 <strong>라이브러리(libraries)</strong>로, 다양한 기능을 모듈화하여 제공한다.
+    <ul>
+      <li>
+        Spark 자체에서 제공하는 공식 라이브러리뿐만 아니라 외부의 third-party 라이브러리도 풍부하게 존재한다.
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    대표적인 Spark 라이브러리는 다음과 같다:
+    <ul>
+      <li><strong>Spark SQL</strong>: SQL 문법을 사용하여 데이터를 질의할 수 있도록 지원</li>
+      <li><strong>MLlib</strong>: 분산 머신러닝 처리를 위한 라이브러리</li>
+      <li><strong>Spark Streaming 및 Structured Streaming</strong>: 실시간 데이터 스트리밍 처리를 위한 라이브러리</li>
+      <li><strong>GraphX</strong>: 대규모 그래프 처리 및 분석을 위한 라이브러리</li>
+    </ul>
+  </li>
+
+  <li>
+    더 다양한 외부 라이브러리는 <a href="https://spark-packages.org" target="_blank">spark-packages.org</a>에서 확인할 수 있다.
+  </li>
+</ul>
+<br>
+
+
+
 <br><br>
-# 용어 정리
-#### computer clusters 
+<h1>용어 정리</h1>
+<h4>computer clusters</h4>
 여러 대의 컴퓨터를 하나로 묶어 병렬 처리를 수행하는 시스템이다.
+
 
