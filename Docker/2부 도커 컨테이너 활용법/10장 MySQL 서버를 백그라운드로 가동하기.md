@@ -123,6 +123,7 @@ docker container stop db
 <h2>1-4. MySQL 서버를 가동해서 사용자와 데이터베이스 작성하기</h2>
 
 ```bash
+# 1. 환경설정을 포함하여 MySQL 컨테이너 가동
 docker container run              \
 --name db                         \
 --rm                              \
@@ -138,4 +139,88 @@ docker container run              \
 mysql
 ```
 
-- 132p 부터
+```bash
+# 2. 컨테이너 내의 MySQL에 접근하여 조작.
+mysql                     \ 
+# 접근할 IP (호스트 머신에서 실행 중인 컨테이너 접근용 IP)
+--host=127.0.0.1          \
+# 호스트 머신에서 MySQL 컨테이너와 연결된 포트
+--port=3306               \ 
+# MySQL 컨테이너 환경설정에서(--env) 설정한 유저 네임
+--user=app                \
+# MySQL 컨테이너 환결설정에서(--env) 설정한 유저의 비밀번호
+--password=pass1234       \
+# MySQL 컨테이너 환경설정의(--env) DB 이름.
+sample
+
+# 결과적으로 sample db에 app 사용자로 접속이 된다.
+```
+
+```bash
+# 3. 접속 확인을 하였으니 컨테이너 정지
+docker container stop db
+```
+
+<br><br>
+<h1>2. 컨테이너를 백그라운드로 실행하기 container run --detach</h1>
+<h2>2-1. [OPTIONS]</h2>
+<ul>
+  <li>
+    -d 혹은 --detach
+  </li>
+    <ul>
+      <li>
+        표준 입출력을 분리.
+      </li>
+      <li>
+        백그라운드에서 실행.
+      </li>
+    </ul>
+</ul>
+<br>
+
+<h2>2-2. 컨테이너를 가동할 때마다 터미널을 바꾸지 않는 방법</h2>
+<ul>
+  <li>
+    Nginx 혹은 MySQL 등을 가동하면 터미널을 더이상 조작할 수 없다. 이때 container run의 <strong>--detach</strong> 옵션을 사용하여 <strong>백그라운드</strong>로 실행하면 그대로 터미널을 사용할 수 있다.
+  </li>
+  <li>
+    단, 백그라운드 실행시 컨테이너의 가동 성공/실패 여부를 알 수 없기 때문에 <strong>--detach 이외의 옵션이 정상 실행되는 것을 확인</strong>한 뒤 --detach를 추가하여 실행한다.
+  </li>
+</ul>
+
+```bash
+# 1. 백그라운드로 MySQL 컨테이너 가동.
+docker container run              \
+--name db                         \
+--rm                              \
+# 백그라운드 옵션을 넣어 터미널을 열지 않고 컨테이너를 가동.
+--detach                          \
+--env MYSQL_ROOT_PASSWORD=secret  \
+--env MYSQL_USER=app              \
+--env MYSQL_PASSWORD=pass1234     \
+--env MYSQL_DATABASE=sample       \
+--publish 3306:3306               \
+mysql
+
+# 이 경우 출력으로 '컨테이너 ID'가 출력된다.
+```
+
+```bash
+# 2. 컨테이너 종료
+docker container stop db
+```
+
+<br>
+<h2>2-3. 터미널 조작 가능 여부로 가동 성공 여부를 판단하지 않기</h2>
+<ul>
+  <li>
+    터미널 조작 여부 혹은 container ls출력의 컨테이너 존재 여부로 컨테이너가 가동되었는지 판단하면 안된다.
+  </li>
+  <li>
+    예를 들어 MySQL 컨테이너를 가동할 때 환경 변수를 설정하지 않으면 오류가 출력되며 컨테이너가 가동되지 않아야 한다. 그러나 백그라운드 옵션을 넣으면 <strong>터미널이 변경되지 않음 -> 오류 출력 안됨 -> 따라서 컨테이너가 제대로 가동 됐는지 알 수 없음</strong>이 된다.
+  </li>
+  <li>
+    따라서 정확히 컨테이너의 가동여부를 판단하기 위해서는 일단 <strong>--detach 옵션을 제외하고 실행</strong>하거나 <strong>PID</strong>를 기준으로 추적해야 한다.
+  </li>
+</ul>
