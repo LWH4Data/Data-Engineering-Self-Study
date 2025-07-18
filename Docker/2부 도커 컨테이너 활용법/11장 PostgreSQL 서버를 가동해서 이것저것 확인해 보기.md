@@ -290,6 +290,8 @@ bash
 docker container stop db
 ```
 
+<br>
+
 <h2>2-5. 컨테이너에 SSH로 접속한다는 오해</h2>
 <h3>2-5-1. SSH란?</h3>
 <ul>
@@ -308,4 +310,83 @@ docker container stop db
 <br><br>
 
 <h2>2-6. PostgreSQL 서버에 접속하는 방법 정리하기</h2>
-- p150부터
+<ul>
+  <li>
+    db라는 이름으로 PostgreSQL 컨테이너가 가동 중임을 가정한다.
+  </li>
+</ul>
+
+```bash
+# 1. 터미널을 통해 접속
+docker container exec --interactive --tty db \
+psql --host=127.0.0.1 --port=5432 --username=postgres
+
+# 장점: 호스트머신 터미널에 이력이 남아 추후 로그 관리 및 확인이 용이하다..
+
+# 단점: bash 쉘 등을 활용하는 것이 아니기에 
+# 명령어 자동완성, 히스토리 탐색, 편집 등이 제한적이다.
+```
+
+```bash
+# 2. bash를 이용한 접속
+docker container exec --interactive --tty db bash
+
+# 이후 bash 창에서 psql 연결
+psql --host=127.0.0.1 --port=5432 --username=postgres
+
+# 장점: 컨테이너 내부에서 bash를 활용하기에 
+# 자동완성, 히스토리 탐색, 편집 등이 용이하다.
+
+# 단점: psql 명령어가 컨테이너와 함께 사라지기에 긴 호스트명 등을 반복 사용할 때 불편하다.
+```
+
+```bash
+# 3. psql 프롬프트로 바로 접속
+psql --host=127.0.0.1 --port=5432 --username=postgres
+
+# 장점: 호스트 머신에서 직접 접속하기에 
+# GUI 애플리케이션 등 다른 접속에 응용이 가능하다.
+
+# 단점: 호스트 머신에 psql 명령어 설치와 포트 공개가 필요하다.
+```
+
+<br>
+<h2>2-7. container exec, container attach, contaienr run</h2>
+<ul>
+  <li>
+    container exec
+  </li>
+    <ul>
+      <li>
+        가동 중인 컨테이너에서 PID1이 아닌 <strong>새로운 프로세스</strong>를 실행한다.
+      </li>
+      <li>
+        따라서 명령어의 종료가 PID1의 종료를 의미하지 않기에 컨테이너가 종료될 걱정이 없다.
+      </li>
+    </ul>
+  <li>
+     container attach
+  </li>
+    <ul>
+      <li>
+        컨테이너의 PID1 입출력을 <strong>호스트 머신 터미널</strong>에 연결.
+      </li>
+      <li>
+        호스트 머신에 PID1가 출력되기에 --detach(백그라운드 수행)를 제거한 것과 같다.
+      </li>
+      <li>
+        attach는 <strong>PID1에 접속</strong>하기에 ctrl + c를 하면 PD1에 종료 시그널을 전달한다. 이후 종료되면 컨테이너 또한 종료된다.
+      </li>
+      <li>
+        실제로는 container run을 사용하기에 개념적으로만 이해해 두면 된다.
+      </li>
+    </ul>
+  <li>
+    container run
+  </li>
+    <ul>
+      <li>
+        container run은 <strong>container create + container start + container attach</strong>와 같다.
+      </li>
+    </ul>
+</ul>
