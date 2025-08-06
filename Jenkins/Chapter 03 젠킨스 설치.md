@@ -35,19 +35,55 @@ docker run \
 
 ```Dockerfile
 # 3. Dockerfile 작성.
+# Jenkins LTS + JDK 21
 FROM jenkins/jenkins:2.516.1-jdk21
+
+#  root 사용자로 패키지를 받기위해 설정.
 USER root
-RUN apt-get update && apt-get install -y lsb-release ca-certificates curl && \
-    install -m 0755 -d /etc/apt/keyrings && \
+
+# ---------------------------------------------
+# Docker CLI 설치 (Docker-in-Docker 실습 대비)
+# ---------------------------------------------
+RUN apt-get update && apt-get install -y \
+    lsb-release \
+    ca-certificates \
+    curl \
+    wget \
+    unzip \
+    gnupg \
+    software-properties-common
+
+RUN install -m 0755 -d /etc/apt/keyrings && \
     curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
     chmod a+r /etc/apt/keyrings/docker.asc && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
     https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" \
     | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && apt-get install -y docker-ce-cli && \
+    apt-get update && \
+    apt-get install -y docker-ce-cli && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# ---------------------------------------------
+# Maven 3.9.0 설치
+# ---------------------------------------------
+# MAVEN이 다운받아져 있지 않기 때문에 설정.
+# 웹에서 URL로 접근 불가.
+ENV MAVEN_VERSION=3.9.0
+
+RUN wget https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.zip && \
+    unzip apache-maven-${MAVEN_VERSION}-bin.zip -d /opt && \
+    ln -s /opt/apache-maven-${MAVEN_VERSION} /opt/maven && \
+    rm apache-maven-${MAVEN_VERSION}-bin.zip
+
+ENV MAVEN_HOME=/opt/maven
+ENV PATH=$MAVEN_HOME/bin:$PATH
+
+# ---------------------------------------------
+# Jenkins 플러그인 설치 (실습에 자주 쓰이는 것)
+# ---------------------------------------------
+# 다운로드 완료라면 일반 유저인 jenkins로 복귀
 USER jenkins
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"
+RUN jenkins-plugin-cli --plugins "blueocean docker-workflow git workflow-aggregator json-path-api"
 ```
 
 ```bash
@@ -58,8 +94,8 @@ docker build -t myjenkins-blueocean:2.516.1-1 .
 ```bash
 # 5. 설정이 완료된 이미지로 컨테이너 가동
 docker run \
-  # 이름은 jenkins로 설정.
-  --name jenkins \
+  # 이름은 MyJenkins로 설정.
+  --name MyJenkins \
   --restart=on-failure \
   --detach \
   --network jenkins \
