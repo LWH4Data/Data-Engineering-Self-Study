@@ -185,6 +185,47 @@ http {
   </li>
 </ul>
 
+<br>
+
+<h2>3-1. URL과 URI</h2>
+<ul>
+  <li>
+    <strong>URL 예시</strong>: https://www.example.com:443/images/cat.png?size=large#section1
+  </li>
+    <ul>
+      <li>
+        <strong>https</strong>: 프로토콜, 브라우저와 서버의 통신 규약
+      </li>
+      <li>
+        <strong>www.example.com</strong>: 호스트(도메인), DNS를 통해 IP로 변환
+      </li>
+      <li>
+        <strong>:443</strong>: 포트, 서버에서 요청 받을 포트번호. (기본은 http=80, https=443).
+      </li>
+      <li>
+        <strong>/image/cat.png</strong>: URI path, 서버에 요청한 리소스의 경로 (Nginx가 location에 매칭하는 대상).
+      </li>
+      <li>
+        <strong>?size=large</strong>: 쿼리 스트링, 추가 요청 데이터
+      </li>
+      <li>
+        <strong>#section</strong>: 프래그먼트, 브라우저 내 페이지 이동용, 서버에는 전송 X.
+      </li>
+    </ul>
+  <li>
+    처리 과정
+  </li>
+    <ul>
+      <li>
+        브라우저 (URL 입력 → DNS 조회 → 도메인 IP 변환)
+      </li>
+      <li>
+        Nginx (server_name 매칭 → location 매칭 → root / alias 적용 → 파일 읽기 / 프록시 / 기타 처리)
+      </li>
+    </ul>
+</ul>
+
+
 ```nginx
 # 1. 새로운 서버 블록을 선언하여 Nginx가 처리할 새로운 context를 정의한다.
 server {
@@ -192,28 +233,50 @@ server {
     # listen 80
     # - `80포트`로 들어오는 요청을 수신한다.
     # default_server
-    # - 80포트로 요청이 들어올 경우 다른 서버 블록과 일치하는 경우가 없다면 `default`로 
-    #   수행할 블록임을 의미한다.
+    # - 80포트로 요청이 들어옴 
+    #   → 일치하는 서버 블록 없음 
+    #   → default_server로 정의한 블록 수행.
     # - 경우에 따라 포트가 여럿일 경우 `포트를 범위로 지정`할 수도 있다.
     listen 80 default_server;
 
     # server_name
-    # - `지정한 도메인(www.example.com)`으로 접속하는 경우 처리하도록 한다.
+    # - `지정한 도메인(www.example.com)`으로 접속
+    #   → 하단의 location과 비교하여 적절한 처리.
     server_name www.example.com;
 
     # location
-    # - Nginx 설정에서 특정 URL 경로(URI)에 대한 요청을 어떻게 처리할지를 정의하는 
-    #   `매칭 블록`이다.
-    # - location은 URL 경로를 기반으로 한다.
-    # - 경로나 도메인 뒤에 붙은 URL을 통합 자원 식별자(URI, Uniform Resource 
-    #   Identifier)라 한다.
+    # - Nginx 설정에서 server_name(도메인)이 일치
+    #   → 경우 URI를 root(혹은 alias)에 연결하여 적합한 파일과 연결한다.
+    # URI
+    # - 통합 자원 식별자(Unifrom Resource Identifier)로 URL의 도메인 경로 뒤의
+    #   영역에 해당한다.
     location / {
 
         # root
-        # - 주어진 컨텍스트(URL)에서 어떤 경로의 파일을 찾을지 설정한다.
-        # - `root 지시자에 정의된 경로 + 수신된 URI`= 요청된 파일을 찾는 기준.
+        # - 주어진 URI를 경로에 그대로 포함하여 연결한다.
+        # - URI와 디렉토리의 명칭이 일치할 때 좋다. (보안상으로는 애매).
+        # - 설정이 단순하여 Nginx의 기본 설정이다.
+        
+        # < Example >
+        # location /images/ {
+        #     root /var/www;
+        # }
+        # 요청: 도메인/images/cat.png → /var/www/images/cat.png
         root /usr/share/nginx/html;
-        # alias /usr/share/nginx/html;
+
+        # alias
+        # - root와 달리 URI를 포함하지 않는다.
+        # - URI를 포함하지 않기에 보안상으로는 더 안전하다.
+        alias /usr/share/nginx/html;
+    
+        # < Example >
+        # location /img/ {
+        #     alias /var/www/static_files;
+        # }
+        # 요청: 도메인/img/cat.png → /var/www/static_files/cat.png
+
+        # index
+        # - URI에 참고할 경로 정보가 없을 때 Nginx가 사용할 기본 파일 목록이다.
         index index.html index.htm;
     }
 }
