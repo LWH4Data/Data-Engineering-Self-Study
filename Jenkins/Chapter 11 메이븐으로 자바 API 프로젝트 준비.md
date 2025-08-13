@@ -100,6 +100,188 @@
   </li>
 </ul>
 
-- p168
-- 젠킨스 관련 제외 실습 주제, 기타 환경은 최대한 추상화.
-- 젠킨스 관련만 자세히 정리.
+<br>
+
+<h2>1-3. 메이븐 프로젝트 디렉터리 구조</h2>
+<ul>
+  <li>
+    메이븐 프로젝트 디렉터리는 프로젝트 생성 시 Artifact Id 필드에 입력한 이름으로 생성된다.
+  </li>
+</ul>
+
+<h3>1-3-1. src/main/java</h3>
+<ul>
+  <li>
+    자바 패키지의 기본 소스 코드 디렉터리로 해당 위치에 <strong>소스 코드</strong>가 위치한다.
+  </li>
+  <li>
+    Group Id와 Artifact Id를 갖는 패키지 디렉터리가 위치한다. 현재 각 명칭은 아래와 같다. (데모 파일인 App.java는 삭제).
+  </li>
+    <ul>
+      <li>
+        <strong>Group Id</strong>: Pranodayd
+      </li>
+      <li>
+        <strong>Artifact Id</strong>: CalculatorAPI
+      </li>
+    </ul>
+</ul>
+
+<h3>1-3-2. src/test/java</h3>
+<ul>
+  <li>
+    단위 테스트 케이스 파일들이 위치한다. (Apptest.java는 테스트 케이스용 템플릿 파일로 삭제한다).
+  </li>
+  <li>
+    Group Id와 Artifact Id로 생성된 패키지 디렉터리가 위치한다.
+  </li>
+</ul>
+
+<h3>1-3-3. pom.xml</h3>
+<ul>
+  <li>
+    뒤에서 설명.
+  </li>
+</ul>
+
+<br>
+
+<h2>1-4. 자바 API 프로젝트 코드 파일</h2>
+<h3>1-4-1. API 소스 코드</h3>
+<ul>
+  <li>
+    <strong>src/main/java</strong>의 패키지 디렉터리 구조 안에 Calculator.java 파일 생성, <strong>기본 함수</strong>가 위치한다.
+  </li>
+</ul>
+
+<h3>1-4-2. API 단위 테스트 코드</h3>
+<ul>
+  <li>
+    <strong>src/test/java</strong>의 디렉터리 구조 안에 API에 구현된 모든 함수에 대한 <strong>단위 테스트 케이스</strong>가 담긴 자바 파일을 생성한다.
+  </li>
+  <li>
+    테스트 케이스들은 <strong>TestNG</strong>라는 단위 테스트 도구를 통해 실행된다.
+  </li>
+    <ul>
+      <li>
+        TestNG는 @BeforeClass, @AfterClass, @Test, @BeforeMethod 등의 <strong>어노테이션(annotation)</strong>으로 작성한 메서드를 통해 테스트 케이스를 제어하는 <strong>단위 테스트 도구</strong>이다.
+      </li>
+      <li>
+        <strong>테스트 보고서</strong>를 생성할 수도 있다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>1-5. 자바 API 프로젝트의 pom.xml 파일</h2>
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- 메이븐 프로젝트의 식별 정보.  -->
+  <groupId>Pranodayd</groupId>
+  <artifactId>CalculatorAPI</artifactId>
+  <version>1.0</version>
+
+  <name>CalculatorAPI</name>
+  <!-- FIXME change it to the project's website -->
+  <url>http://www.example.com</url>
+
+  <!-- 
+  <properties>
+  - .JAVA 파일을 컴파일할 때 필요한 속성들을 정의한다.
+  - 텍스트 인코딩(UTF-8, ANSI, etc), 자바 버전 등
+   -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <maven.compiler.release>17</maven.compiler.release>
+  </properties>
+
+  <!-- 
+  <dependencies>
+  - 서드 파티 라이브러리와 해당 라이브러리가 필요한 단계(컴파일, 단위 테스트, 애플리케이션
+     등)를 정의한다.
+   -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.junit</groupId>
+        <artifactId>junit-bom</artifactId>
+        <version>5.11.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- Optionally: parameterized tests support -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
+      <plugins>
+        <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
+        <plugin>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.4.0</version>
+        </plugin>
+        <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
+        <plugin>
+          <artifactId>maven-resources-plugin</artifactId>
+          <version>3.3.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.13.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.3.0</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-jar-plugin</artifactId>
+          <version>3.4.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-install-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-deploy-plugin</artifactId>
+          <version>3.1.2</version>
+        </plugin>
+        <!-- site lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#site_Lifecycle -->
+        <plugin>
+          <artifactId>maven-site-plugin</artifactId>
+          <version>3.12.1</version>
+        </plugin>
+        <plugin>
+          <artifactId>maven-project-info-reports-plugin</artifactId>
+          <version>3.6.1</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
+```
+
+- POM은 Project Object Model의 약어이다.
+- 메이븐의 pom.xml은 모든 메이븐 프로젝트의 핵심이며 특정 프로젝트의 다양한 세부 정보를 정의하는 파일이다.
+- 프로젝트의 정보는 <project></project> 태그 내에 담긴다.
+
+- 170p부터
