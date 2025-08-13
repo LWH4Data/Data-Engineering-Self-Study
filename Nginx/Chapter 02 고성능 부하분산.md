@@ -105,7 +105,7 @@ server {
     Nginx의 upstream블록과 stream 모듈을 활용한다.
   </li>
   <li>
-    Nginx의 기본 설정 파일 conf.d는 http 블록에 포함되기에 TCP를 활용하기 위해서는 stream.donf.d라는 별도의 폴더를 생성하고 저장하는 편이 좋다.
+    Nginx의 기본 설정 파일 conf.d는 http 블록에 포함되기에 TCP를 활용하기 위해서는 stream.conf.d라는 별도의 폴더를 생성하고 저장하는 편이 좋다.
   </li>
     <ul>
       <li>
@@ -141,7 +141,7 @@ stream {
       </li>
     </ul>
   <li>
-    <strong>http</strong>는 OS 7계층 중 7계층인 <strong>애플리케이션 계층(application layer)</strong>을, <strong>stream<strong>은 4계층인 <strong>전송 계층(transport layer)</strong>에서 동작한다. 
+    <strong>http</strong>는 OSI 7계층 중 7계층인 <strong>애플리케이션 계층(application layer)</strong>을, <strong>stream</strong>은 4계층인 <strong>전송 계층(transport layer)</strong>에서 동작한다. 
   </li>
     <ul>
       <li>
@@ -163,11 +163,11 @@ stream {
 <h1>4. UDP 부하분산</h1>
 
 ```nginx
-# UPD 프로토콜을 사용해 NTP(네트워크 타임 프로토콜, Network Time protocol) 서버 두 대로 전달.
+# UDP 프로토콜을 사용해 NTP(네트워크 타임 프로토콜, Network Time Protocol) 서버 두 대로 전달.
 stream {
       upstream ntp {
             server ntp1.example.com:123 weight=2;
-            server htp2.example.com:123;
+            server ntp2.example.com:123;
       }
 
       server {
@@ -181,7 +181,7 @@ stream {
 
 <ul>
   <li>
-    UDP 부하분산이 적용된 대표적인 서비스들은 OpenVPN, Voice Internet Protocol, 가상 데스크톱 환경, Datagram Transport Layer Security가 잇다.
+    UDP 부하분산이 적용된 대표적인 서비스들은 OpenVPN, Voice Internet Protocol, 가상 데스크톱 환경, Datagram Transport Layer Security가 있다.
   </li>
   <li>
     DNS를 통해 여러 A 레코드 주소나 SRV 레코드를 갖고 있으면 되지 않나?<br> → UDP는 DNS, NTP, QUIC, HTTP/3, VoIP 등 네트워크 기반 시스템에서 사용하는 많은 서비스의 근간<br> → Nginx의 UDP 부하분산<br> → <strong>DNS의 부하 분산</strong>의 기능을 한다.
