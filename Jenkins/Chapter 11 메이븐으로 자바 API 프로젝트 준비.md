@@ -182,7 +182,6 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <!-- 메이븐 프로젝트의 식별 정보.  -->
   <groupId>Pranodayd</groupId>
   <artifactId>CalculatorAPI</artifactId>
   <version>1.0</version>
@@ -213,6 +212,25 @@
         <artifactId>junit-bom</artifactId>
         <version>5.11.0</version>
         <type>pom</type>
+        <!-- 
+        < scope >
+        - 단위 테스트 케이스를 실행할 때만 프로젝트의 CLASSPATH에 TestNG JAR파일을 
+          배치한다고 정의.
+        - 따라서 단위 테스트가 종료되면 TestNG JAR 파일들은 프로젝트의 CLASSPATH에서 
+          제거된다.
+        - 수명 주기별로 필요한 의존성을 정의 
+          → 로컬 리포지터리 내부의 중앙 리포지터리에 다운로드 
+          → 프로젝트 CLASSPATH에 추가.
+        - 메이븐이 이렇게 기본적으로 생성하는 로컬 리포지터리 경로는 ${user.home}/.m2
+          /repository 이다.
+        - 빌드를 실행
+          → 로컬 리포지터리 내의 필요한 의존성 가용 여부 확인
+          → 가용가능 하면 CLASSPATH에 추가, 불가하다면 다음 단계
+          → 중앙 리포지터리에서 로컬 리포지터리로 다운.
+          → 프로젝트의 CLASSPATH에 추가.
+        - 메이븐이 로컬 리포지터리에 의존성을 다운할 때 경로는 GroupId/ArtifactId/Version
+          이 되며 해당 경로에 testing-7.4.0.jar 파일이 다운된다.
+        -->
         <scope>import</scope>
       </dependency>
     </dependencies>
@@ -232,6 +250,15 @@
     </dependency>
   </dependencies>
 
+  <!-- 
+  <settings></settings>
+  - 로컬 리포지터리의 기본 위치를 다른 위치로 변경할 수 있다.
+   -->
+
+  <!-- 
+  < build >
+  - 단계별로 필요한 메이븐 플로그인과 애플리케이션의 전체 빌드 수명 주기를 정의.
+  -->
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
@@ -280,8 +307,14 @@
 </project>
 ```
 
-- POM은 Project Object Model의 약어이다.
-- 메이븐의 pom.xml은 모든 메이븐 프로젝트의 핵심이며 특정 프로젝트의 다양한 세부 정보를 정의하는 파일이다.
-- 프로젝트의 정보는 <project></project> 태그 내에 담긴다.
+<br>
 
-- 170p부터
+<h2>1-6. 빌드 수명 주기 단계와 순서</h2>
+<h3>1-6-1. 정리(Clean)</h3>
+<ul>
+  <li>
+    maven-clean-plugin을 사용해 이전에 생성된 모든 컴파일 파일과 패키지 파일 정리, 새로운 빌드 수명 주기 실행.
+  </li>
+</ul>
+
+- p174
