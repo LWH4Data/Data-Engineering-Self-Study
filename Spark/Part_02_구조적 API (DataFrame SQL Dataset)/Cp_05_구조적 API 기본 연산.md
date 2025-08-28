@@ -700,6 +700,14 @@ dataFrames[0].count() > dataFrames[1].count()
   <li>
     DataFrame을 <strong>뷰</strong>로 만들거나 <strong>테이블</strong>로 등록하면 DataFrame 변경 작업과 관계없이 <strong>동적으로 참조</strong>할 수 있다.
   </li>
+    <ul>
+      <li>
+        동적 참조란 실시간으로 transformation이 적용되는 것이라 이해할 수 있다.
+      </li>
+      <li>
+        만약 동적 참조가 불가하다면 transformation을 적용하고 다시 createOrReplaceTempView를 해야한다.
+      </li>
+    </ul>
 </ul>
 
 ```python
@@ -726,3 +734,177 @@ df.union(newDF)\
 <br>
 
 <h2>4-15. 로우 정렬하기</h2>
+<ul>
+  <li>
+    <strong>sort</strong>와 <strong>orderBy</strong> 메서드를 사용하여 DataFrame을 오름차순 혹은 내림차순으로 정렬할 수 있다.
+  </li>
+  <li>
+    두 메서드는 완전히 같은 방식으로 동작한다.
+  </li>
+  <li>
+    <strong>asc_nulls_first, desc_nulls_first, asc_nulls_last, desc_nulls_last 메서드</strong>를 활용하여 정렬된 DataFrame에서 <strong>null 값이 표시되는 기준</strong>을 지정할 수 있다.
+  </li>
+  <li>
+    Transformation을 처리하기 전에 성능을 최적화하기 위해 <strong>partition별 정렬</strong>을 수행하기도 한다.
+  </li>
+    <ul>
+      <li>
+        partition별 정렬은 <strong>sortWithinPartitions</strong> 메서드를 활용한다.
+      </li>
+    </ul>
+</ul>
+
+```python
+# 1. sort와 orderBy를 사용한 정렬 실습
+df.sort("count").show(5)
+df.orderBy("count", "DEST_COUNTRY_NAME").show(5)
+df.orderBy(col("count"), col("DEST_COUNTRY_NAME")).show(5)
+```
+
+```python
+# 2. asc와 desc를 활용한 실습
+from pyspark.sql.functions import desc, asc
+
+df.orderBy(expr("count desc")).show(2)
+df.orderBy(col("count").desc(), col("DEST_COUNTRY_NAME").asc()).show(2)
+```
+
+```python
+# 3. 성능 최적화를 위한 Partition별 정렬 적용
+spark.read.format("json").load("/opt/spark-data/data/flight-data/json/2015-summary.json")
+```
+
+<br>
+
+<h2>4-16. 로우 수 제한하기</h2>
+<ul>
+  <li>
+    <strong>limit 메서드</strong>를 사용해 추출할 <strong>row의 수를 제한</strong>할 수 있다.
+  </li>
+</ul>
+
+```python
+# 1. limit을 활용하여 제한된 행의 수 반환
+df.limit(5).show()
+```
+
+```python
+# 2. 정렬 후 제한된 행의 수 반환.
+df.orderBy(expr("count desc")).limit(6).show()
+```
+
+<br>
+
+<h2>4-17. repartition과 coalesce</h2>
+<ul>
+  <li>
+    <strong>자주 필터링하는 컬럼</strong>을 기준으로 데이터를 분할하여 최적화할 수 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>partitioning schema</strong>와 <strong>partitioning 수</strong>를 포함해 클러스터 전반의 <strong>물리적 데이터 구성</strong>을 제어할 수 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>repartition() 메서드</strong>를 호출하면 무조건 <strong>전체 데이터를 셔플</strong>한다.
+  </li>
+    <ul>
+      <li>
+        <strong>인자</strong>로 <strong>몇 개의 partition</strong>으로 분할할지를 전달한다.
+      </li>
+      <li>
+        <strong>transformation</strong>이기에 <strong>새로운 객체에 초기화</strong>를 해야지 사용할 수 있다.
+      </li>
+      <li>
+        <strong>향후 사용할 partition의 수</strong>가 현재 partition의 수보다 <strong>많을 때</strong> 사용한다.
+      </li>
+      <li>
+        <strong>Column을 기준</strong>으로 partition을 만드는 경우에만 사용한다.
+      </li>
+    </ul>
+  <li>
+    <strong>coalesce() 메서드</strong>는 전체 데이터를 셔플하지 않고 <strong>partition을 병합</strong>하는 경우 사용한다.
+  </li>
+    <ul>
+      <li>
+        coalesce() 메서드는 <strong>인자</strong>로 <strong>병합 후 남길 partition의 수</strong>를 전달한다.
+      </li>
+    </ul>
+</ul>
+
+```python
+# 1. getNumPartitions()를 통해 RDD가 몇 개의 partition으로 구성되었는지 확인한다.
+df.rdd.getNumPartitions()
+```
+
+```python
+# 2. repatition()을 통해 DataFrame/RDD의 partition의 개수와 배치를 풀 셔플로 섞어 
+#    재분배.
+
+# 5 개의 파티션으로 재분배.
+df.repartition(5)
+```
+
+```python
+# 3. 자주 필터링되는 컬럼을 기준으로 파티션을 재분배.
+df.repartition(col("DEST_COUNTRY_NAME"))
+```
+
+```python
+# 4. 컬럼과 파티션을 수를 지정하여 재분배
+df.repartition(5, col("DEST_COUNTRY_NAME"))
+```
+
+```python
+# 5. 다섯 개의 partition으로 분할하고, 다시 두 개의 partition으로 병합.
+df.repartition(5, col("DEST_COUNTRY_NAME")).coalesce(2)
+```
+
+<br>
+
+<h2>4-18. 드라이버로 로우 데이터 수집하기</h2>
+<ul>
+  <li>
+    Spark는 <strong>드라이버</strong>에서 <strong>클러스터 상태 정보</strong>를 유지한다.
+  </li>
+  <li>
+    <strong>로컬 환경</strong>에서 데이터를 다루기 위해서는 <strong>드라이버로 데이터를 수집</strong>해야 한다.
+  </li>
+  <li>
+    아직 드라이버로 데이터를 수집하는 연산을 배우지 않았기에 다음의 메서드만 살펴본다.
+  </li>
+    <ul>
+      <li>
+        <strong>collect</strong>: 전체 DataFrame의 모든 데이터를 수집한다.
+      </li>
+      <li>
+        <strong>take</strong>: 상위 N개의 row를 반환한다.
+      </li>
+      <li>
+        <strong>show</strong>: 여러 row를 보기 좋게 출력한다.
+      </li>
+    </ul>
+  <li>
+    <strong>toLocalIterator 메서드</strong>를 사용하면 데이터셋의 <strong>partition</strong>을 <strong>차례로 반복</strong>하여 처리할 수 있다.
+  </li>
+    <ul>
+      <li>
+        collect와 toLocalIterator와 같이 <strong>드라이버로 모든 데이터를 수집</strong>하는 작업은 <strong>매우 큰 비용(CPU, 메모리, 네트워크 등)</strong>이 발생한다.
+      </li>
+      <li>
+        비용 문제가 존재하기에 실행 시에 드라이버와 애플리케이션이 <strong>비정상적으로 종료</strong> 될 수 있다.
+      </li>
+      <li>
+        연산 또한 병렬이 아니라 <strong>차례로 수행</strong>된다.
+      </li>
+    </ul>
+</ul>
+
+```python
+# 1. python 실습 코드들
+collectDF = df.limit(10)
+collectDF.take(5) # take(5)는 정수형 값을 인수로 사용한다.
+collectDF.show() # 결과를 참조된 형태로 출력한다.
+collectDF.show(5, False)
+colelctDF.collect()
+```
