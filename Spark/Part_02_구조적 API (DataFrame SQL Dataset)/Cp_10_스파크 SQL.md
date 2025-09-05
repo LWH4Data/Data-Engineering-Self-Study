@@ -630,5 +630,349 @@ spark.sql("CREATE DATABASE some_db")
 <h2>8-2. 데이터베이스 설정하기</h2>
 
 ```python
-# 2. USE 
+# 2. USE keyword 다음에 데이터베이스명을 붙여 쿼리 수행에 필요한 데이터베이스르 설정할 수 있다.
+spark.sql("USE some_db")
+```
+
+```python
+# 3. 2번에서 쿼리를 사용할 데이터베이스를 지정하였기에 다른 데이터베이스에서 쿼리를 수행하면 
+#    다른 데이터베이스의 테이블에 쿼리를 수행하게 된다.
+
+# 현재 데이터베이스의 테이블 목록 확인
+spark.sql("SHOW TABLES").show(truncate=False)
+
+# flights 테이블 전체 조회
+spark.sql("SELECT * FROM flights").show()
+```
+
+```python
+# 4. 접두사를 활용하여 다른 데이터베이스의 테이블을 쿼리에 수행할 수 있다.
+spark.sql("SELECT * FROM default.flights").show()
+```
+
+```python
+# 5. 어떤 데이터베이스를 사용 중인지 확인.
+spark.sql("SELECT current_database()").show()
+```
+
+```python
+# 6. 기본 데이터베이스로 회귀
+spark.sql("USE default")
+```
+
+<br>
+
+<h2>8-3. 데이터베이스 제거하기</h2>
+
+```python
+# 1. DROP DATABASE를 통해 데이터베이스 제거.
+spark.sql("DROP DATABASE IF EXISTS some_db CASCADE")
+```
+
+<br><br>
+
+<h1>9. select 구문</h1>
+<ul>
+  <li>
+    Spark는 ANSI-SQL 요건을 충족하며 SELECT 표현식의 구조를 확인할 수 있다.
+  </li>
+</ul>
+
+<br>
+
+<h2>9-1. case...when...then 구문</h2>
+
+```python
+# 1. CAASE...WHEN...THEN...END 구문을 통한 조건문 처리
+spark.sql("""
+    SELECT
+        CASE 
+            WHEN DEST_COUNTRY_NAME = 'UNITED STATES' THEN 1
+            WHEN DEST_COUNTRY_NAME = 'Egypt' THEN 0
+            ELSE -1
+        END AS country_flag
+    FROM partitioned_flights
+""").show()
+```
+
+<br><br>
+
+<h1>10. 고급 주제</h1>
+<h2>10-1. 복합 데이터 타입</h2>
+<ul>
+  <li>
+    <strong>복합 데이터 타입</strong>은 표준 SQL에는 존재하지 않는 기능이다. Spark SQL에는 <strong>구조체, 리스트, 맵</strong> 세 가지 핵심 복합 데이터 타입이 존재한다.
+  </li>
+</ul>
+
+<h3>10-1-1. 구조체</h3>
+<ul>
+  <li>
+    구조체는 맵에 더 가까우머 Spark에서 <strong>중첩 데이터</strong>를 <strong>생성</strong>하거나 <strong>쿼리</strong>하는 방법을 제공한다.
+  </li>
+  <li>
+    구조체를 만들기 위해서는 여러 컬럼이나 표현식을 <strong>괄호</strong>로 묶이만 하면 된다.
+  </li>
+</ul>
+
+```python
+# 1. 구조체 생성.
+spark.sql("""
+    CREATE VIEW IF NOT EXISTS nested_data AS
+    SELECT (DEST_COUNTRY_NAME, ORIGIN_COUNTRY_NAME) AS country,
+           count
+    FROM flights
+""")
+```
+
+```python
+# 2. 구조체 데이터 조회
+spark.sql("SELECT * FROM nested_data").show()
+```
+
+```python
+# 3. 점(dot)을 활용하여 구조체의 개별 컬럼 조회
+spark.sql("""
+    SELECT country.DEST_COUNTRY_NAME, count
+    FROM nested_data
+""").show()
+```
+
+```python
+# 4. 구조체의 이름과 구조체에 속한 모든 컬럼 조회
+spark.sql("""
+    SELECT country.*, count
+    FROM nested_data
+""").show()
+```
+
+<h3>10-1-2. 리스트</h3>
+<ul>
+  <li>
+    <strong>값의 리스트</strong>는 <strong>collect_list</strong> 함수 혹은 <strong>중복 값이 없는 배열</strong>을 만드는 <strong>collect_set 함수</strong>를 사용할 수 있다.
+  </li>
+    <ul>
+      <li>
+        두 함수 모두 <strong>집계 함수</strong>이기에 <strong>집계 연산</strong> 시에만 사용할 수 있다.
+      </li>
+    </ul>
+</ul>
+
+```python
+# 1. collect_list와 collect_set을 통해 리스트 생성.
+spark.sql("""
+    SELECT DEST_COUNTRY_NAME AS new_name,
+           collect_list(count) AS flight_counts,
+           collect_set(ORIGIN_COUNTRY_NAME) AS origin_set
+    FROM flights
+    GROUP BY DEST_COUNTRY_NAME
+""").show(truncate=False)
+```
+
+```python
+# 2. 직접 배열 생성.
+spark.sql("""
+    SELECT DEST_COUNTRY_NAME,
+           ARRAY(1, 2, 3) AS sample_array
+    FROM flights
+""").show(truncate=False)
+```
+
+```python
+# 3. 배열 쿼리 구문을 사용해 리스트의 특정 위치의 데이터를 쿼리
+spark.sql("""
+    SELECT DEST_COUNTRY_NAME AS new_name,
+           collect_list(count)[0] AS first_count
+    FROM flights
+    GROUP BY DEST_COUNTRY_NAME
+""").show(truncate=False)
+```
+
+```python
+# 4. explod 함수를 사용해 배열을 다시 여러 row로 변환
+
+# 실습을 위한 뷰 생성.
+spark.sql("""
+    CREATE OR REPLACE TEMP VIEW flights_agg AS
+    SELECT DEST_COUNTRY_NAME,
+           collect_list(count) AS collected_counts
+    FROM flights
+    GROUP BY DEST_COUNTRY_NAME
+""")
+
+# explode 수행
+spark.sql("""
+    SELECT explode(collected_counts) AS count_value,
+           DEST_COUNTRY_NAME
+    FROM flights_agg
+""").show(truncate=False)
+```
+
+<br>
+
+<h2>10-2. 함수</h2>
+<ul>
+  <li>
+    DataFrame 함수 문서(http://bit.ly/2DPAycx)에서 모든 함수를 찾아볼 수 있다.
+  </li>
+  <li>
+    <strong>SQL</strong>에서는 <strong>SHOW FUNCTIONS</strong>를 통해 전체함수를 확인할 수 있다.
+  </li>
+</ul>
+
+
+```python
+# 1. SQL 함수 확인.
+spark.sql("SHOW FUNCTIONS").show(truncate=False)
+```
+
+```python
+# 2. 조회하고자 하는 함수 유형을 지정하여 함수 조회
+spark.sql("SHOW SYSTEM FUNCTIONS").show(truncate=False)
+```
+
+```python
+# 3. 사용자 정의 함수 조회
+spark.sql("SHOW USER FUNCTIONS").show(truncate=False)
+```
+
+```python
+# 4. 와일드 카드를 사용하여 s로 시작하는 함수 조회
+spark.sql("SHOW FUNCTIONS LIKE 's*'").show(truncate=False)
+```
+
+```python
+# 5. LIKE 키워드를 사용하여 조회
+spark.sql("SHOW FUNCTIONS LIKE 'collect*'").show(truncate=False)
+```
+
+<h3>10-2-1. 사용자 정의 함수</h3>
+
+```python
+# 1. 사용자 정의 함수를 생성하고 적용
+from pyspark.sql.types import LongType
+
+# 파이썬 함수 정의
+def power3(number: int) -> int:
+    return number * number * number
+
+# Spark UDF로 등록 (SQL에서 "power3" 이름으로 사용 가능)
+spark.udf.register("power3", power3, LongType())
+
+# SQL에서 호출
+spark.sql("""
+    SELECT count, power3(count) AS count_cubed
+    FROM flights
+""").show()
+```
+
+<br>
+
+<h2>10-3. 서브쿼리</h2>
+<ul>
+  <li>
+    서브쿼리(subquery)를 사용하면 쿼리 안에 쿼리를 지정할 수 있다.
+  </li>
+  <li>
+    Spark에는 <strong>상호연관 서브쿼리(correlated subquery)</strong>와 <strong>비상호연관 서브쿼리(uncorrelated subquery)</strong> 두 가지 서브쿼리가 존재한다.
+  </li>
+    <ul>
+      <li>
+        <strong>Correlated subquery</strong>: 서브쿼리의 정보를 보완하기 위해 쿼리 <strong>외부 범위에 있는 일부 정보를 사용</strong>할 수 있다.
+      </li>
+      <li>
+        <strong>Uncorrelated subquery</strong>: 외부 범위 정보를 <strong>사용하지 않는다</strong>.
+      </li>
+    </ul>
+  <li>
+    Spark는 값에 따라 필터링할 수 있는 <strong>조건절 서브쿼리(predicate subquery)</strong>도 지원한다.
+  </li>
+</ul>
+
+<h3>10-3-1. 비상호연관 조건절 서브쿼리</h3>
+
+```python
+# 1. 데이터 중 상위 5 개의 목적지 국가를 조회하는 쿼리
+spark.sql("""
+    SELECT DEST_COUNTRY_NAME
+    FROM flights
+    GROUP BY DEST_COUNTRY_NAME
+    ORDER BY SUM(count) DESC
+    LIMIT 5
+""").show(truncate=False)
+
+# 서브쿼리를 사용한 필터링.
+# 쿼리 외부 범위의 정보를 사용하지 않기에 비상호연관 쿼리이다.
+spark.sql("""
+    SELECT *
+    FROM flights
+    WHERE ORIGIN_COUNTRY_NAME IN (
+        SELECT DEST_COUNTRY_NAME
+        FROM flights
+        GROUP BY DEST_COUNTRY_NAME
+        ORDER BY SUM(count) DESC
+        LIMIT 5
+    )
+""").show(truncate=False)
+```
+
+<h3>10-3-2. 상호연관 조건절 서브쿼리</h3>
+<ul>
+  <li>
+    상호연관 조건절 서브쿼리는 내부 쿼리에서 외부 범위에 있는 정보를 사용할 수 있다.
+  </li>
+</ul>
+
+```python
+# 1. 상호연관 조건절 서브쿼리를 통한 조회
+# EXISTS를 통해 외부의 정보를 참조하기 때문에 상호연관 이다.
+spark.sql("""
+    SELECT *
+    FROM flights f1
+    WHERE EXISTS (
+        SELECT 1
+        FROM flights f2
+        WHERE f1.DEST_COUNTRY_NAME = f2.ORIGIN_COUNTRY_NAME
+    )
+    AND EXISTS (
+        SELECT 1
+        FROM flights f2
+        WHERE f2.DEST_COUNTRY_NAME = f1.ORIGIN_COUNTRY_NAME
+    )
+""").show(truncate=False)
+```
+
+<h3>10-3-3. 비상호연관 스칼라 쿼리</h3>
+<ul>
+  <li>
+    비상호연관 스칼라 쿼리(uncorrelated scalar query)를 사용하면 기존에 없던 일부 부가 정보를 가져올 수 있다.
+  </li>
+</ul>
+
+```python
+# 1. 데이터셋 count 컬럼의 최댓값을 결과에 포함.
+spark.sql("""
+    SELECT *,
+           (SELECT MAX(count) FROM flights) AS maximum
+    FROM flights
+""").show(truncate=False)
+```
+
+<br><br>
+
+<h1>11. 다양한 기능</h1>
+<h2>11-1. 설정 (p302)</h2>
+<ul>
+  <li>
+    Spark SQL 애플리케이션에는 <strong>환경 설정값</strong>이 존재하며 애플리케이션 <strong>초기화</strong> 시점 혹은 <strong>실행</strong> 시점에 설정할 수 있다.
+  </li>
+</ul>
+
+<br>
+
+<h2>11-2. SQL에서 설정값 지정하기</h2>
+
+```python
+# 1. Spark SQL 관련 설정만 가능하다. (셔플 파티션 수 지정).
+spark.conf.set("spark.sql.shuffle.partitions", 20)
 ```
