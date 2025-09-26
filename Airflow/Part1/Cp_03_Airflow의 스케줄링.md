@@ -349,3 +349,120 @@ fetch_events=BashOperator(
 <br>
 
 <h2>3-3. 데이터 파티셔닝</h2>
+<ul>
+  <li>
+    데이터를 <strong>어떤 단위</strong>로 적재를 할 것인가를 결정하는 데에는 몇 가지 방법들을 고려할 수 있다.
+  </li>
+  <li>
+    데이터 세트를 이처럼 관리하기 쉬운 조각으로 나누는 방벙은 <strong>파티셔닝(partitioning)</strong>이라고 하며 이렇게 나누어진 작은 부분은 <strong>파티션(partition)</strong>이라 한다.
+  </li>
+</ul>
+
+```python
+# 1. 날짜 별로 파일을 만들어 일일 배치처리.
+fetch_events=BashOperator(
+    task_id="fetch_events",
+    bash_command=(
+        "mkdir -p /data/events && "
+        # 일단위로 반환된 값이 파일명이 된다.
+        "curl -o /data/events/{{ds}}.json "
+        "http://localhost:5000/events?"
+        "start_date={{ds}}&"
+        "end_date={{nect_ds}}",
+    dag=dag
+    )
+)
+```
+
+```python
+# 2. 파티셔닝된 데이터를 통해 파티션 별로 통계 계산
+# 모든 컨텍스트 변수를 수신한다.
+def _calculate_stats(**context):
+    """Calculates event statistics."""
+
+    # templates_dict 개체에서 템플릿 값을 검색한다.
+    #     - 이후 PythonOperator에서 템플릿 값을 전달한다.
+    input_path=context["templates_dict"]["input_path"]
+    output_path=context["templates_dict"]["output_path"]
+    Path(output_path).parent.mkdir(exist_ok=True)
+
+    events=pd.read_json(input_path)
+    stats=events.groupby(["data", "user"]).size().reset_index()
+    stats.to_csv(output_path, index=False)
+  
+calculate_stats=PythonOperator(
+    task_id="calculate_stats",
+    python_callable=_calculate_stats,
+    # 함수에 전달될 템플릿 값을 정의한다.
+    templates_dict={
+        "input_path": "/data/events/{{ ds }}.json",
+        "output_path": "/data/stats/{{ ds }}.csv",
+    },
+    dag=dag
+)
+
+# 템플릿
+#   - 보일러플레이트(boilerplate) 코드 작성
+#       - 여러 곳에 필수적으로 사용되는 코드를 의미하며 수정하지 않거나 최소의 수정만 하도
+#         록 설계한다.
+#   - PythonOperator에서 템플릿을 구현하려면 오퍼레이터의 templates_dist 매개변수를 사
+#     용하여 템플릿화 해야하는 모든 인수를 전달한다.
+```
+
+<br><br>
+
+<h1>4. Airflow의 실행 날짜 이해</h1>
+<h2>4-1. 고정된 스케줄 간격으로 태스크 실행</h2>
+<ul>
+  <li>
+    <strong>간격 기반 스케줄링</strong>은 이전 실행을 기준으로 일정 간격 후 실행되므로, <strong>작업 실행 시간까지 포함</strong>하여 주기를 계산한다. 반면 <strong>시점 기반 스케줄링</strong>은 캘린더 시점을 기준으로 트리거되며, Airflow의 작업 처리 시간과 관계없이 <strong>지정한 시점</strong>에 실행되도록 설계된다.
+  </li>
+  <li>
+    간격 기반 접근 방식은 작업이 <strong>실행되는 시간 간격(시작과 끝)</strong>을 정확히 알 수 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>간격 기반 스케줄링</strong>은 이전 실행 시점을 기준으로 다음 주기를 계산하므로, 자연스럽게 <strong>증분 처리(Incremental Processing)</strong>에 적합하다.
+      </li>
+      <li>
+        반면 <strong>cron 기반</strong> 스케줄링은 고정된 시점에 실행되므로, 증분 처리를 위해서는 execution_date(예: {{ ds }})를 활용해 <strong>처리 구간을 명시적으로 계산</strong>해야 한다.
+      </li>
+    </ul>
+  <li>
+    시점 기반 방식으로도 증분 처리가 되지만 정확한 증분을 위해서는 <strong>airflow 작업 끝 시간</strong>을 기준으로하는 것이 좋다는 의미이다.
+  </li>
+  <li>
+    간격 기반 스케줄링에서는 <strong>시작 시점(start_date)</strong>을 잘 결정해야 한다. 
+    Airflow의 실행은 지정한 시점 자체가 아니라, <strong>해당 시점을 지난 직후</strong>에 트리거된다.
+  </li>
+    <ul>
+      <li>
+        예를 들어 <strong>start_date=2019-01-03</strong>으로 설정하고 
+        <strong>timedelta(days=1)</strong> 간격을 주면, 첫 DAG 실행은 2019-01-04 00:00에 발생한다.
+      </li>
+    </ul>
+  <li>
+    Airflow 실행 날짜를 <strong>해당 스케줄 간격의 시작</strong>으로 생각해 정의하면 특정 간격의 시작과 끝을 유추할 때 사용할 수 있다.
+  </li>
+    <ul>
+      <li>
+        현재 스케줄 간격 = |execution_date - next_execution|
+      </li>
+      <li>
+        현재 스케줄 범위 = [execution_date, next_execution) 
+      </li>
+      <li>
+        이전 스케줄 간격 = |previous_execution_date - execution_date|
+      </li>
+      <li>
+        이전 스케줄 범위 = [previous_execution_date, execution_date)
+      </li>
+    </ul>
+  <li>
+    previous_execution_date 및 next_execution_date 매개변수는 <strong>DAG 실행</strong>을 통해서만 정의되기에 <strong>Airflow UI 또는 CLI</strong>를 통해 수동으로 실행할 경우 <strong>매개변수의 값이 정의되지 않는다</strong>.
+  </li>
+</ul>
+
+<br><br>
+
+<h1>5. 과거 데이터 간격을 메꾸기 위해 백필 사용하기</h1>
