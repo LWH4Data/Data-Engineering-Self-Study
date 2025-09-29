@@ -466,3 +466,120 @@ calculate_stats=PythonOperator(
 <br><br>
 
 <h1>5. 과거 데이터 간격을 메꾸기 위해 백필 사용하기</h1>
+<ul>
+  <li>
+    Airflow는 임의의 날짜로부터 스케줄 간격을 정의할 수 있기에 <strong>백필(bacdfilling)</strong>을 활용하여 DAG를 과거 시점으로 지정하여 <strong>과거 데이터 세트</strong>를 다룰 수 있다.
+  </li>
+</ul>
+
+<br>
+
+<h2>5-1. 과거 시점의 작업 실행하기</h2>
+<ul>
+  <li>
+    Airflow는 아직 실행되지 않은 과거 스케줄 간격을 예약하고 실행하기에 <strong>과거 시작 이후의 모든 스케줄 간격</strong>이 생성된다.
+  </li>
+  <li>
+    해당 기능은 DAG의 <strong>catchup 매개변수</strong>에 의해 제어되며 catchup을 false로 설정하면 비활성화 할 수 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>False</strong>: 과거 실행일들을 건너뛰고 DAG를 켜는 시점부터 <strong>앞으로의 실행</strong>만 수행.
+      </li>
+      <li>
+        <strong>True</strong>: start_date부터 현재까지 모든 주기별 실행일(schedule interval)을 따라가며 <strong>과거 태스크도 전부 실행</strong>.
+      </li>
+    </ul>
+</ul>
+
+```python
+# 1. 과거 시점의 태스크 실행을 피하기 위해 catchup 비활성화.
+dag=DAG(
+    dag_id="09_no_catchup",
+    schedule_interval="@daily",
+    start_date=dt.datetime(year=2019, month=1, day=1),
+    end_date=dt.datetime(year=2019, month=1, day=5),\
+    # 과거 태스크 실행 X. (백필 수행 안함).
+    catchup=False
+)
+```
+
+<br><br>
+
+<h1>6. 태스크 디자인을 위한 모범 사례</h1>
+<ul>
+  <li>
+    Airflow의 <strong>원자성(atomicity)</strong>과 <strong>멱등성(idempotency)</strong>을 살펴 본다.
+  </li>
+</ul>
+
+<br>
+
+<h2>6-1. 원자성</h2>
+<ul>
+  <li>
+    <strong>원자성</strong>은 모든 <strong>발생하거나 발생하지 않는, 나눌 수 없고 돌이킬 수 없는</strong> 일련의 데이터베이스와 같은 작업으로 간주된다.
+  </li>
+  <li>
+    즉, Airflow는 성공적으로 <strong>결과를 생성</strong>하거나 시스템에 영향을 미치지 않고 <strong>실패</strong>하도록 정의한다.
+  </li>
+  <li>
+    완전한 원자성은 아니기에 일정 정도 수행이되는 경우도 있는 듯하다.
+  </li>
+  <li>
+    <strong>의존성</strong>이 문제가 될 경우에는 오히려 단일 태스크 내에 여러 <strong>작업들을 담아 하나의 일관된 태스크 단위</strong>를 형성하는 것이 나을 수도 있다.
+  </li>
+  <li>
+    대부분 Airflow 오퍼레이터는 이미 원자성을 유지하도록 설계되어 있다.
+  </li>
+</ul>
+
+```python
+# 1. 하나의 태스크 내의 두 작업 → 원자성 불충족
+#   - CSV 작성 후 이메일을 보내면 단일 태스크 내에서 두 가지 작업을 하기에 원자성이 깨진다.
+def _calculate_stats(**context):
+    
+    """이벤트 데이터 통계 계산하기"""
+    input_path=context["templates_dict"]["input_path"]
+    output_path=context["templates_dict"]["output_path"]
+
+    events=pd.read_json(input_path)
+    stats=events.groupby(["date", "user"]).size().reset_index()
+
+    # CSV 작성
+    stats.to_csv(output_path, index=False)
+
+    # 이메일 전송
+    email_stats(stats, email="user@example.com")
+
+    calculate_stats >> email_stats
+```
+
+```python
+# 2. 이메일 발송 기능을 별도의 태스크로 분리하여 원자성 보장.
+#   - 보내기만 하는 함수를 생성하여 CSV작성과 이메일 작성을 분리.
+def _send_stats(email, **context):
+  stats=pd.read_csv(context["templates_dict"]["stats_path"])
+  email_stats(stats, email=email)
+
+send_stats=PythonOperator( python_callable=_send_stats,
+    task_id="send_stats",
+    op_kwargs={"email": "user@example.com"},
+    templates_dict={"stats_path": "/data/stats/{{ ds }}.csv"},
+    dag=dag,
+)
+
+calculate_stats >> send_stats
+```
+
+<br>
+
+<h2>6-2. 멱등성</h2>
+<ul>
+  <li>
+    <strong>멱등성</strong>이란 특정 연산을 <strong>여러 번 반복</strong>해서 실행해도 결과가 <strong>한 번</strong> 실행했을 때와 동일하게 유지되는 성질을 의미한다.
+  </li>
+  <li>
+    데이터를 쓰는 태스크는 <strong>기존 결과를 확인</strong>하거나 이전 태스크 결과를 <strong>덮어쓸지 여부</strong>를 확인하여 멱등성을 유지할 수 있다.
+  </li>
+</ul>
