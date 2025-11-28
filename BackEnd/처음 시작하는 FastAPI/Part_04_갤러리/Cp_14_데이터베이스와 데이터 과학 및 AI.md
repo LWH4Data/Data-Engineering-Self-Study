@@ -207,3 +207,87 @@ def get_one(name: str) -> Row | None:
     최근에는 관계형 DB에서도 JSON을 지원한다.
   </li>
 </ul>
+
+<br><br>
+
+<h1>5. 데이터베이스 부하 테스트</h1>
+<ul>
+  <li>
+    페이커(faker) 패키지를 사용해 쉽게 데이터를 만들어 부하 테스트를 진행한다.
+  </li>
+</ul>
+
+```python
+# 1. faker를 통해 이름과 국가를 만들고 load() 함수로 SQLite에 적재.
+from faker import Faker
+from time import perf_counter
+
+def load():
+    from error import Duplicate
+    from data.explorer import create
+    from model.explorer import Explorer
+
+    f = Faker()
+    NUM = 100_000
+    t1 = perf_counter()
+    for row in range(NUM):
+        try:
+            create(Explorer(name=f.name(),
+                country=f.country(),
+                description=f.text()))
+        except Duplicate:
+            pass
+    t2 = perf_counter()
+    print(NUM, "rows")
+    print("write time:", t2-t1)
+
+def read_db():
+    from data.explorer import get_all
+    t1 = perf.counter()
+    _ = get_all()
+    t2 = perf_counter()
+    print("db read time:", t2-t1)
+
+def read_api():
+    from fastapi.testclient import TestClient
+    from main import app
+    t1 = perf_counter()
+    client = TestClient(app)
+    _ = client.get("/explorer/")
+    t2 = perf_counter()
+    print("api read time:", t2-t1)
+
+load()
+read_db()
+read_db()
+read_api()
+```
+
+<br><br>
+
+<h1>6. 데이터 과학과 AI</h1>
+<ul>
+  <li>
+    AI와 관련된 다양한 패키지와 워크 프레임 등을 소개한다.
+  </li>
+</ul>
+
+```python
+# 1. 최상위 수준의 LLM 테스트: ai.py
+from fastapi import FastAPI
+
+app = FastAPI()
+
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, GenerationConfig
+model_name = "google/flan-t5-base"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForSeq2SeqLM.from_pretrained(model_name)
+config = GenerationConfig(max_new_tokens=200)
+
+@app.get("/ai")
+def prompt(line: str) -> str:
+    tokens = tokenizer(line, return_tensors="pt")
+    outputs = model.generate(**tokens, max_new_tokens=config.max_new_tokens)
+    result = tokenizer.batch_decode(outputs, skip_special_tokens=True)
+    return result[0]
+```
