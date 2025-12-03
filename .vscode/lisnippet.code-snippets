@@ -1,0 +1,11 @@
+{
+  "HTML li snippet": {
+    "prefix": "li",
+    "body": [
+      "<li>",
+      "  $1",
+      "</li>"
+    ],
+    "description": "HTML <li> snippet with indented content"
+  }
+}
