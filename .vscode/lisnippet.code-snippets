@@ -7,5 +7,30 @@
       "</li>"
     ],
     "description": "HTML <li> snippet with indented content"
-  }
+  },
+    "HTML h1 snippet": {
+    "prefix": "h1",
+    "body": [
+      "<h1>$1</h1>"
+    ],
+    "description": "HTML <h1> snippet with indented content"
+  },
+    "HTML ul snippet": {
+    "prefix": "ul",
+    "body": [
+      "<ul>",
+      "  <li>",
+      "    $1",
+      "  </li>",
+      "</ul>"
+    ],
+    "description": "HTML <ul> snippet with indented content"
+  },
+    "HTML h2 snippet": {
+    "prefix": "h2",
+    "body": [
+      "<h2>$1</h2>",
+    ],
+    "description": "HTML <h2> snippet with indented content"
+  },
 }
