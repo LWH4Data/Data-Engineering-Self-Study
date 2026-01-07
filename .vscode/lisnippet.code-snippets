@@ -33,4 +33,11 @@
     ],
     "description": "HTML <h2> snippet with indented content"
   },
+    "HTML strong snippet": {
+    "prefix": "st",
+    "body": [
+      "<strong>",
+    ],
+    "description": "HTML <h2> snippet with indented content"
+  },
 }
