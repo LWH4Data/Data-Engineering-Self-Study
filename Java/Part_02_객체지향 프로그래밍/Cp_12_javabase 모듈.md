@@ -489,3 +489,206 @@ String[] names = data.split("&|,|-");
 String data = "홍길동/이수홍/박연수";
 StringTokenizer st = new StringTokenizer(data, "/");
 ```
+
+<br><br>
+
+<h1>6. 포장 클래스</h1>
+<ul>
+  <li>
+    자바는 <strong>기본 타입(byte, char, short, int, long, float, double, boolean)의 값을 갖는 객체</strong>를 생성할 수 있으며 이런 객체를 <strong>포장(wrapper) 객체</strong>라 한다.
+  </li>
+  <li>
+    포장 객체 생성을 위한 클래스는 <strong>java.lang 패키지</strong>에 포함되어 있다.
+  </li>
+    <ul>
+      <li>
+        char와 int 타입이 각각 Charactor와 Integer것을 제외하고 나머지 타입은 모두 첫 문자가 대문자 인것 외에 차이가 없다.
+      </li>
+    </ul>
+  <li>
+    포장 객체는 기본 타입의 값을 변경할 수 없고 <strong>단지 객체로 생성</strong>하는 데 목적이 있다.
+  </li>
+    <ul>
+      <li>
+        이런 객체가 필요한 이유는 15장에서 다룰 <strong>컬렉션 객체</strong> 때문이다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>6-1. 박싱과 언박싱</h2>
+<ul>
+  <li>
+    기본 타입의 값을 <strong>포장 객체</strong>로 만드는 과정을 <strong>박싱(boxing)</strong>, 반대로 포장 객체에서 <strong>기본 타입을 얻는 과정</strong>을 <strong>언박싱(unboxing)</strong>이라 한다.
+  </li>
+  <li>
+    박싱은 포장 클래스 변수에 <strong>기본 타입 값이 대입</strong>될 때 발생한다. 반면 언박싱은 기본 타입 변수에 <strong>포장 객체가 대입</strong>될 때 발생한다.
+  </li>
+    <ul>
+      <li>
+        언박싱은 <strong>연산 과정</strong>에서도 발생한다.
+      </li>
+    </ul>
+</ul>
+
+```java
+// 1. 박싱과 언박싱
+Integer obj = 100;    // 박싱
+int value = obj;      // 언박싱
+int value = obj + 50; // 언박싱 후 연산이 진행된다.
+```
+
+<br>
+
+<h2>6-2. 문자열을 기본 타입 값으로 변환</h2>
+<ul>
+  <li>
+    포장 클래스는 문자열을 <strong>기본 타입 값으로 변환</strong>할 때에도 사용된다.
+  </li>
+  <li>
+    대부분의 포장 클래스에는 <strong>parse + 기본타입</strong> 명으로 된 <strong>정적(static) 메소드</strong>가 있다. 
+  </li>
+    <ul>
+      <li>
+        메소드는 문자열을 해당 <strong>기본 타입 값으로 변환</strong>한다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>6-3. 포장 값 비교</h2>
+<ul>
+  <li>
+    포장 객체를 비교할 때에는 <strong>==</strong>와 <strong>!= 연산자</strong>를 사용할 수 없다. 연산 내부의 값을 비교하는 것이 아니라 <strong>포장 객체의 번지</strong>를 비교하기 때문이다.
+  </li>
+    <ul>
+      <li>
+        일부 <strong>값의 범위</strong>를 갖는 타입(boolean, char, byte, short, int)는 <strong>객체의 주소를 공유</strong>하기에 가능하다.
+      </li>
+      <li>
+        그럼에도 포장 객체에 정확히 어떤 값이 저장될지 모르는 상황이라면 사용을 지양해야 한다.
+      </li>
+    </ul>
+  <li>
+    대신 <strong>equals() 메소드</strong>를 사용하여 <strong>내부 값을 비교</strong>할 수 있다.
+  </li>
+</ul>
+
+```java
+// 1. 포장 객체 번지 비교로 인해 false 반환.
+Integer obj1 = 300;
+Integer obj2 = 300;
+System.out.println(obj1 == obj20);
+```
+
+<br><br>
+
+<h1>7. 수학 클래스</h1>
+<ul>
+  <li>
+    Math 클래스는 <strong>수학 계산</strong>에 사용할 수 있는 메소드를 제공하며 <strong>모두 정적(static)</strong>이며 Math 클래스로 <strong>바로 사용</strong>이 가능하다.
+  </li>
+  <li>
+    각 메소드에 대해서는 p531 참고.
+  </li>
+  <li>
+    random() 메소드는 <strong>0.0과 1.0 사이의 double 타입 난수</strong>를 리턴한다.
+  </li>
+  <li>
+    난수를 얻는 또 다른 방법으로는 <strong>java.util.Random</strong> 클래스가 있다.
+  </li>
+    <ul>
+      <li>
+        Random() 객체를 생성할 때에 <strong>종자값 seed</strong>를 사용할 수 있다. 
+      </li>
+        <ul>
+          <li>
+            seed는 <strong>난수를 만드는 알고리즘</strong>에 사용되는 값으로, 종자값이 같으면 같은 난수를 얻는다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+```java
+// 1. random을 통해 start와 start + n 사이의 n개의 수 중 하나 추출.
+int num = (int) (Math.random() * n) + start;
+```
+
+<br><br>
+
+<h1>8. 날짜와 시간 클래스</h1>
+<ul>
+  <li>
+    자바는 <strong>java.util 패키지</strong>의 <strong>Date와 Calender</strong>를 통해 컴퓨터의 날짜 및 시각을 <strong>읽을</strong> 수 있다.
+  </li>
+  <li>
+    자바는 <strong>java.time 패키지</strong>의 <strong>LocalDateTime</strong> 등의 클래스를 통해 날짜와 시간을 <strong>조작할</strong> 수 있다.
+  </li>
+</ul>
+
+<br>
+
+<h2>8-1. Date 클래스</h2>
+<ul>
+  <li>
+    Date는 날짜를 표현하는 클래스로 <strong>객체 간 날짜 정보를 주고받을 때</strong> 사용하나 대부분 Deprecated 되어 <strong>Date() 생성자</strong>만 주로 사용된다.
+  </li>
+  <li>
+    Date() 생성자는 컴퓨터의 <strong>현재 날짜</strong>를 읽어 <strong>Date 객체</strong>로 만든다.
+  </li>
+  <li>
+    현재 날짜를 <strong>문자열</strong>로 얻고 싶다면 <strong>toString() 메소드</strong>를 사용할 수 있으나 <strong>영문</strong>으로 출력된다.
+  </li>
+    <ul>
+      <li>
+        원하는 문자열로 얻고 싶다면 <strong>SimpleDateFormat 클래스</strong>와 함께 사용해야 한다.
+      </li>
+    </ul>
+</ul>
+
+```java
+// 1. Date 객체 생성.
+Date now = new Date();
+```
+
+<br>
+
+<h2>8-2. Calendar 클래스</h2>
+<ul>
+  <li>
+    Calendar 클래스는 <strong>달력</strong>을 표현하는 <strong>추상 클래스</strong>이다.
+  </li>
+    <ul>
+      <li>
+        날짜와 시간을 계산하는 방법이 <strong>지역과 문화</strong>에 따라 다르기에 특정 역법에 따르는 달력은 <strong>자식 클래스</strong>로 구현하도록 되어 있다.
+      </li>
+      <li>
+        특별한 역법을 사용하는 경우가 아니라면 직접 하위 클래스를 만들 필요없이 Calendar 클래스의 <strong>정적 메소드 getInstance() 메소드</strong>를 이용하면 <strong>컴퓨터에 설정된 시간대(TimeZone)</strong>를 기준으로 <strong>Calendar의 하위 객체</strong>를 얻을 수 있다.
+      </li>
+    </ul>
+  <li>
+    Calendar가 제공하는 날짜와 시간에 대한 정보를 얻기 위해서는 <strong>get() 메소드</strong>를 이용한다.
+  </li>
+    <ul>
+      <li>
+        get() 메소드의 매개값으로 <strong>Calendar에 정의된 상수</strong>를 줌녀 상수가 의미하는 값을 리턴한다.
+      </li>
+    </ul>
+</ul>
+
+```java
+// 1. 컴퓨터의 시간대에 맞는 시간 객체 생성.
+Calendar now = Calendar.getInstance();
+
+// 2. Calendar에 정의된 상수로 결과 받기.
+int year = now.get(Calendar.YEAR);         // 년도를 리턴
+int month = now.get(Calendar.MONTH) + 1;   // 월을 리턴
+int day = now.get(Calendar.DAY_OF_MONTH);  // 일을 리턴
+int week = now.get(Calendar.DAY_OF_WEEK);  // 요일을 리턴
+int amPm = now.get(Calendar.AM_PM);        // 오전/오후를 리턴
+int hour = now.get(Calendar.HOUR);         // 시를 리턴
+int minute = now.get(Calendar.MINUTE);     // 분을 리턴
+int second = now.get(Calendar.SECOND);     // 초를 리턴
+```
