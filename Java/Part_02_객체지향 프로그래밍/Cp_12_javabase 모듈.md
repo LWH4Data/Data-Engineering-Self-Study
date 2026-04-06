@@ -676,11 +676,23 @@ Date now = new Date();
         get() 메소드의 매개값으로 <strong>Calendar에 정의된 상수</strong>를 줌녀 상수가 의미하는 값을 리턴한다.
       </li>
     </ul>
+  <li>
+    Calendar 클래스의 오버로딩된 다른 getInstance() 메소드를 이용하여 미국/로스앤젤레스 등 <strong>다른 시간대의 Calendar</strong>를 얻을 수 있다.
+  </li>
+    <ul>
+      <li>
+        알고 싶은 시간대의 TimeZone 객체를 얻어 getInstance() 메소드의 <strong>매개값</strong>으로 넘겨준다.
+      </li>
+    </ul>
+  <li>
+    America/Los_Angeles와 같은 시간대 ID는 <strong>TimeZone.getAvailableIDs() 메소드</strong>의 리턴 값 중하나를 활용할 수 있다.
+  </li>
 </ul>
 
 ```java
 // 1. 컴퓨터의 시간대에 맞는 시간 객체 생성.
 Calendar now = Calendar.getInstance();
+
 
 // 2. Calendar에 정의된 상수로 결과 받기.
 int year = now.get(Calendar.YEAR);         // 년도를 리턴
@@ -691,4 +703,9 @@ int amPm = now.get(Calendar.AM_PM);        // 오전/오후를 리턴
 int hour = now.get(Calendar.HOUR);         // 시를 리턴
 int minute = now.get(Calendar.MINUTE);     // 분을 리턴
 int second = now.get(Calendar.SECOND);     // 초를 리턴
+
+
+// 3. 다른 지역의 시간대를 매개값으로 다른 지역 시간대 얻기.
+TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles");
+Calendar now = Calendar.getInstance( timeZone );
 ```
