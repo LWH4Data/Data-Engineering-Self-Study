@@ -709,3 +709,422 @@ int second = now.get(Calendar.SECOND);     // 초를 리턴
 TimeZone timeZone = TimeZone.getTimeZone("America/Los_Angeles");
 Calendar now = Calendar.getInstance( timeZone );
 ```
+
+<br>
+
+<h2>8-3. 날씨와 시간 조작</h2>
+<ul>
+  <li>
+    Date와 Calendar는 날짜와 시간 정보를 얻기에 충분하지만 조작하지는 못한다.
+  </li>
+  <li>
+    날짜 데이터를 조작하기 위해서는 <strong>java.time 패키지</strong>의 <strong>LocalDateTime 클래스가 제공하는 메소드</strong>를 활용할 수 있다. (p540 참고).
+  </li>
+</ul>
+
+```java
+// 1. LocalDateTime 클래스를 이용해 현재 컴퓨터 날짜와 시간 얻기.
+LocalDateTime now = LocalDateTime.now();
+```
+
+<br>
+
+<h2>8-4. 날짜와 시간 비교</h2>
+<ul>
+  <li>
+    LocalDateTime 클래스에는 <strong>날짜와 시간을 비교</strong>할 수 있는 메소드도 제공된다.
+  </li>
+</ul>
+
+```java
+// 1. 비교를 위해 LocatDateTime 객체를 각각 int로 얻기.
+LocalDateTime target = LocalDateTime.of(year, month, dayOfMonth, hour, minute, second);
+```
+
+<br><br>
+
+<h1>9. 형식 클래스</h1>
+<ul>
+  <li>
+    <strong>Format(형식) 클래스</strong>는 숫자 또는 날짜를 <strong>원하는 형태의 문자열</strong>로 변환해주는 기능을 제공한다.
+  </li>
+  <li>
+    Format 클래스는 java.text 패키지에 포함되어 있다. (p543을 참고).
+  </li>
+</ul>
+
+<br>
+
+<h2>8-5. DecimalFormat</h2>
+<ul>
+  <li>
+    DecimalFormat은 숫자를 <strong>형식화된 문자열</strong>로 변환하는 기능을 한다. (p544 참고).
+  </li>
+</ul>
+
+```java
+// 1. 패턴 정보와 함께 DecimalFormat 객체를 생성하고 
+//    format() 메소드로 숫자를 제공하여 패턴에 따른 형식화된 문자열 얻기.
+DecimalFormat df = new DecimalFormat("#,###.0");
+String result = df.format(1234567.89) // 1,234,567.9
+```
+
+<br>
+
+<h2>8-6. SimpleDateFormat</h2>
+<ul>
+  <li>
+    SimpleDateFormat은 날짜를 형식화된 문자열로 변환한다. (p545 참고).
+  </li>
+  <li>
+    패턴에는 <strong>자릿수</strong>에 맞게 기호를 반복해서 작성할 수 있다.
+  </li>
+</ul>
+
+```java
+// 1. 날짜 형식 지정 및 출력 예.
+SimpleDateFormat sdf = new SimpleDateFormat("yyyy년 MM월 dd일");
+String strDate = sdf.format(new Date()); // 현재 날짜를 지정된 형식 반환
+```
+
+<br><br>
+
+<h1>10. 정규 표현식 클래스</h1>
+<ul>
+  <li>
+    문자열이(예를 들어 사용자 입력) <strong>정해져 있는 형식</strong>으로 구성되어 있는지 검증해야하는 경우가 있다. 이때 <strong>정규 표현식(Regular Expression)</strong>을 사용한다.
+  </li>
+</ul>
+
+<br>
+
+<h2>10-1. 정규 표현식 작성 방법</h2>
+<ul>
+  <li>
+    정규 표현식은 문자 또는 숫자와 관련된 표현과 반복 기호가 결합된 문자열이다. (p547 참고).
+  </li>
+</ul>
+
+```java
+// 02-123-1234 혹은 010-1234-5678 전화번호 정규 표현식 예.
+(02|010)-\d{3,4}-\d{4}
+
+// white@naver.com 정규 표현식 예.
+\w+@\w+\. \w+(\.\w+)?
+```
+
+<br>
+
+<h2>10-2. Pattern 클래스로 검증</h2>
+<ul>
+  <li>
+    <strong>java.util.regex 패키지</strong>의 <strong>Pattern 클래스</strong>는 정규 표현식으로 문자열을 검증하는 <strong>matches() 메소드</strong>를 제공한다.
+  </li>
+    <ul>
+      <li>
+        첫 번째 매개값은 <strong>정규 표현식</strong>, 두 번째 매개값은 <strong>검증할 문자열</strong>이다.
+      </li>
+    </ul>
+  <li>
+    검증한 후의 결과는 <strong>boolean 타입</strong>으로 리턴된다.
+  </li>
+  <li>
+    '\'는 이스케이프 문자열로 활용될 수 있음을 주의해야 한다.
+  </li>
+</ul>
+
+<br><br>
+
+<h1>11. 리플렉션</h1>
+<ul>
+  <li>
+    자바는 클래스와 인터페이스의 메타 정보를 <strong>Class 객체</strong>로 관리한다.
+  </li>
+    <ul>
+      <li>
+        메타 정보란 <strong>패키지의 정보, 타입 정보, 멤버(생성자, 필드, 메소드) 정보</strong> 등을 말한다.
+      </li>
+    </ul>
+  <li>
+    메타 정보를 프로그램에서 읽고 수정하는 행위를<strong> 리플렉션(reflection)</strong>이라 한다.
+  </li>
+</ul>
+
+```java
+// 1. 메타 정보를 얻는 방법.
+// 1-1. 클래스로 얻기.
+Class clazz = String.class; // Class clazz = 클래스이름.class;
+Class clazz = Class.forName("java.lang.String"); // Class clazz = Class.forName("패키지...클래스이름");
+// 1-2. 객체로부터 얻기.
+String str = "김자바";
+Class clazz = str.getClass(); // Class clazz = 객체참조변수.getClass();
+```
+
+<br>
+
+<h2>11-1. 패키지와 타입 정보 얻기</h2>
+<ul>
+  <li>
+    패키지와 타입(클래스, 인터페이스) 이름 정보는 다음 메소드를 통해 얻을 수 있다.
+  </li>
+    <ul>
+      <li>
+        Package getPackage(): 패키지 정보 읽기.
+      </li>
+      <li>
+        String getSimpleName(): 패키지를 제외한 타입 이름.
+      </li>
+      <li>
+        String getName(): 패키지를 포함한 전체 타입 이름.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>11-2. 멤버 정보 얻기</h2>
+<ul>
+  <li>
+    타입(클래스, 인터페이스)이 가지고 있는 멤버 정보는 다음 메소드를 통해 얻을 수 있다.
+  </li>
+    <ul>
+      <li>
+        Constructor[]getDeclaredConstructors(): 생성자 정보 읽기
+      </li>
+      <li>
+        Field[]getDeclaredFields(): 필드 정보 읽기
+      </li>
+      <li>
+        Method[]getDeclaredMethods(): 메소드 정보 읽기
+      </li>
+    </ul>
+  <li>
+    Constructor, Field, Method 클래스는 모두 <strong>java.lang.reflect 패키지</strong>에 존재하며 각각 생성자, 필드, 메소드에 대한 선언부 정보를 제공한다.
+  </li>
+</ul>
+
+<br>
+
+<h2>11-3. 리소스 경로 얻기</h2>
+<ul>
+  <li>
+    Class 객체는 <strong>클래스 파일(*.class)</strong>의 경로 정보를 통해 <strong>상대 경로</strong>에 있는 다른 리소스 파일의 정보를 얻을 수 있다.
+  </li>
+  <li>
+    <strong>URL getResource(String name)</strong>은 URL 정보가 담긴 <strong>URL 객체</strong>를 리턴한다.
+  </li>
+  <li>
+    <strong>getResourceAsStream()</strong>은 파일의 내용을 읽을 수 있도록 <strong>InputStream 객체</strong>를 리턴한다.
+  </li>
+</ul>
+
+```java
+// 1. getPath()를 통해 절대 경로 얻기.
+// 상대 경로를 기반으로 절대 경로를 얻는다.
+String photo1Path = clazz.getResource("photo1.jpg").getPath();
+String photo2Path = clazz.getResource("images/photo2.jpg");
+```
+
+<br><br>
+
+<h1>12. 어노테이션</h1>
+<ul>
+  <li>
+    코드에서 <strong>@</strong>로 작성되는 요소를 <strong>어노테이션(Annotation)</strong>이라 한다.
+  </li>
+  <li>
+    어노테이션은 클래스 또는 인터페이스를 <strong>컴파일하거나 실행</strong>할 때 <strong>어떻게 처리해야 할 것이지 알려주는 설정 정보</strong>이다.
+  </li>
+  <li>
+    어노테이션의 사용 용도는 다음과 같다.
+  </li>
+    <ul>
+      <li>
+        <strong>컴파일</strong> 시 사용하는 정보 전달.
+      </li>
+        <ul>
+          <li>
+            대표적인 예로 @Override가 있다. 컴파일러가 메소드 재정의 검사를 하도록 설정한다.
+          </li>
+        </ul>
+      <li>
+        <strong>빌드 툴</strong>이 코드를 자동으로 생성할 때 사용하는 정보 전달.
+      </li>
+      <li>
+        <strong>실행 시 특정 기능</strong>을 처리할 때 사용하는 정보 전달.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>12-1. 어노테이션 타입 정의와 적용</h2>
+<ul>
+  <li>
+    어노테이션도 하나의 <strong>타입</strong>이며 사용하기 전에 먼저 <strong>정의</strong>부터 해야 한다.
+  </li>
+  <li>
+    어노테이션은 <strong>@interface + 어노테이션명</strong>으로 정의할 수 있으며 <strong>@어노테이션명</strong>으로 사용한다. 
+  </li>
+  <li>
+    어노테이션은 <strong>속성</strong>을 가질 수 있으며 <strong>타입</strong>과 <strong>이름</strong>으로 구성된다.
+  </li>
+    <ul>
+      <li>
+        이름 뒤에는 <strong>()</strong>를 붙인다.
+      </li>
+      <li>
+        속성값은 <strong>default 키워드</strong>로 <strong>기본값</strong>을 지정할 수 있다.
+      </li>
+    </ul>
+</ul>
+
+```java
+// 1. 어노테이션 정의
+//   - 정의된 어노테이션은 @AnnotationName과 같이 사용된다.
+public @interface AnnotationName {
+}
+
+// 2. 어노테이션 속성 정의.
+public @interface AnnotationName {
+  String prop1();
+  int prop2() default 1;
+}
+
+// 3. 어노테이션 사용.
+@AnnotationName(prop1= "값");
+@AnnotationName(prop1= "값", prop2=3);
+
+// 4. 기본 속성 value를 생성.
+public @interface AnnotationName {
+  String value();
+  int prop2() default 1;
+}
+
+// 5. value 속성을 갖는 어노테이션은 값만 기술하여 value 속성에 자동 대입 가능.
+@AnnotationName("값");
+
+// 6. value 속성과 다른 속성 값을 동시에 줄 때에는 value 명시.
+@AnnotationName(value= "값", prop2=3);
+```
+
+<br>
+
+<h2>12-2. 어노테이션 적용 대상</h2>
+<ul>
+  <li>
+    어떤 대상(클래스, 메소드 등)에 설정 정보를 적용할 것인지는 <strong>ElementType 열거 상수</strong>로 정의되어 있다. (p558 참고).
+  </li>
+  <li>
+    적용 대상을 지정할 때에는 <strong>@Target 어노테이션</strong>을 사용한다.
+  </li>
+    <ul>
+      <li>
+        @Target의 기본 속성인 value는 <strong>ElementType 배열</strong>을 값으로 갖는다.
+      </li>
+        <ul>
+          <li>
+            적용 대상을 <strong>복수 개로 지정</strong>하기 위해서이다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+```java
+// 1. @Target을 통해 어노테이션 지정.
+@Target( { ElementType.TYPE, ElementType.FIELD, ElementType.METHOD } )
+public @interface AnnotationName {
+}
+
+// TYPE(클래스)에 적용.
+@AnnotationName
+public class ClassName{
+  // 필드에 적용
+  @AnnotationName
+  private String fieldName;
+  
+  // @Target에 CONSTRUCT가 없기에 생성자에는 적용 못함.
+  // @AnnotationName
+  public ClassName() { }
+
+  // 메소드에 적용.
+  @AnnotationName
+  public void methodName() { }
+}
+```
+
+<br>
+
+<h2>12-3. 어노테이션 유지 정책</h2>
+<ul>
+  <li>
+    어노테이션을 정의할 때에는 <strong>언제까지 어노테이션을 유지</strong>할 것인지 지정해야 한다.
+  </li>
+    <ul>
+      <li>
+        어노테이션 유지 정책은 <strong>RetentionPolicy 열거 상수</strong>로 정의된다.
+      </li>
+        <ul>
+          <li>
+            SOURCE: 컴파일 적용 - 컴파일 후
+          </li>
+          <li>
+            CLASS: 메모리 로딩 - 메모리 로딩 후
+          </li>
+          <li>
+            RUNTIME: 실행 - 계속 유지
+          </li>
+        </ul>
+    </ul>
+  <li>
+    <strong>유지 정책</strong>을 지정할 때에는 <strong>@Retenstion 어노테이션</strong>을 사용한다.
+  </li>
+    <ul>
+      <li>
+        @Retension의 기본 속성인 value는 RetentionPolicy 열거 상수 값을 가진다.
+      </li>
+    </ul>
+</ul>
+
+```java
+// 1. RUNTIME 어노테이션 지정.
+@Target( { ElementType.TYPE, ElementType.FIELD, ElementType.METHOD } )
+@Retention( RetentionPolicy.RUNTIME )
+public @interface AnnotationName {
+}
+```
+
+<br><br>
+
+<h2>12-4. 어노테이션 설정 정보 이용</h2>
+<ul>
+  <li>
+    어노테이션은 <strong>동작이 없는 설정 정보</strong>로 어떻게 처리할 것인지는 애플리케이션의 몫이다.
+  </li>
+    <ul>
+      <li>
+        isAnnotationPresent(AnnotationName.class) 
+      </li>
+        <ul>
+          <li>
+            지정한 어노테이션 적용 여부 → boolean
+          </li>
+        </ul>
+      <li>
+        getAnnotation(AnnotationName.class)
+      </li>
+        <ul>
+          <li>
+            지정한 어노테이션이 적용되어 있다면 어노테이션 리턴, 아니라면 null 리턴 → Annotation
+          </li>
+        </ul>
+      <li>
+        getDeclaredAnnotation()
+      </li>
+        <ul>
+          <li>
+            적용된 모든 어노테이션을 리턴 → Annotation[]
+          </li>
+        </ul>
+    </ul>
+</ul>
