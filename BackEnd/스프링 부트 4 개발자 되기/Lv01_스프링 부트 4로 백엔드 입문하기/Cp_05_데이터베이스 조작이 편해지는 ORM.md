@@ -586,7 +586,128 @@ Optional<Member> findByNameQuery(String name);
         실제 서비스에서는 거의 사용하지 않고 <strong>테스트 간 격리를 보장</strong>하기 위해 사용한다.
       </li>
       <li>
-        따라서 보통 @AfterEach
+        따라서 보통 <strong>@AfterEach</strong> 애너테이션을 붙여 cleanUp() 메소드와 같은 형태로 사용한다.
+      </li>
+    </ul>
+  <li>
+    요약
+  </li>
+    <ul>
+      <li>
+        saveAll(): 한 번에 여러 레코드 추가.
+      </li>
+      <li>
+        deleteById(): 아이디로 레코드 삭제.
+      </li>
+      <li>
+        deleteAll(): 모든 레코드 삭제.
       </li>
     </ul>
 </ul>
+
+<h3>4-2-4. 수정 메서드 사용해보기</h3>
+<ul>
+  <li>
+    JPA는 <strong>트랜잭션 내</strong>에서 데이터를 수정한다. 따라서 데이터를 수정할 때에는 <strong>@Transactional 애너테이션</strong>을 메소드에 추가한다.
+  </li>
+    <ul>
+      <li>
+        객체에 값을 바꾸는 <strong>일종의 setter 메소드</strong>가 있고, @Transaction 애너테이션이 포함된 메소드가 이를 호출하면 JPA는 <strong>변경 감지(dirty checking)</strong> 기능을 통해 엔티티의 필드값이 변경될 때<strong>데이터베이스에 자동으</strong>로 반영한다.
+      </li>
+    </ul>
+  <li>
+    Test 코드에서는 @DataJpaTest 애너테이션이 트랜잭션을 관리하기에 @Transactional이 포함되어 있다. 따라서 작성하지 않아도 된다.
+  </li>
+    <ul>
+      <li>
+        하지만 <strong>실제 서비스</strong>에서는 @Transactional을 사용해야 한다.
+      </li>
+    </ul>
+</ul>
+
+<br><br>
+
+<h1>5. 예제 코드 살펴보기</h1>
+<ul>
+  <li>
+    자동키 생성 방식
+  </li>
+    <ul>
+      <li>
+        AUTO: 선택한 DB의 dialect에 따라 방식ㅇ르 자동으로 선택(기본값).
+      </li>
+      <li>
+        IDENTITY: 기본키 생성을 DB에 위임한다(=AUTO_INCREMENT).
+      </li>
+      <li>
+        SEQUENCE: DB 시퀀스를 사용해 기본키를 할당한다.
+      </li>
+      <li>
+        TABLK: 키 생성 테이블을 사용한다.
+      </li>
+    </ul>
+  <li>
+    @Column 애너테이션 속성.
+  </li>
+    <ul>
+      <li>
+        name: 필드와 매핑할 컬럼 이름. 설정하지 않을 경우 필드 이름으로 지정한다.
+      </li>
+      <li>
+        nullable: 컬럼의 null 허용 여부. 설정하지 않으면 true
+      </li>
+      <li>
+        unique: 컬럼의 유일한 값(unique) 여부. 설정하지 않으면 false.
+      </li>
+      <li>
+        columnDefinition: 컬럼 정보 설정. default 값을 줄 수 있다.
+      </li>
+    </ul>
+  <li>
+    리포지터리는 엔티티에 있는 데이터들을 <strong>조회하거나 저장, 변경, 삭제</strong>할 때 사용하는 <strong>인터페이스</strong>이다.
+  </li>
+    <ul>
+      <li>
+        <strong>JpaRepository 클래스를 상속</strong>받아 간단히 구현할 수 있다.
+      </li>
+        <ul>
+          <li>
+            상속을 받을 때 엔티티와 엔티티의 기본키 타입 Long을 인수로 넣어준다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+```java
+@Getter
+// Member 객체를 JPA가 관리하는 엔티티로 지정한다. (테이블 매핑).
+//   - name을 사용하면 name과 일치하는 테이블에 매핑한다.
+//   - name을 사용하지 않으면 클래스 이름과 동일한 테이블에 매핑한다.
+@Entity
+// Protected는 기본 생성자 이다.
+//   - 엔티티는 반드시 기본 생성자가 있어야 한다.
+//   - 접근 제어자는 public 혹은 protected를 제공한다.
+//     - public 보다는 protected가 더 안전하다.
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class Member {
+  
+  // @Id는 Long 타입의 id 필드를 테이블의 기본키로 지정한다.
+  @Id
+  // @GeneratedValue는 기본키의 생성 바식을 결정한다.
+  @GeneratedValue(strategy = GenerationType.IDENTITIY)
+  // @Column 애너테이션은 DB의 컬럼과 필드를 매핑한다.
+  @Column(name = "id", updatable = false)
+  private Long id;
+ 
+  @Column(name = "name", nullable = false)
+  private String name;
+
+  public Member(String name) {
+    this.name = name;
+  }
+
+  public void changeName(String name) {
+    this.name = name;
+  }
+}
+```
