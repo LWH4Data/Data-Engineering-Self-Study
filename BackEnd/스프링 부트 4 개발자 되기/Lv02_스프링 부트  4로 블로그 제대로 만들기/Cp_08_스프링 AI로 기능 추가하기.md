@@ -256,3 +256,36 @@
     "controller/BlogApiController.java"에 "/api/ai-thumbnails POST" 여청이 오면 AI를 활용해 섬네일을 생성하는 thumbnailGenerator() 메서드를 작성한다.
   </li>
 </ul>
+
+<br>
+
+<h2>4-5. 실행 테스트하기</h2>
+<ul>
+  <li>
+    포스트맨에서 [POST]로 "http://localhost:8080/api/thumbnails"로 요청한다. [Body]는 [raw][JSON]으로 설정한 뒤 title과 content를 입력한다.
+  </li>
+</ul>
+
+<br>
+
+<h2>4-6. 글 생성 뷰 수정하기</h2>
+<ul>
+  <li>
+    지금까지 만든 API를 활용해 [AI 섬네일 만들기] 버튼을 추가한다.
+  </li>
+  <li>
+    "resources/templates/newArticle.html" 파일에 [AI 섬네일 만들기] 버튼과 로딩 시간 동안 보여줄 뷰를 추가한다.
+  </li>
+  <li>
+    "static/js/article.js" 파일에 [AI 도움받기] 버튼을 누르면 입력칸에 있는 데이터를 가져와 API를 호출해 AI 제안을 받는 Js 코드 추가.
+  </li>
+</ul>
+
+<br>
+
+<h2>4-7. 실행 테스트하기</h2>
+<ul>
+  <li>
+    "http://localhost:8080/new-article"에 접속해 제목과 내용을 채우고 테스트한다.
+  </li>
+</ul>
