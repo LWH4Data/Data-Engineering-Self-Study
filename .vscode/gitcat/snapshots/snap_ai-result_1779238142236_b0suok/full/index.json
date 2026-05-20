@@ -1,0 +1,14 @@
+{
+  "before": {
+    "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md": {
+      "exists": true,
+      "storedPath": "before/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md"
+    }
+  },
+  "after": {
+    "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md": {
+      "exists": true,
+      "storedPath": "after/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md"
+    }
+  }
+}

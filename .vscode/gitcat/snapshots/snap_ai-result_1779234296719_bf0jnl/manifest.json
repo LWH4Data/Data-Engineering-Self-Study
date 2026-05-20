@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779234296719_bf0jnl",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_ai-result_1779179513786_ryj6fo",
+  "createdAt": "2026-05-19T23:44:56.719Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+      "status": "modified",
+      "beforeHash": "f926f3f25c2c5d806ba16f540d4bcd64637afb8315765fc1c0d03bef43d34127",
+      "afterHash": "551850e905238c4232b00b521cc31d7e9ba5574c96cea7cf4585e13502ea9bc1",
+      "importance": "medium",
+      "additions": 5,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+          "oldStart": 413,
+          "oldLines": 3,
+          "newStart": 413,
+          "newLines": 8,
+          "beforeText": "</ul>\n\n<h3>3-2-2. 메인 환경 파일</h3>",
+          "afterText": "</ul>\n\n<h3>3-2-2. 메인 환경 파일</h3>\n<ul>\n  <li>\n    \n  </li>\n</ul>"
+        }
+      ]
+    }
+  ]
+}

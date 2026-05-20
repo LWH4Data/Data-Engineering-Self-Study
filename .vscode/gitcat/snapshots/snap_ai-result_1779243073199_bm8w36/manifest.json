@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779243073199_bm8w36",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_ai-result_1779242731253_ky5vdr",
+  "createdAt": "2026-05-20T02:11:13.199Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+      "status": "modified",
+      "beforeHash": "103db821f94ce8862d6e9cddd1b228e36583a0eda2a49951651040ed0790c7d1",
+      "afterHash": "c834bb5339dd8fc20f2423715e56a20baa740fd5050b31fc02d32682a4a45cf2",
+      "importance": "medium",
+      "additions": 5,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+          "oldStart": 514,
+          "oldLines": 3,
+          "newStart": 514,
+          "newLines": 8,
+          "beforeText": "</ul>\n\n<h3>2-3-5. 메인 액티비티 파일</h3>",
+          "afterText": "</ul>\n\n<h3>2-3-5. 메인 액티비티 파일</h3>\n<ul>\n  <li>\n    \"app/kotlin+java/com.exmaple.androidlap/MainActivity.kt\"는 앱 아이콘을 터치하면 실행된다.\n  </li>\n</ul>"
+        }
+      ]
+    }
+  ]
+}

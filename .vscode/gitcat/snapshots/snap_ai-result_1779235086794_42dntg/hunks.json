@@ -1,0 +1,12 @@
+[
+  {
+    "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md#hunk-1",
+    "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+    "oldStart": 417,
+    "oldLines": 4,
+    "newStart": 417,
+    "newLines": 13,
+    "beforeText": "  <li>\n    \"app/manifests/AndroidManifest.xml\"은 안드로이드 앱의 <strong>메인 환경 파일</strong>이다.\n  </li>\n</ul>",
+    "afterText": "  <li>\n    \"app/manifests/AndroidManifest.xml\"은 안드로이드 앱의 <strong>메인 환경 파일</strong>이다.\n  </li>\n  <li>\n    개발을 하며 매니페스트 파일을 분석하고 수정할 일이 많다.\n  </li>\n  <li>\n    안드로이드 시스템은 매니페스트 파일에 설정한 대로 사용자의 폰에서 앱을 실행한다.\n  </li>\n  <li>\n    코드에 대한 설명은 주석으로 정리한다.\n  </li>\n</ul>"
+  }
+]

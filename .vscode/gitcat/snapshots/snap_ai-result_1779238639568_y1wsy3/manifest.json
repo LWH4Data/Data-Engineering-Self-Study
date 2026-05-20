@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779238639568_y1wsy3",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_ai-result_1779238268831_lh6w61",
+  "createdAt": "2026-05-20T00:57:19.568Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+      "status": "modified",
+      "beforeHash": "9cd613a7839861a3eddb52e33d38b9e82ac166ecbe290f9f3d7a0976e8459a82",
+      "afterHash": "fa4b7093a237bb338fd8a9eef2bbf9b46bde4f2840720772840e465312e73fe9",
+      "importance": "medium",
+      "additions": 16,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+          "oldStart": 471,
+          "oldLines": 4,
+          "newStart": 471,
+          "newLines": 20,
+          "beforeText": "        values: 문자열 등의 값으로 이용되는 리소스\n      </li>\n    </ul>\n</ul>",
+          "afterText": "        values: 문자열 등의 값으로 이용되는 리소스\n      </li>\n    </ul>\n  <li>\n    res 폴더 아래 리소스를 만들면 자동으로 <strong>R.java 파일</strong>에 <strong>상수 변수</strong>로 리소스가 등록되고 코드에서는 생성된 <strong>상수 변수</strong>로 리소스를 이용한다.\n  </li>\n    <ul>\n      <li>\n        R.java 파일은 자동으로 만들어지며 개발자가 만드는 파일이 아니기에 최근 버전에서는 안드로이드 스튜디오에 표시되지 않는다.\n      </li>\n    </ul>\n  <li>\n    리소스를 등록하면 <strong>int형 변수</strong>가 R.java 파일에 등록된다. 정확히는 각 폴더의 <strong>하위 클래스</strong>도 만들어지며 <strong>파일명</strong>을 기준으로 int형 변수가 자동 생성된다.\n  </li>\n    <ul>\n      <li>\n        예를 들어 \"res/drawable/person1.png\"를 생성했다면 활용할 때에는 \"R.drawable.person1\"로 식별한다.\n      </li>\n    </ul>\n</ul>"
+        }
+      ]
+    }
+  ]
+}

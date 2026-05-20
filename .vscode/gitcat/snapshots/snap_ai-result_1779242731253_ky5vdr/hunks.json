@@ -1,0 +1,12 @@
+[
+  {
+    "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md#hunk-1",
+    "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+    "oldStart": 507,
+    "oldLines": 3,
+    "newStart": 507,
+    "newLines": 8,
+    "beforeText": "</ul>\n\n<h3>2-3-4. 레이아웃 XML 파일</h3>",
+    "afterText": "</ul>\n\n<h3>2-3-4. 레이아웃 XML 파일</h3>\n<ul>\n  <li>\n    \n  </li>\n</ul>"
+  }
+]

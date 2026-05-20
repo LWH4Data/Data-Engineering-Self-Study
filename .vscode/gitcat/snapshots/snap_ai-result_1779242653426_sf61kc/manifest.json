@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779242653426_sf61kc",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_ai-result_1779238639568_y1wsy3",
+  "createdAt": "2026-05-20T02:04:13.426Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+      "status": "modified",
+      "beforeHash": "fa4b7093a237bb338fd8a9eef2bbf9b46bde4f2840720772840e465312e73fe9",
+      "afterHash": "d144379e1683a3624490e08174e386a175771b6e7ebb152949aaaf8feeed18bc",
+      "importance": "medium",
+      "additions": 17,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/첫째마당 안드로이드 앱 개발 준비하기/Cp_02_안드로이드 앱의 기본 구조.md",
+          "oldStart": 487,
+          "oldLines": 4,
+          "newStart": 487,
+          "newLines": 21,
+          "beforeText": "        예를 들어 \"res/drawable/person1.png\"를 생성했다면 활용할 때에는 \"R.drawable.person1\"로 식별한다.\n      </li>\n    </ul>\n</ul>",
+          "afterText": "        예를 들어 \"res/drawable/person1.png\"를 생성했다면 활용할 때에는 \"R.drawable.person1\"로 식별한다.\n      </li>\n    </ul>\n  <li>\n    R.java 파일에 상수 변수로 등록하여 사용하는 데에는 다음과 같은 규칙들이 있다.\n  </li>\n    <ul>\n      <li>\n        res 하위의 폴더명은 <strong>지정된 폴더명</strong>을 사용해야 한다.\n      </li>\n      <li>\n        각 리소스 폴더에 다시 <strong>하위 폴더</strong>를 정의할 수는 없다.\n      </li>\n      <li>\n        리소스 파일명은 <strong>자바의 이름 규칙</strong>을 위배할 수 없다.\n      </li>\n      <li>\n        리소스 파일명에는 <strong>알파벳 대문자</strong>를 이용할 수 없다.\n      </li>\n    </ul>\n</ul>"
+        }
+      ]
+    }
+  ]
+}
