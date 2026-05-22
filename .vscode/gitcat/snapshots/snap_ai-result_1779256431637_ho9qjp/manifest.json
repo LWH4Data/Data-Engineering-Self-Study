@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779256431637_ho9qjp",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_auto-dirty-before-ai_1779256343832_ijzu06",
+  "createdAt": "2026-05-20T05:53:51.637Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+      "status": "modified",
+      "beforeHash": "77298b6ca16a636c9956d856efe1c8e9143dedc6ac00d431744807f42cd4c1c8",
+      "afterHash": "eebf46fa9af20fb168e7a0efb0ffcdd17e9e4b5070a053e06dea1ff12f13fc44",
+      "importance": "medium",
+      "additions": 5,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+          "oldStart": 115,
+          "oldLines": 3,
+          "newStart": 115,
+          "newLines": 8,
+          "beforeText": "<br>\n\n<h2>1-3. 코틀린 소스를 테스트하는 방법</h2>",
+          "afterText": "<br>\n\n<h2>1-3. 코틀린 소스를 테스트하는 방법</h2>\n<ul>\n  <li>\n    단순히 코틀린 소스 파일의 main() 함수를 실행하는 코드를 작성한다.\n  </li>\n</ul>"
+        }
+      ]
+    }
+  ]
+}

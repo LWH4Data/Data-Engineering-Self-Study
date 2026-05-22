@@ -1,0 +1,22 @@
+[
+  {
+    "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+    "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+    "oldStart": 316,
+    "oldLines": 7,
+    "newStart": 316,
+    "newLines": 13,
+    "beforeText": "      <li>\n        <strong>큰따옴표</strong>로 표현한 문자열에서 Enter 혹은 Tab을 활용한 <strong>줄 바꿈</strong>이나 <strong>들여쓰기</strong> 등을 유지하려면 <strong>역슬래시(\\)</strong>로 시작하는 <strong>이스케이프 시퀀스(escape sequence)</strong>를 입력해야 한다.\n      </li>\n    </ul>\n</ul>\n\n```kotlin",
+    "afterText": "      <li>\n        <strong>큰따옴표</strong>로 표현한 문자열에서 Enter 혹은 Tab을 활용한 <strong>줄 바꿈</strong>이나 <strong>들여쓰기</strong> 등을 유지하려면 <strong>역슬래시(\\)</strong>로 시작하는 <strong>이스케이프 시퀀스(escape sequence)</strong>를 입력해야 한다.\n      </li>\n      <li>\n        삼중 따옴표의 경우 자동 완성처럼 <strong>\".trimIndent()\"</strong>가 붙는데 이는 <strong>공통적으로 적용되는 문자 앞의 공백</strong>을 제거한다.\n      </li>\n    </ul>\n  <li>\n    String 타입의 데이터에 <strong>변숫값</strong>이나 어떤 <strong>연산식의 결과</strong>를 포함해야할 때에는 <strong>'$' 기호</strong>를 이용하며 이를 <strong>문자열 템플릿(string template)</strong>이라 한다.\n  </li>\n</ul>\n\n```kotlin"
+  },
+  {
+    "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-2",
+    "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+    "oldStart": 338,
+    "oldLines": 4,
+    "newStart": 344,
+    "newLines": 22,
+    "beforeText": "    println(\"str1: $str1\")\n    println(\"str2: $str2\")\n}\n```",
+    "afterText": "    println(\"str1: $str1\")\n    println(\"str2: $str2\")\n}\n\n// 3. 문자열 템플릿 사용 예.\nfun main() {\n    fun sum(no: Int): Int {\n        var sum = 0\n        for (i in 1..no) {\n            sum += i\n        }\n        return sum\n    }\n\n    val name: String = \"kkang\"\n    println(\"name : $name, sum : ${sum(10)}, plus : ${10 + 20}\")\n    /*\n    < 실행 결과 >\n    name : kkang, sum : 55, plus : 30\n    */\n}\n```"
+  }
+]

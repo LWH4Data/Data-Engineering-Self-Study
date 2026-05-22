@@ -1,0 +1,14 @@
+{
+  "before": {
+    "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md": {
+      "exists": true,
+      "storedPath": "before/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md"
+    }
+  },
+  "after": {
+    "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md": {
+      "exists": true,
+      "storedPath": "after/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md"
+    }
+  }
+}

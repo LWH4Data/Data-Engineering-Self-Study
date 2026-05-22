@@ -1,0 +1,150 @@
+diff --git a/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md b/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
+index 8a6ca92a1986..83157f586d0a
+--- a/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
++++ b/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
+@@ -124,6 +124,145 @@
+   </li>
+ </ul>
+ 
++```kotlin
++// 함수 작성하고 실행.
++fun main() {
++    println("hello world")
++}
++```
++
+ <br><br>
+ 
+ <h1>2. 변수와 함수</h1>
++<h2>2-1. 변수 선언하기</h2>
++<ul>
++  <li>
++    코틀린에서 변수는 <strong>val</strong>과 <strong>var</strong> 키워드로 선언한다.
++  </li>
++    <ul>
++      <li>
++        val은 value의 줄임말로 초깃값이 할당되면 <strong>바꿀 수 없는 변수</strong>를 선언할 때 사용한다.
++      </li>
++      <li>
++        var는 variable의 줄임말로 초깃값이 할당된 후에도 값을 <strong>바꿀 수 있는</strong> 변수를 선언할 때 사용한다.
++      </li>
++    </ul>
++  <li>
++    val(혹은 var) 변수명: 타입=값
++  </li>
++</ul>
++
++```kotlin
++// 1. var와 val의 차이.
++val data1 = 10
++var data2 = 10
++
++fun main() {
++    data1 = 20  // 오류!
++    data2 = 20  // 성공!
++}
++```
++
++<h3>2-1-1. 타입 지정과 타입 추론</h3>
++<ul>
++  <li>
++    변수명 뒤에 <strong>콜론(:)</strong>을 추가해 <strong>타입을 명시</strong>할 수 있다. <strong>추론</strong>이 가능한 경우에는 <strong>생략</strong>이 가능하다.
++  </li>
++</ul>
++
++```kotlin
++// 1. 변수에 타입 지정과 타입 추론.
++// 1-1. 타입 지정.
++val data1: Int = 10
++// 1-2. 타입 추론
++val data2 = 10
++```
++
++<h3>2-1-2. 초깃값 할당</h3>
++<ul>
++  <li>
++    <strong>최상위</strong>에 선언한 <strong>변수나 클래스의 멤버 변수</strong>는 선언과 동시에 <strong>초깃값</strong>을 할당해야 한다.
++  </li>
++    <ul>
++      <li>
++        함수 내부에 선언한 변수는 선언시에 초깃값을 할당할 필요는 없으나 나중에 <strong>사용하기 전</strong>에는 할당해야 한다.
++      </li>
++    </ul>
++</ul>
++
++```kotlin
++// 1. 초깃값 할당.
++val data1: Int  // 오류! - 값을 초기화 안함.
++val data2 = 10  // 성공!
++
++fun  someFun() {
++    val data3: Int
++    println("data3: $data3")   // 오류! - 값을 초기화 안함.
++    data3 = 10
++    println("data3 : $data3")  // 성공! - 값을 10으로 초기화함.
++}
++
++class User {
++    val data4: Int       // 오류! - 값을 초기화 안함.
++    val data5: Int = 10  // 성공!
++}
++```
++
++<h3>2-1-3. 초기화 미루기</h3>
++<ul>
++  <li>
++    변수르 선언할 때 초깃값을 할당할 수 없는 경우가 있는데 이떄에는 <strong>lateinit</strong>이나 <strong>lazy 키워드</strong>를 통해 값을 이후헤 할당할 것을 <strong>컴파일러</strong>에게 알려야 한다.
++  </li>
++  <li>
++    <strong>lateinit</strong>은 <strong>var 키워드</strong>로 선언한 변수에만 사용할 수 있다. 반면 Int, Long, Short, Double, Float, Boolean, Byte에는 사용이 불가하다.
++  </li>
++  <li>
++    <strong>lazy 키워드</strong>는 변순 선언문 뒤에 <strong>"by lazy { }"</strong> 형식으로 선언한다.
++  </li>
++    <ul>
++      <li>
++        소스에서 변수가 최초로 이용되는 순간 <strong>중괄호 내의 코드</strong>가 실행되며 <strong>실행 결과값</strong>이 초깃값으로 할당된다.
++      </li>
++      <li>
++        여러 중괄호가 있다면 <strong>가장 마지막 중괄호의 실행 결과</strong>가 변수의 초깃값이 된다.
++      </li>
++    </ul>
++</ul>
++
++```kotlin
++// 1. 초기화 미루기1 - lateinit 키워드.
++lateinit var data1: Int     // 오류! - Int 선언.
++lateinit val data2: String  // 오류! - val 선언.
++lateinit var data3: String  // 성공!
++```
++
++```kotlin
++// 2. 초기화 미루기2 - lazy 키워드.
++val data4: Int by lazy {
++    println("in lazy......")
++    10
++}
++
++fun main() {
++    println("in main......")
++    println(data4 + 10)
++    println(data4 + 10)
++}
++
++/*
++<실행 결과>
++in main......
++in lazy......
++20
++20
++*/
++```
++
++<br>
++
++<h2>2-2. 데이터 타입</h2>
++<ul>
++  <li>
++    
++  </li>
++</ul>

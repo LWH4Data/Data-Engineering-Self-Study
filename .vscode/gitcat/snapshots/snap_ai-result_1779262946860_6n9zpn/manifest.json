@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779262946860_6n9zpn",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_auto-dirty-before-ai_1779261871170_efji50",
+  "createdAt": "2026-05-20T07:42:26.860Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+      "status": "modified",
+      "beforeHash": "8a6ca92a19869f677d44482955ba8e006f6e88da7f7a9e9ebfe5c0503b60ef82",
+      "afterHash": "83157f586d0abce02f74d699c33ea1d675df1ba8053dbf6c92a80fccd449ad68",
+      "importance": "medium",
+      "additions": 139,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+          "oldStart": 124,
+          "oldLines": 6,
+          "newStart": 124,
+          "newLines": 145,
+          "beforeText": "  </li>\n</ul>\n\n<br><br>\n\n<h1>2. 변수와 함수</h1>",
+          "afterText": "  </li>\n</ul>\n\n```kotlin\n// 함수 작성하고 실행.\nfun main() {\n    println(\"hello world\")\n}\n```\n\n<br><br>\n\n<h1>2. 변수와 함수</h1>\n<h2>2-1. 변수 선언하기</h2>\n<ul>\n  <li>\n    코틀린에서 변수는 <strong>val</strong>과 <strong>var</strong> 키워드로 선언한다.\n  </li>\n    <ul>\n      <li>\n        val은 value의 줄임말로 초깃값이 할당되면 <strong>바꿀 수 없는 변수</strong>를 선언할 때 사용한다.\n      </li>\n      <li>\n        var는 variable의 줄임말로 초깃값이 할당된 후에도 값을 <strong>바꿀 수 있는</strong> 변수를 선언할 때 사용한다.\n      </li>\n    </ul>\n  <li>\n    val(혹은 var) 변수명: 타입=값\n  </li>\n</ul>\n\n```kotlin\n// 1. var와 val의 차이.\nval data1 = 10\nvar data2 = 10\n\nfun main() {\n    data1 = 20  // 오류!\n    data2 = 20  // 성공!\n}\n```\n\n<h3>2-1-1. 타입 지정과 타입 추론</h3>\n<ul>\n  <li>\n    변수명 뒤에 <strong>콜론(:)</strong>을 추가해 <strong>타입을 명시</strong>할 수 있다. <strong>추론</strong>이 가능한 경우에는 <strong>생략</strong>이 가능하다.\n  </li>\n</ul>\n\n```kotlin\n// 1. 변수에 타입 지정과 타입 추론.\n// 1-1. 타입 지정.\nval data1: Int = 10\n// 1-2. 타입 추론\nval data2 = 10\n```\n\n<h3>2-1-2. 초깃값 할당</h3>\n<ul>\n  <li>\n    <strong>최상위</strong>에 선언한 <strong>변수나 클래스의 멤버 변수</strong>는 선언과 동시에 <strong>초깃값</strong>을 할당해야 한다.\n  </li>\n    <ul>\n      <li>\n        함수 내부에 선언한 변수는 선언시에 초깃값을 할당할 필요는 없으나 나중에 <strong>사용하기 전</strong>에는 할당해야 한다.\n      </li>\n    </ul>\n</ul>\n\n```kotlin\n// 1. 초깃값 할당.\nval data1: Int  // 오류! - 값을 초기화 안함.\nval data2 = 10  // 성공!\n\nfun  someFun() {\n    val data3: Int\n    println(\"data3: $data3\")   // 오류! - 값을 초기화 안함.\n    data3 = 10\n    println(\"data3 : $data3\")  // 성공! - 값을 10으로 초기화함.\n}\n\nclass User {\n    val data4: Int       // 오류! - 값을 초기화 안함.\n    val data5: Int = 10  // 성공!\n}\n```\n\n<h3>2-1-3. 초기화 미루기</h3>\n<ul>\n  <li>\n    변수르 선언할 때 초깃값을 할당할 수 없는 경우가 있는데 이떄에는 <strong>lateinit</strong>이나 <strong>lazy 키워드</strong>를 통해 값을 이후헤 할당할 것을 <strong>컴파일러</strong>에게 알려야 한다.\n  </li>\n  <li>\n    <strong>lateinit</strong>은 <strong>var 키워드</strong>로 선언한 변수에만 사용할 수 있다. 반면 Int, Long, Short, Double, Float, Boolean, Byte에는 사용이 불가하다.\n  </li>\n  <li>\n    <strong>lazy 키워드</strong>는 변순 선언문 뒤에 <strong>\"by lazy { }\"</strong> 형식으로 선언한다.\n  </li>\n    <ul>\n      <li>\n        소스에서 변수가 최초로 이용되는 순간 <strong>중괄호 내의 코드</strong>가 실행되며 <strong>실행 결과값</strong>이 초깃값으로 할당된다.\n      </li>\n      <li>\n        여러 중괄호가 있다면 <strong>가장 마지막 중괄호의 실행 결과</strong>가 변수의 초깃값이 된다.\n      </li>\n    </ul>\n</ul>\n\n```kotlin\n// 1. 초기화 미루기1 - lateinit 키워드.\nlateinit var data1: Int     // 오류! - Int 선언.\nlateinit val data2: String  // 오류! - val 선언.\nlateinit var data3: String  // 성공!\n```\n\n```kotlin\n// 2. 초기화 미루기2 - lazy 키워드.\nval data4: Int by lazy {\n    println(\"in lazy......\")\n    10\n}\n\nfun main() {\n    println(\"in main......\")\n    println(data4 + 10)\n    println(data4 + 10)\n}\n\n/*\n<실행 결과>\nin main......\nin lazy......\n20\n20\n*/\n```\n\n<br>\n\n<h2>2-2. 데이터 타입</h2>\n<ul>\n  <li>\n    \n  </li>\n</ul>"
+        }
+      ]
+    }
+  ]
+}

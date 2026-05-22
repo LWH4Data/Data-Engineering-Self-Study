@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_ai-result_1779264337808_92qv6g",
+  "type": "ai_result",
+  "previousSnapshotId": "snap_ai-result_1779262946860_6n9zpn",
+  "createdAt": "2026-05-20T08:05:37.808Z",
+  "reason": "세션 타임아웃",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+      "status": "modified",
+      "beforeHash": "f2ea8372186742efaef8d5cebe293257b980afc515f97be1f0d23e6aa60e7797",
+      "afterHash": "ac6558156eecb1ba4e5e4675371b580354bc0e561a74694ed3c783aac9b4f57b",
+      "importance": "medium",
+      "additions": 16,
+      "deletions": 0,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+          "oldStart": 265,
+          "oldLines": 4,
+          "newStart": 265,
+          "newLines": 20,
+          "beforeText": "  <li>\n    코틀린의 모든 변수는 객체이고 따라서 <strong>모든 타입 또한 객체</strong>이다.\n  </li>\n</ul>",
+          "afterText": "  <li>\n    코틀린의 모든 변수는 객체이고 따라서 <strong>모든 타입 또한 객체</strong>이다.\n  </li>\n    <ul>\n      <li>\n        예를 들어 정수를 다루는 데이터 타입인 Int도 기초 데이터 타입(primitive type)이 아니라 <strong>클래스</strong>이다.\n      </li>\n    </ul>\n</ul>\n\n```kotlin\n// 1. int 타입에 null 대입과 메서드 이용.\nfun someFun() {\n    var data1: Int = 10\n    var data2: Int? = null  // null 대입 가능.\n\n    data1 = data1 + 10 \n    data1 = data1.plus(10)  // 객체의 메서드 이용 가능.\n}\n```"
+        }
+      ]
+    }
+  ]
+}

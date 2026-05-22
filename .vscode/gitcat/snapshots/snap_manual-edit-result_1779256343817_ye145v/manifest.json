@@ -1,0 +1,41 @@
+{
+  "snapshotId": "snap_manual-edit-result_1779256343817_ye145v",
+  "type": "manual_edit_result",
+  "previousSnapshotId": "snap_ai-result_1779256212117_uwrbyu",
+  "createdAt": "2026-05-20T05:52:23.817Z",
+  "reason": "세션 종료",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+      "status": "modified",
+      "beforeHash": "c3bf1fc73e46cf24d275e16d327c7f93f92789028ec97ef7efbf138f13d43bdc",
+      "afterHash": "cd1589fb45e92d4fc6784a61a50f4a02dc31dbbf70df73baaf94a961eee9a066",
+      "importance": "medium",
+      "additions": 6,
+      "deletions": 1,
+      "hunkCount": 2,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+          "oldStart": 80,
+          "oldLines": 7,
+          "newStart": 80,
+          "newLines": 7,
+          "beforeText": "      </li>\n    </ul>\n  <li>\n    \n  </li>\n</ul>\n",
+          "afterText": "      </li>\n    </ul>\n  <li>\n    코틀린 컴파일러는 컴파일 시에 소스 파일 <strong>최상위에 선언한 변수와 함수를 포함</strong>하여 클래스로 만들기 때문에 자바에서도 코틀린으로 작성한 함수나 변수를 활용할 수 있다.\n  </li>\n</ul>\n"
+        },
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-2",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+          "oldStart": 111,
+          "oldLines": 3,
+          "newStart": 111,
+          "newLines": 8,
+          "beforeText": "    }\n}\n```",
+          "afterText": "    }\n}\n```\n\n<br>\n\n<h2>1-3. 코틀린 소스를 테스트하는 방법</h2>\nu"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+[
+  {
+    "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+    "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+    "oldStart": 284,
+    "oldLines": 3,
+    "newStart": 284,
+    "newLines": 58,
+    "beforeText": "```\n\n<h3>2-2-1. Int, Short, Long, Double, Float, Byte, Boolean - 기초 타입 객체</h3>",
+    "afterText": "```\n\n<h3>2-2-1. Int, Short, Long, Double, Float, Byte, Boolean - 기초 타입 객체</h3>\n<ul>\n  <li>\n    기초 데이터를 <strong>객체</strong>로 표현하는 타입이다.\n  </li>\n    <ul>\n      <li>\n        정수: Int, Short, Long\n      </li>\n      <li>\n        실수: Double, Float\n      </li>\n      <li>\n        2진수: Byte\n      </li>\n      <li>\n        T/F: Boolean\n      </li>\n    </ul>\n</ul>\n\n<h3>2-2-2. Char, String - 문자와 문자열</h3>\n<ul>\n  <li>\n    <strong>Char</strong>는 <strong>문자</strong>를 표현하는 타입으로 코틀린에서는 <strong>작은따옴표(')</strong>로 감싸서 표현하며 <strong>Number 타입</strong>으로 표현할 수 없다.\n  </li>\n  <li>\n    <strong>String</strong>은 <strong>문자열</strong>을 표현하는 타입으로 <strong>큰따옴표(\")</strong>나 <strong>삼중 따옴표(\"\"\")</strong>로 감싸서 표현한다.\n  </li>\n    <ul>\n      <li>\n        <strong>큰따옴표</strong>로 표현한 문자열에서 Enter 혹은 Tab을 활용한 <strong>줄 바꿈</strong>이나 <strong>들여쓰기</strong> 등을 유지하려면 <strong>역슬래시(\\)</strong>로 시작하는 <strong>이스케이프 시퀀스(escape sequence)</strong>를 입력해야 한다.\n      </li>\n    </ul>\n</ul>\n\n```kotlin\n// 1. 문자 표현.\nval a: Char = 'a'\nif (a == 1) {  // 오류! - Number 타입으로 표현 불가.\n\n}\n\n// 2. 문자열 표현 - 큰따옴표와 삼중 따옴표의 차이\nfun main() {\n    // 큰 따옴표는 이스케이프 시퀀스 필요.\n    val str1 = \"Hello \\n World\"\n    // 삼중 따옴표는 이스케이프 시퀀스 없어도 됨.\n    val str2 = \"\"\"\n        Hello\n        World\n    \"\"\"\n    println(\"str1: $str1\")\n    println(\"str2: $str2\")\n}\n```"
+  }
+]

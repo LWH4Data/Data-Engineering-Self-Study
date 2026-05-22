@@ -1,0 +1,25 @@
+diff --git a/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md b/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
+index f2ea83721867..ac6558156eec
+--- a/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
++++ b/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
+@@ -265,4 +265,20 @@
+   <li>
+     코틀린의 모든 변수는 객체이고 따라서 <strong>모든 타입 또한 객체</strong>이다.
+   </li>
++    <ul>
++      <li>
++        예를 들어 정수를 다루는 데이터 타입인 Int도 기초 데이터 타입(primitive type)이 아니라 <strong>클래스</strong>이다.
++      </li>
++    </ul>
+ </ul>
++
++```kotlin
++// 1. int 타입에 null 대입과 메서드 이용.
++fun someFun() {
++    var data1: Int = 10
++    var data2: Int? = null  // null 대입 가능.
++
++    data1 = data1 + 10 
++    data1 = data1.plus(10)  // 객체의 메서드 이용 가능.
++}
++```

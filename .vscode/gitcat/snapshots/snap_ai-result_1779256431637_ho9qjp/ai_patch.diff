@@ -1,0 +1,13 @@
+diff --git a/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md b/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
+index 77298b6ca16a..eebf46fa9af2
+--- a/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
++++ b/FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md
+@@ -115,3 +115,8 @@
+ <br>
+ 
+ <h2>1-3. 코틀린 소스를 테스트하는 방법</h2>
++<ul>
++  <li>
++    단순히 코틀린 소스 파일의 main() 함수를 실행하는 코드를 작성한다.
++  </li>
++</ul>

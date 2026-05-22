@@ -1,0 +1,12 @@
+[
+  {
+    "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+    "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+    "oldStart": 120,
+    "oldLines": 6,
+    "newStart": 120,
+    "newLines": 11,
+    "beforeText": "    단순히 코틀린 소스 파일의 main() 함수를 실행하는 코드를 작성한다.\n  </li>\n  <li>\n    도서에서는 단순히 하면 된다는데 나의 경우 [File] → [New] → [New Module] → [Java or Kotlin Library]로 새로운 모듈을 생성하고 파일을 작성해야 작동한다.\n  </li>\n</ul>",
+    "afterText": "    단순히 코틀린 소스 파일의 main() 함수를 실행하는 코드를 작성한다.\n  </li>\n  <li>\n    도서에서는 단순히 하면 된다는데 나의 경우 <strong>[File] → [New] → [New Module] → [Java or Kotlin Library]</strong>로 새로운 모듈을 생성하고 파일을 작성해야 작동한다.\n  </li>\n</ul>\n\n<br><br>\n\n<h1>2. 변수와 함수</h1>\nu"
+  }
+]

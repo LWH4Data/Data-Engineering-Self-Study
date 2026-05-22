@@ -1,0 +1,31 @@
+{
+  "snapshotId": "snap_manual-edit-result_1779261871146_888uio",
+  "type": "manual_edit_result",
+  "previousSnapshotId": "snap_ai-result_1779256431637_ho9qjp",
+  "createdAt": "2026-05-20T07:24:31.146Z",
+  "reason": "세션 종료",
+  "changedFiles": [
+    {
+      "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+      "status": "modified",
+      "beforeHash": "b0ae3e654e90bb999c376b2eee6e51e8cf0636b5fc674f2172ce4c51b507f425",
+      "afterHash": "e4baf3f316c891eb210413b8100e9abbcca637b6f3115fca2c1182f70eebcdd1",
+      "importance": "medium",
+      "additions": 6,
+      "deletions": 1,
+      "hunkCount": 1,
+      "hunks": [
+        {
+          "hunkId": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md#hunk-1",
+          "filePath": "FrontEnd/Android/Do it 깡쎔의 안드로이드 (생략)/02_둘째마당 코틀린 이해하기/Cp_03_코틀린 시작하기.md",
+          "oldStart": 120,
+          "oldLines": 6,
+          "newStart": 120,
+          "newLines": 11,
+          "beforeText": "    단순히 코틀린 소스 파일의 main() 함수를 실행하는 코드를 작성한다.\n  </li>\n  <li>\n    도서에서는 단순히 하면 된다는데 나의 경우 [File] → [New] → [New Module] → [Java or Kotlin Library]로 새로운 모듈을 생성하고 파일을 작성해야 작동한다.\n  </li>\n</ul>",
+          "afterText": "    단순히 코틀린 소스 파일의 main() 함수를 실행하는 코드를 작성한다.\n  </li>\n  <li>\n    도서에서는 단순히 하면 된다는데 나의 경우 <strong>[File] → [New] → [New Module] → [Java or Kotlin Library]</strong>로 새로운 모듈을 생성하고 파일을 작성해야 작동한다.\n  </li>\n</ul>\n\n<br><br>\n\n<h1>2. 변수와 함수</h1>\nu"
+        }
+      ]
+    }
+  ]
+}
