@@ -1,0 +1,406 @@
+<h1>1. 리소스의 종류와 특징</h1>
+<ul>
+  <li>
+    안드로이드 앱 개발에서 리소스(resource)란 <strong>정적인 자원</strong>을 의미한다. 동적인 자원은 코드로 작성하고 정적인 자원은 외부 <strong>파일</strong>로 만들어 리소스로 활용할 수 있다.
+  </li>
+  <li>
+    앱에서 이용하는 리소스는 크게 <strong>앱 리소스</strong>와 <strong>플랫폼 리소스</strong>로 구분된다.
+  </li>
+</ul>
+
+<br>
+
+<h2>1-1. 앱 리소스 사용하기</h2>
+<ul>
+  <li>
+    앱 리소스란 <strong>개발자가 직접 추가한 리소스</strong>를 의미한다.
+  </li>
+  <li>
+    모듈을 만들면 기본적으로 4개의 디렉터리(drawable, layout, mipmap, values)가 생성되지만 <strong>더 많은 종류의 디렉터리</strong>를 res 아래에 추가하여 사용할 수 있다.
+  </li>
+    <ul>
+      <li>
+        animator: 속성 애니메이션 XML
+      </li>
+      <li>
+        anim: 트윈 애니메이션 XML
+      </li>
+      <li>
+        color: 생상 상태 목록 정의 XML
+      </li>
+      <li>
+        drawable: 이미지 리소스
+      </li>
+      <li>
+        mipmap: 앱 실행 아이콘 리소스
+      </li>
+      <li>
+        layout: 레이아웃 XML
+      </li>
+      <li>
+        menu: 메뉴 구성 XML
+      </li>
+      <li>
+        raw: 원시 형태로 이용되는 리소스 파일
+      </li>
+      <li>
+        values: 단순 값으로 이용되는 리소스
+      </li>
+      <li>
+        xml: 특정 디렉터리가 정의되지 않은 나머지 XML 파일
+      </li>
+      <li>
+        font: 글꼴 리소스
+      </li>
+    </ul>
+  <li>
+    리소스 디렉터리와 파일은 <strong>명명규칙</strong>이 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>res 디렉터리명</strong>은 고정이다. 또한 res 디렉터리 아래에 개발자 <strong>임의로 이름</strong>을 붙인 디렉터리 혹은 하위 디렉터리를 만들 수 없다.
+      </li>
+      <li>
+        리소스 파일명은 <strong>values</strong>에 추가하는 파일을 제외하고는 <strong>자바의 이름 작성 규칙</strong>을 지켜야하며 <strong>알파벳 대문자</strong>를 사용할 수 없다.
+      </li>
+    </ul>
+  <li>
+    명명규칙이 존재하는 이유는 리소스 디렉터리와 파일을 코드에서 그대로 사용하지 않고 <strong>R 파일에 식별자</strong>로 등록해서 이용하기 때문이다.
+  </li>
+</ul>
+
+<h3>1-1-1. 레이아웃 리소스 - layout 디렉터리</h3>
+<ul>
+  <li>
+    <strong>화면을 구성</strong>하는 레이아웃 XML 파일을 저장하는 디렉터리이다.
+  </li>
+</ul>
+
+<h3>1-1-2. 이미지 리소스 - drawable 디렉터리</h3>
+<ul>
+  <li>
+    이미지 리소스를 저장하는 디렉터리이다. PNG, JPG, GIF, WEBP 파일을 포함하고 XML로 작성한 이미지도 저장할 수 있다.
+  </li>
+    <ul>
+      <li>
+        XML 이미지를 만들 때 사용할 수 있는 태그는 p238 참고.
+      </li>
+    </ul>
+</ul>
+
+```xml
+<!-- 1. XML로 작성한 이미지 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <gradient
+        android:startColor="#FFFF0000"
+        android:endColor="#00FF00FF"
+        android:angle="45" />
+    <corners android:radius="8dp" />
+</shape>
+```
+
+```xml
+<!-- 2. XML 이미지 활용 예. -->
+<ImageView
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:src="@drawable/gradient_box" />
+```
+
+<h3>1-1-3. 실행 아이콘 리소스 - mipmap 디렉터리</h3>
+<ul>
+  <li>
+    앱을 기기에 설치하면 나타나는 <strong>실행 아이콘의 이미지 리소스</strong>가 저장되는 디렉터리이다.
+  </li>
+</ul>
+
+<h3>1-1-4. 값 리소스 - values 디렉터리</h3>
+<ul>
+  <li>
+    <strong>값으로 이용되는 리소스</strong>를 저장하는 디렉터리로 문자열, 색상, 크기, 스타일, 배열 등의 값을 XML로 저장할 수 있다.
+  </li>
+  <li>
+    values에 저장되는 리소스는 다른 디렉터리의 리소스와 이용방법이 다르다.
+  </li>
+    <ul>
+      <li>
+        다른 리소스는 파일명이 R인 파일에 식별자로 추가되기에 코드에서 식별자로 사용한다. 예를 들어 "layout/activity_main.xml"이라면 <strong>R.layout.activity_main</strong>으로 이용한다.
+      </li>
+      <li>
+        반면 values 디렉터리의 리소스 파일은 R인 파일에 등록되지 않고 리소스 파일에 값을 지정한 <strong>태그의 name 속성값</strong>이 등록된다.
+      </li>
+        <ul>
+          <li>
+            colors.xml, string.xml 등의 파일명이 권장되지만 <strong>개발자가 자유롭게</strong> 정할 수 있으며 <strong>알파벳 대문자</strong>도 활용 가능하다.
+          </li>
+        </ul>
+    </ul>
+  <li>
+    스타일 리소스는 <strong>style 태그</strong>로 등록하며 뷰에 설정되는 여러 속성을 스타일에 등록하여 <strong>한꺼번에 적용</strong>하거나 여러 뷰에 <strong>중복되는 속성을 스타일로 정의해 재사용</strong>할 수 있다.
+  </li>
+  <li>
+    스타일을 <strong>상속</strong>받아 작성할 수 있다.
+  </li>
+</ul>
+
+```xml
+<!-- 1. 문자열 리소스 등록 -->
+<resources>
+    <string name="app_name">Test9</string>
+    <string name="txt_data1">Hello</string>
+    <string name="txt_data2">World</string>
+</resources>
+```
+
+```xml
+<!-- 2. 1에서 작성한 strings.xml를 기반으로 name 속성에 지정한 값이 R 파일에 식별자로 기록된다. -->
+<TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@string/txt_data1" />
+```
+
+```kotlin
+// 3. 코드에서 문자열 리소스 사용.
+binding.textView.text = getString(R.string.txt_data2)
+```
+
+```xml
+<!-- 4. 색상 리소스 등록. -->
+<resources>
+    <color name="txt_color">#FFFF00</color>
+    <color name="txt_bg_color">#FF0000</color>
+</resources>
+```
+
+```xml
+<!-- 5. 크기 리소스 등록. (dimen 태그 사용). -->
+<resources>
+    <dimen name="txt_size">20sp</dimen>
+</resources>
+```
+
+```xml
+<!-- 6. XML에서 위에서 지정한 values 리소스를 활용. -->
+<TextView
+    android:id="@+id/textView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="@string/txt_data1"
+    android:textColor="@color/txt_color"
+    android:background="@color/txt_bg_color"
+    android:textSize="@dimen/txt_size" />
+```
+
+```kotlin
+// 7. 코드에서 색상과 크기 리소스 사용. 이번에는 R 파일 활용.
+binding.textView.text = getString(R.string.txt_data2)
+binding.textView.setTextColor(ResourcesCompat.getColor(resources, R.color.txt_color, null))
+binding.textView.textSize = resources.getDimension(R.dimen.txt_size)
+```
+
+```xml
+<!-- 8. 스타일 등록 (상속 활용). -->
+<resources>
+    <style name="MyTextStyle">
+        <item name="android:textSize">@dimen/txt_size</item>
+        <item name="android:textColor">@color/txt_color</item>
+    </style>
+    <!-- MyTextStyle을 상속받아 작성한다. -->
+    <style name="MyTextStyleSub" parent="MyTextStyle">
+        <item name="android:textColor">#0000FF</item>
+        <item name="android:background">@color/txt_bg_color</tiem>
+    </style>
+</resources>
+
+<!-- 9. 8에서 작성한 MyTextStyle 리소스 활용. -->
+<TextView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/MyTextStyleSub"
+    android:text="Hello World" />
+```
+
+<h3>1-1-5. 색상 리소스 - color 디렉터리</h3>
+<ul>
+  <li>
+    생상 리소스는 <strong>color 디렉토리</strong>에 등록할 수도 있고 values의 <strong>color 태그</strong>로 등록할 수도 있다.
+  </li>
+    <ul>
+      <li>
+        color 디렉터리의 리소스는 <strong>특정 뷰의 상태</strong>를 표현하고 <strong>그 상태에 적용되는 색상</strong>을 등록할 때 사용한다.
+      </li>
+        <ul>
+          <li>
+            예를 들어 버튼을 누르기 전과 후(뷰의 상태)에 따라 색이 달라지는 경우 활용한다.
+          </li>
+        </ul>
+      <li>
+        values의 color 태그에 등록한 리소스는 <strong>색상 하나</strong>를 리소스에 등록해 사용하겠다는 의미이다.
+      </li>
+    </ul>
+</ul>
+
+```xml
+<!-- 1. 색상 리소스 등록. -->
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 뷰를 눌렀을 때(pressed) 색상 지정. -->
+    <item android:state_pressed="true"
+        android:color="#ffff0000" />
+
+    <!-- 뷰에 포커스가 주어졌을 때(focused) 생상 지정. -->
+    <item android:state_focused="true"
+        android:color="#ff0000ff" />
+
+    <!-- 기본 색상 지정. -->
+    <item android:color="#ff000000" />
+</selector>
+
+<!-- 2. 색생 리소스 사용. -->
+<Button
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:text="Click Me!!"
+    android:textColor="@color/button_text" />
+```
+
+<h3>1-1-6. 글꼴 리소스 - font 디렉터리</h3>
+<ul>
+  <li>
+    font 디렉터리에는 글꼴 리소스를 저장하며 TTF나 OTF 파일 등을 저장하고 뷰에서 이용할 수 있다.
+  </li>
+</ul>
+
+```xml
+<!-- 1. 글꼴 리소스 사용. -->
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="HelloWorld"
+    android:textSize="20dp"
+    android:fontFamily="@font/paccifico" />
+```
+
+<br>
+
+<h2>1-2. 플랫폼 리소스 사용하기</h2>
+<ul>
+  <li>
+    개발자가 추가하는 앱 리소스(res) 외에 이미 안드로이드 플랫폼에서 제공하는 많은 리소스를 사용할 수 있다. 이렇게 <strong>안드로이드 플랫폼</strong>에서 제공하는 리소스를 <strong>플랫폼 리소스</strong>라한다.
+  </li>
+  <li>
+    플랫폼 리소스는 안드로이드 스튜디오의 프로젝트 탐색 참에서 <strong>보기 옵션을 [Packages]</strong>로 지정한 후 <strong>[Libraries] 항목</strong>에서 확인할 수 있다. 
+  </li>
+  <li>
+    플랫폼 리소스는 앱 리소스가 사용하는 R 파일이 아니라 <strong>android.R</strong>이라는 <strong>플랫폼 라이브러리</strong>에 있으며 android.R 파일을 통해 플랫폼 리소스를 이용할 수 있다.
+  </li>
+  <li>
+    앱 리소스는 XML에서 @ 기호로 R 파일의 리소스를 활용하였다. 예를 들면 @drawable/save 처럼 작성한다. 반면 플랫폼 리소스는 XML에서 활용할 때 <strong>"@android:"</strong> 패턴을 사용한다. 예를 들면 @android:drawable/save로 이용한다.
+  </li>
+</ul>
+
+```kotlin
+// 1. 코드에서 플랫폼 리소스 사용.
+binding.imageView.setImageDrawable(ResourcesCompat.getDrawable(resources, android.R.drawable.alert_dart_frame, null))
+binding.textView.text=getString(android.R.string.emptyPhoneNumber)
+```
+
+```xml
+<!-- 2. XML에서 플랫폼 리소스 사용. -->
+<ImageView
+    android:id="@+id/imageView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@android:drawable/alert_dark_frame"/>
+
+<TextView
+    android:id="@+id/textView"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="@android:string/emptyPhoneNumber"/>
+```
+
+<br><br>
+
+<h1>2. 리소스 조건 설정</h1>
+<h2>2-1. 리소스 조건 설정이란?</h2>
+<ul>
+  <li>
+    리소스 조건 설정이란 어떤 리소스를 <strong>특정 환경에서만 적용</strong>되도록 설정하는 것을 의미한다.
+  </li>
+    <ul>
+      <li>
+        예를 들어 하나의 실행 아이콘만을 사용하는 경우 다른 크기(dpi)의 기기에서 같은 리소스를 사용하면 이미지의 크기가 다르게 보이는 문제가 있다.
+      </li>
+      <li>
+        이와 같은 상황에서 보통 <strong>크기별</strong>로 이미지를 5개씩 준비하고 <strong>리소스 조건</strong>으로 지정하여 자동으로 환경에 맞게 적용할 수 있다.
+      </li>
+    </ul>
+  <li>
+    리소스 조건을 이용할 때에는 아이콘의 <strong>파일명을 동일하게 지정</strong>한다.
+  </li>
+    <ul>
+      <li>
+        이때 중복되는 파일명은 mipmap-mdip, mipmap-hdpi 등 각각의 디렉터리에 담고 <strong>디렉터리로 구분</strong>한다.
+      </li>
+      <li>
+        mipmap-mdpi 처럼 디렉터리명에서 <strong>붙입표(-)의 후에 오는 단어</strong>가 리소스의 조건이 된다. 현재는 mdpi이며 mdpi 기기일 때에만 플랫폼이 알아서 적용한다.
+      </li>
+      <li>
+        실제로는 실행 아이콘의 디렉터리 조건은 개발자가 신경 쓰지 않아도 앱을 만들 때 플랫폼이 <strong>알아서 res 디렉터리 아래에 여러 개의 mipmap 디렉터리를 생성</strong>해준다.
+      </li>
+    </ul>
+  <li>
+    다른 리소스 디렉터리에도 붙임표(-)를 추가해 디렉터리명에 조건을 명시하고 각 조건에 맞는 상황에 리소스가 적용되도록 할 수 있다. (리소스 디렉터리명의 조건은 p249 참고).
+  </li>
+    <ul>
+      <li>
+        <strong>여러 조건을 한 번에 적용</strong>할 수도 있으며 이때에는 <strong>조건의 순서</strong>를 지켜 나열해야 한다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>2-2. 화면 회전에 대응하기</h2>
+<ul>
+  <li>
+    리소스 조건을 이용해 <strong>화면 회전에 대응하는 UI</strong>를 만들 수 있다.
+  </li>
+    <ul>
+      <li>
+        가로와 세로 방향일 때 출력할 레이아웃 XML 파일을 각각 준비한다.
+        <br>→ 어느 방향에서 어떤 XML 파일을 출력할지 지정한다.
+      </li>
+    </ul>
+  <li>
+    실습은 "app/res/layout"에 두 개의 activity_main2.xml 파일을 생성한다.
+  </li>
+    <ul>
+      <li>
+        파일 하나는 layout 디렉터리에 저장하여 기본값(세로)으로 적용되게 한다.
+      </li>
+      <li>
+        다른 하나의 파일은 layout-land(가로 조건) 디렉터리에 저장하여 가로로 적용되게 한다.
+      </li>
+    </ul>
+  <li>
+    [res] → [Android Resource Directory]로 생성을 하는데 이 디렉토리는 Android에서는 보이지 않고 <strong>Project</strong>에서 보인다. 대신 작성한 파일은 <strong>조건이 적용되어 Android의 layout이 표시</strong>된다.
+  </li>
+  <li>
+    화면 회전을 못하도록 고정하면 기능이 필요 없을 수 있으나 테블릿까지 고려하면 회전 옵션을 넣는 것이 일반적이다.
+  </li>
+</ul>
+
+<br>
+
+<h2>2-3. 국제 언어 제공하기</h2>
+<ul>
+  <li>
+    
+  </li>
+</ul>
