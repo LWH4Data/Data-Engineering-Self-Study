@@ -588,6 +588,6 @@
     <strong>중단(abort)</strong>은 CPU가 실행 중인 프로그램을 <strong>강제로 중단</strong>시킬 수밖에 없는 심각한 오류를 발견헸을 때 발생하는 예외이다.
   </li>
   <li>
-    소프트웨어 인터럽트(software interrupt)는 시스템 호출이 발생했을 때 나타난다.
+    <strong>소프트웨어 인터럽트(software interrupt)</strong>는 <strong>시스템 호출</strong>이 발생했을 때 나타난다.
   </li>
 </ul>
