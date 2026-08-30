@@ -1,0 +1,4 @@
+# Install with: uv pip install -r requirements.txt
+matplotlib==3.11.1
+numpy==2.5.2
+pip==25.0.1

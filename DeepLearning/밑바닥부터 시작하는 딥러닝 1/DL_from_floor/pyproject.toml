@@ -1,0 +1,11 @@
+[project]
+name = "dl-from-floor"
+version = "0.1.0"
+description = "Deep learning exercises from scratch"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "matplotlib==3.11.1",
+    "numpy==2.5.2",
+    # Required by VS Code's Python package browser.
+    "pip==25.0.1",
+]
