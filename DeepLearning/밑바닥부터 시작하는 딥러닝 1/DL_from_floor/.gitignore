@@ -14,9 +14,12 @@ __pycache__/
 .coverage
 htmlcov/
 
+# Downloaded MNIST dataset
+dataset/*.gz
+dataset/mnist.pkl
+
 # IDE and OS files
 .vscode/
 .idea/
 .DS_Store
 Thumbs.db
-
