@@ -294,4 +294,115 @@ numerical_gradient(function_2, np.array([3.0, 0.0]))
 
 ## 4-1. 경사법(경사 하강법)
 - 매개변수의 공간은 광대하고 어디가 최솟값이 되는지를 짐작하기 어렵다. 이런 상황에서 기울기를 이용해 **함수의 최솟값(혹은 가능한 한 작은 값)을 찾는 기법**이 **경사법**이다.
-- 
+- 각 지점에서 함수의 값을 낮추는 방향을 제시하는 지푠는 기울기이지만 기울기가 가리키는 방향에 **최솟값이 없는 경우**가 대부분이다.s
+  - 함수의 극솟값, 최솟값, 또 안정점(saddle point)이 되는 장소에서 기울기는 0이다.
+  - 기울기가 0이긴하지만 반드시 최솟값이라 할 수 없다.
+  - 복잡하고 찌그러진 모양의 함수의 경우 평평한 곳으로 파고들면서 고워(플래도, plateau)이라 하는 학습이 진행되지 않는 정체기에 빠질 수 있다.
+- 경사법(gradient method)은 현 위치에서 기울어진 방향으로 일정 거리만큼 이동한다.
+  - 이후 이동한 지점에서 또 기울기를 구하고 나아가는 과정을 반복한다.
+  - 경사법은 머신러닝 모델과 신경망 학습에 자주 사용한다.
+- 경사법은 최솟값을 찾느냐, 최댓값을 찾느냐에 따라 이름이 다르다. 최솟값을 찾는 경우 경사 하강법(gradient descent method), 최댓값을 찾는 경우 경사 상승법(gradient ascent method)라 한다.
+- 경사법을 수식으로 나타내면 다음과 같다.
+  - $ \eta $: 에타는 **갱신하는 양**을 의미하며 이를 신경망 학습에서는 **학습률(learning rate)**이라 한다.
+    - 한 번의 학습으로 얼마나 학습해야할지, 즉 매개변수를 얼마나 업데이트할지 결정한다.
+    - 변수가 더 늘어도 방식은 동일하다.
+    - 일반적으로 0.01이나 0.001 등 미리 특정 값을 정하며 값이 너무 크거나 작으면 적절한 해를 찾기 어렵다.
+- 경사법을 수행하고 시각화를 하면 값이 가장 낮은 장소인 원점에 점차 가까워지는 것을 볼 수 있다. (DL_from_floor/ch04/gradient_method.py)
+- 학습률과 같은 매개변수를 **하이퍼파라미터(hyper parameter)**라고 한다.
+  - 가중치와 편향과 같은 신경망 매개변수와 다르게 하이퍼파라미터는 **사람이 직접 설정**하는 매개변수이다.
+
+$$
+x_0 = x_0 - \eta \frac{\partial f}{\partial x_0}
+$$
+
+$$
+x_1 = x_1 - \eta \frac{\partial f}{\partial x_1}
+$$
+
+```python
+# 1. 경사법 구현.
+# f: 최적화하려는 함수 / init_x: 초깃값
+# lr: learning rate / step_num: 반복 횟수
+def gradient_descent(f, int_x, lr=0.01, step_num=100):
+    x = init_x
+
+    for i in range(step_num):
+        grad = numerical_gradient(f, x)
+        x -= lr * grad
+    return x
+```
+
+```python
+# 2. 경사법 테스트
+def function_2(x):
+    return x[0]**2 + x[1]**2
+
+init_x = np.array([-3.0, 4.0])
+gradient_descent(function_2, init_x=init_x, lr=0.1, step_num=100)
+```
+
+```python
+# 3. 학습률에 따른 결과 차이.
+# 학습률이 너무 큰 예: lr=10.0
+init_x = np.array([-3.0, 4.0])
+gradient_descent(function_2, init_x=init_x, lr=10.0, step_num=100)
+
+# 학습률이 너무 작은 예: lr=1e-10
+init_x = np.array([-3.0, 4.0])
+gradient_descent(function_2, init_x=init_x, lr=1e-10, step_num=100)
+```
+
+## 4-2. 신경망에서의 기울기
+- 신경망 학습에서도 가중치 매개변수에 대한 손실 함수의 기울기를 구해야한다.
+- 예를 들어 형상이 2 x 3, 가중치가 $ W $, 손실 함수가 $ L $인 신경망의 경사는 $ \frac{\partial L}{\partial W} $로 나타낼 수 있다. 수식은 아래와 같다. (DL_from_floor/ch04/gradient_simplenet.py)
+  - $ W $: 가중치
+  - $ L $: 손실 함수, 각 원소는 $ w $을 변경했을 때에 대한 $ L $의 변화량을 보여주는 편미분이다.
+- 파이썬 함수를 $ f(x) $로 넘기는데 이 대신 **람다(lambda)**를 사용하면 더 짧게 구현이 가능하다.
+
+$$
+W = 
+\begin{pmatrix} 
+w_{11} & w_{12} & w_{13} \\
+w_{21} & w_{22} & w_{23}
+\end{pmatrix}
+$$
+
+$$
+\frac{\partial L}{\partial W} = 
+\begin{pmatrix}
+\frac{\partial L}{\partial w_{11}} & \frac{\partial L}{\partial w_{12}} & \frac{\partial L}{\partial w_{13}} \\
+\frac{\partial L}{\partial w_{21}} &\frac{\partial L}{\partial w_{22}} & \frac{\partial L}{\partial w_{23}}
+\end{pmatrix}
+$$
+
+```python
+# 1. 람다 구현의 예.
+f = lambda w: net.loss(x, t)
+dW = numerical_gradient(f, net.W)
+```
+
+<br><br>
+
+# 5. 학습 알고리즘 구현하기
+- 신경망 학습 절차.
+  1. 미니 배치
+    - 훈련 데이터 중 일부를 무작위로 가져온다.
+    - 선택된 데이터는 미니배치라하며 손실 함수 값을 줄이는 것이 목표이다.
+  2. 기울기 산출
+    - 미니배치 손실 함수 값을 줄이기 위해 각 가중치 매개변수의 기울기를 구한다.
+  3. 매개변수 갱신
+    - 가중치 매개변수를 기울기 방향으로 가주 조금 갱신한다.
+  4. 반복
+- 데이터를 미니배치로 무작위로 선정하여 신경망 학습을 하는 경우 이를 **확률적 경사 하강법(stochastic gradient descent, SGD)**라 한다.
+
+## 5-1. 2층 신경망 클래스 구현하기
+- DL_from_floor/ch04/two_layer_net.py
+
+## 5-2. 미니배치 학습 구현하기
+- DL_from_floor/ch04/minibatch_train.py
+
+## 5-3. 시험 데이터로 평가하기
+- DL_from_floor/ch04/minibatch_test.py
+- **에포크(epoch)** 단위를 사용한다.
+  - 1에포크가 의미하는 바는 학습에서 **훈련 데이터를 모두 소진했을 때의 횟수**에 해당한다.
+  - 예를 들어 전체 데이터가 10,000, 미니배치가 100일 때 비복원추출로 100회 학습을 하면 모든 데이터를 소진하기에 1에포크가 된다.
