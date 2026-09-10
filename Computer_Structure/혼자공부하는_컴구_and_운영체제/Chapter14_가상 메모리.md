@@ -255,6 +255,14 @@
 <h2>2-4. 페이지 테이블 엔트리</h2>
 <ul>
   <li>
-    
+    페이지 테이블의 각각의 행들을 <strong>a페이지 테이블 엔트리(PTE; Page Table Entry)</strong>a라고 한다.
+  </li>
+    <ul>
+      <li>
+        페이지 테이블 엔트리에는 페이지 번호, 프레임 번호도 있지만 대표적으로 중요한 정보들에는 <strong>유효 비트</strong>, <strong>보호 비트</strong>, <strong>참조 비트</strong>, <strong>수정 비트</strong>가 있다.
+      </li>
+    </ul>
+  <li>
+    유효 비트(valid bit)는 현재 해당 페이지에 접근 가능한지 여부를 알려준다.
   </li>
 </ul>
