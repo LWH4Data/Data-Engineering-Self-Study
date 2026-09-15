@@ -1,6 +1,6 @@
 import numpy as np
-from functions import softmax
-from functions import cross_entropy_error
+from common.functions import softmax
+from common.functions import cross_entropy_error
 
 class Relu:
     def __init__(self):
@@ -14,7 +14,7 @@ class Relu:
         out = x.copy()
         out[self.mask] = 0
 
-        return 0
+        return out
 
     def backward(self, dout):
         # 역전파 때에는 순전파 때의 입력이 0 이하면(True)
