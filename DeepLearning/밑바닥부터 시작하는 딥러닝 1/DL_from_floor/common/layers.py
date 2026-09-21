@@ -108,7 +108,7 @@ class Dropout:
         else:
             return x * (1.0 - self.dropout_ratio)
 
-    def backword(self, dout):
+    def backward(self, dout):
         return dout * self.mask
 
 class BatchNormalization:
