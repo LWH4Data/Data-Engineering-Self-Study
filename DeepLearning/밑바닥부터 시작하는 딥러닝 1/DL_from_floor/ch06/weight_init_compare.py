@@ -27,5 +27,3 @@ for key, weight_type in weight_init_types.items():
                                   output_size=10, weight_init_std=weight_type)
     train_loss[key] = []
 
-
-
