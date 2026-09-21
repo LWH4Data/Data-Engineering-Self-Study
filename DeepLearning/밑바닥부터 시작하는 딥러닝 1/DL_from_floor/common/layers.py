@@ -84,6 +84,11 @@ class SoftmaxWithLoss:
         
         # Softmax와 교차 엔트로피 손실을 결합해서 미분하면
         # 입력 점수 x에 대한 기울기는 (y - t) / batch_size가 된다.
-        dx = (self.y - self.t) / batch_size
+        if self.t.size == self.y.size:  # 정답 레이블이 원-핫 인코딩 형태일 때
+            dx = (self.y - self.t) / batch_size
+        else:
+            dx = self.y.copy()
+            dx[np.arange(batch_size), self.t] -= 1
+            dx = dx / batch_size
 
         return dx
