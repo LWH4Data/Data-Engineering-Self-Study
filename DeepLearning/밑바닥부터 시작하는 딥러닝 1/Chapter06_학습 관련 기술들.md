@@ -208,4 +208,13 @@ $$
     - weight_decay_lambda 값을 조정하면 과적합을 방지할 수 있다. (잘못하면 오히려 accuracy가 떨어지는 경우도 있다).
 
 ## 4-3. 드롭아웃
-- 
+- 신경망 모델이 복잡해지면 가중치 감소만으로는 대응하기 어려우며 흔히 <strong>드랍아웃(Dropout)</strong>이라는 기법을 사용한다.
+- 드롭아웃은 <strong>뉴런을 임의로 삭제</strong>하면서 학습하는 방법이다.
+  - 훈련 때 은닉층의 뉴런을 무작위로 골라 삭제하며 삭제된 뉴런은 신호를 전달하지 않는다.
+  - 시험 때는 모든 뉴런에 신호를 전달하며 훈련 때 삭제 안한 비율을 곱하여 출력한다.
+    - <strong>훈련 때와 시험 때의 뉴런 수 차이를 보정</strong>하기 위해 비율을 곱한다.
+- 드롭아웃의 구현은 DL_from_floor/common/layers.py에 있다. 자세한 구현은 https://chainer.org를 참고.
+- 순전파 때마다 self.mask에 삭제할 뉴런을 False로 표시하고 dropout_ratio보다 큰 원소만 True로 설정한다.
+  - 역전파 때의 동작은 순전파 때 신호를 통과시키는 뉴런은 <strong>역전파 때에도 신호를 그대로 통과</strong>시키고, 순전파 때 통과시키지 않은 뉴런은 동일하게 <strong>역전파 때에도 신호를 차단</strong>한다.
+- 드롭아웃 효과를 MNIST 데이터셋으로 확인하는 코드는 DL_from_floor/ch06/overfit_dropout.py에 있다.
+  - 코드를 간단히 하기 위한 DL_from_floor/common/trainer.py의 Trainer 클래스도 필요하다.
