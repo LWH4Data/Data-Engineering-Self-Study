@@ -145,4 +145,6 @@ x[0, 0]  # 또는 x[0][0]
 <br><br>
 
 # 5. CNN 구현하기
-- 
+- CNN은 'Conv-ReLU-Pooling-Affine-ReLU-Affine-Softmax' 순으로 흐르게 작성한다.
+- layer를 만드는 코드는 DL_from_floor/ch07/simple_convnet.py에 있다.
+- 실제 훈련 코드는 DL_from_floor/ch07/train_convnet.py에 있다.

@@ -45,10 +45,13 @@ class Affine:
         self.W = W
         self.b = b
         self.x = None
+        self.original_x_shape = None
         self.dW = None
         self.db = None
 
     def forward(self, x):
+        self.original_x_shape = x.shape
+        x = x.reshape(x.shape[0], -1)
         self.x = x
         out = np.dot(x, self.W) + self.b
 
@@ -64,6 +67,8 @@ class Affine:
         # 덧셈의 미분은 1이므로 dout이 그대로 전달된다.
         # 같은 편향을 모든 데이터가 공유하므로 배치 방향으로 합산한다.
         self.db = np.sum(dout, axis=0)
+
+        dx = dx.reshape(*self.original_x_shape)  # 입력 데이터 모양 변경(텐서 대응)
 
         return dx
 

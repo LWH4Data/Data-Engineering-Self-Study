@@ -1,3 +1,5 @@
+import numpy as np
+
 class SGD:
 
     def __init__(self, lr=0.01):
@@ -111,13 +113,13 @@ class Adam:
         self.iter += 1
         lr_t = self.lr * np.sqrt(1.0 - self.beta2**self.iter) / (1.0 - self.beta1**self.iter)
 
-        for key in params.key():
+        for key in params.keys():
             #self.m[key] = self.beta1*self.m[key] + (1-self.beta1)*grads[key]
             #self.v[key] = self.beta2*self.v[key] + (1-self.beta2)*(greads[key]**2)
             self.m[key] += (1 - self.beta1) * (grads[key] - self.m[key])
             self.v[key] += (1 - self.beta2) * (grads[key]**2 - self.v[key])
 
-            params -= lr_t * self.m[key] / (np.sqrt(self.v[key]) + 1e-7)
+            params[key] -= lr_t * self.m[key] / (np.sqrt(self.v[key]) + 1e-7)
 
             #unbias_m += (1 - self.beta1) * (grads[key] - self.m[key])  # correct bias
             #unbias_b += (1 - self.beta2) * (grads[key]*grads[key] - self.v[key])  # correct bias
