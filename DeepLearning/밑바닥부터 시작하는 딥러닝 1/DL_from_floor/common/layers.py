@@ -19,7 +19,7 @@ class Relu:
 
     def backward(self, dout):
         # 역전파 때에는 순전파 때의 입력이 0 이하면(True)
-        # 역젖ㄴ파 때의 값을 0으로 한다.
+        # 역전파 때의 값을 0으로 한다.
         dout[self.mask] = 0
         dx = dout
 
