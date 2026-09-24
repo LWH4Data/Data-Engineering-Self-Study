@@ -1,3 +1,6 @@
+import sys, os
+sys.path.append(os.pardir)  # 부모 디렉터리의 파일을 가져올 수 있도록 설정.
+
 import numpy as np
 from collections import OrderedDict
 from common.layers import Convolution, Relu, Pooling, Affine, SoftmaxWithLoss
@@ -5,7 +8,7 @@ import pickle
 
 class SimpleConvNet:
     def __init__(self, input_dim=(1, 28, 28),
-                conv_param = {'filter_num':30, 'filter_zero':5,
+                conv_param = {'filter_num':30, 'filter_size':5,
                                'pad':0, 'stride':1},
                 hidden_size=100, output_size=10, weight_init_std=0.01):
         """
