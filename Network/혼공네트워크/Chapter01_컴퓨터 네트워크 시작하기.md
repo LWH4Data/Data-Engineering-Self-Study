@@ -833,4 +833,76 @@
   </li>
 </ul>
 
-<h4>트래픽과 </h4>
+<h4>트래픽과 네트워크 성능 지표</h4>
+<ul>
+  <li>
+    트래픽(traffic)이란 네트워크 내의 <strong>정보량</strong>을 의미한다.
+  </li>
+    <ul>
+      <li>
+        특정 노드에 트래픽이 몰린다면 해당 노드가 특정 시간 동안 처리해야할 정보가 많음을 의미한다. 이 경우 해당 노드에 <strong>과부화(overhead)</strong>가 걸릴 수 있으며 이 경우 성능이 저하될 수 있다.
+      </li>
+    </ul>
+  <li>
+    네트워크 성능을 평가할 수 있는 대중적인 지표 세 가지로는 <strong>처리율</strong>, <strong>대역폭</strong>, <strong>패킷 손실</strong>이 있다.
+  </li>
+</ul>
+
+<h5>처리율</h5>
+<ul>
+  <li>
+    처리율(throughput)은 단위 시간당 네트워크를 통해 실제로 전송되는 정보량을 의미한다.
+  </li>
+  <li>
+    일반적으로 bps(bit/s; bits per second), Mbps(Mbit/s; megabits per second), Gbps(Gbit/s; gigabits per second) 단위로 표현하며 초당 패킷 수를 표현할 때에는 pps(p/s; packets per second) 단위를 사용하기도 한다.
+  </li>
+  <li>
+    처리율은 <strong>실시간성</strong>이 강조된 지표로, 특정 노드가 <strong>얼마만큼의 트래픽을 처리</strong>하는 중인지 판단하기 위해 사용되는 경우가 많다.
+  </li>
+    <ul>
+      <li>
+        따라서 처리율은 매 순간 변하는 모습으로 표현되거나, 처리율의 평균값이 주로 활용된다.
+      </li>
+    </ul>
+</ul>
+
+<h5>대역폭</h5>
+<ul>
+  <li>
+    <strong>대역폭(bandwith)</strong>은 신호 처리 영역에서의 정의와 네트워크 성능 측정 영역에서의 정의가 다소 다르다.
+  </li>
+    <ul>
+      <li>
+        신호 처리 영역에서는 <strong>주파수의 범위</strong>를 의미한다.
+      </li>
+      <li>
+        네트워크 성능 측정 영역에서는 <strong>단위 시간</strong> 동안 통신 매체를 통해 송수신할 수 있는 <strong>최대 정보량</strong>을 의미한다.
+      </li>
+    </ul>
+  <li>
+    처리율과 동일하게 bps, Mbps, Gbps 단위로 사용한다.
+  </li>
+</ul>
+
+<h5>패킷 손실</h5>
+<ul>
+  <li>
+    <strong>패킷 손실(packet loss)</strong>은 송수신되는 <strong>패킷이 손실된 상황</strong>을 의미한다.
+  </li>
+    <ul>
+      <li>
+        높은 트래픽, 예기치 못한 장애 등으로 인해 발생한다.
+      </li>
+      <li>
+        패킷 손실은 전체 패킷 중 유실된 패킷을 <strong>백분위로 표현</strong>한 값을 사용하는 경우가 많다.
+      </li>
+    </ul>
+  <li>
+    패킷 손실은 명령 프롬프트(CMD) 혹은 터미널에서 <strong>ping 명령어</strong>로 확인할 수 있다.
+  </li>
+    <ul>
+      <li>
+        ping 명령어는 수신지로 다수의 패킷을 전송해 수신지까지 도달 가능한지 여부를 알려준다. 즉 몇 개의 패킷이 도달하고 몇 %가 손실되었는지 알 수 있다.
+      </li>
+    </ul>
+</ul>
