@@ -931,4 +931,312 @@
         사실 공유기는 라우터 기능뿐만 아니라 NAT 기능, DHCP 서버 기능, 보안을 위한 방화벽 등 다양한 장치의 기능이 함축되어 있다.
       </li>
     </ul>
+  <li>
+    멀리 떨어진 호스트 간의 통신은 패킷이 서로에게 도달하기까지 여러 라우터를 거쳐 다양한 경로를 이용한다. 이 라우팅 도중 패킷이 호스트와 라우터 간에, 혹은 라우터와 라우터 간에 이동하는 하나의 과정을 <strong>홉(hop)</strong>이라 한다.
+  </li>
+  <li>
+    Window OS에서는 CMD - tracert www.google.com으로, 리눅스나 맥OS에서는 terminal - traceroute www.google.com으로 구글 웹 페이지를 보내 주는 호스트까지의 경로를 확인할 수 있다.
+  </li>
+    <ul>
+      <li>
+        각 IP 주소 앞에 붙은 번호가 패킷이 이동한 홉이다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>3-2. 라우팅 테이블</h2>
+<ul>
+  <li>
+    <strong>라우팅 테이블(routing table)</strong>은 특정 수신지까지 도달하기 위한 정보를 명시한 일종의 표와 같은 정보이며 라우터는 라우팅 테이블을 참고하여 <strong>수신지까지의 도달 경로를 파악</strong>한다.
+  </li>
+  <li>
+    라우팅 테이블에 포함된 정보는 라우팅 방식과 호스트의 환경에 따라 달라지지만 공통적인 정보이자 핵심 정보는 아래와 같다.
+  </li>
+    <ul>
+      <li>
+        <strong>수신지 IP 주소와 서브넷 마스크</strong>: 최종적으로 패킷을 전달할 대상.
+      </li>
+      <li>
+        <strong>다음 홉(next hop)</strong>: 최종 수신지까지 가기 위해 다음으로 거쳐야 할 호스트의 IP 주소나 인터페이스를 의미한다. 게이트웨이라고 명시되기도 한다.
+      </li>
+      <li>
+        <strong>네트워크 인터페이스</strong>: 패킷을 내보낼 통로이다. 인터페이스(NIC) 이름이 직접적으로 명시되거나 인터페이스에 대응하는 IP 주소가 명시되기도 한다.
+      </li>
+      <li>
+        <strong>메트릭(metric)</strong>: 해당 경로로 이동하는 데 드는 비용을 의미한다. 라우터가 라우팅 경로 중 패킷을 내보낼 경로를 선택할 때 더 비용이 더 낮은 경로를 선호한다.
+      </li>
+    </ul>
+  <li>
+    패킷 내의 수신지 IP 주소가 라우팅 테이블의 수신지 IP 주소 및 서브넷 마스크와 일치하지 않는 경우 (라우팅 테이블에 없는 경로) 기본적으로 패킷을 내보낼 경로를 설정하여 해당 경로로 패킷을 보낼 수 있다. 이 기본 경로를 <strong>디폴트 라우트(default route)</strong>라 한다.
+  </li>
+    <ul>
+      <li>
+        디폴트 라우트는 모든 IP 주소를 의미하는 <strong>0.0.0.0/0</strong>으로 명시한다.
+      </li>
+    </ul>
+  <li>
+    Window OS에서는 'cmd-route print'로, Mac OS에서는 'terminal-netstat -rn'으로 라우팅 테이블을 확인할 수 있다.
+  </li>
+  <li>
+    중요한 점은 라우팅을 해 주는 네트워크 장비인 라우터는 라우팅 테이블을 통해 패킷을 수신지까지 전달할 수 있고, 라우팅 테이블 안에는 네트워크상의 특정 수신지까지 도달하기 위한 정보들이 담겨 있다는 것이다.
+  </li>
+</ul>
+
+<br>
+
+<h2>3-3. 정적 라우팅과 동적 라우팅</h2>
+<ul>
+  <li>
+    라우팅 테이블을 구성하는 방법에는 크게 정적 라우팅과 동적 라우팅 두 가지가 있다.
+  </li>
+</ul>
+
+<h3>3-3-1. 정적 라우팅</h3>
+<ul>
+  <li>
+    정적 라우팅(static routing)은 사용자가 <strong>수동으로 직접 채워 넣은</strong> 라우팅 테이블의 항목을 토대로 라우팅되는 방식이다. (예를 들면 아래와 같다).
+  </li>
+    <ul>
+      <li>
+        route add 10.0.0.0 mask 255.255.255.0 192.168.1.1
+      </li>
+    </ul>
+</ul>
+
+<h3>3-3-2. 동적 라우팅</h3>
+<ul>
+  <li>
+    마찬가지로 네트워크의 규모가 커져 직접 관리할 라우터가 늘어난다면 수동으로 관리하기 어렵다는 문제가 발생한다. 
+  </li>
+    <ul>
+      <li>
+        라우팅 경로가 고정적이면 해당 라우터에 문제가 발생하는 경우에도 해당 경로로 패킷을 보내는 문제가 발생한다.
+      </li>
+    </ul>
+  <li>
+    동적 라우팅(dynamic routing)은 자동으로 라우팅 테이블 항목을 만들고 이를 통해 라우팅을 하기에 상기한 문제들을 해결할 수 있다.
+  </li>
+    <ul>
+      <li>
+        다만 자동으로 만들고 수행하기에 라우팅 테이블 항목이 수시로 변할 수 있다.
+      </li>
+      <li>
+        대규모 네트워크 관리가 용이하며 네트워크 경로상 문제가 발생하여도 우회가 가능하도록 경로가 자동으로 갱신되기도 한다.
+      </li>
+    </ul>
+  <li>
+    모든 라우터는 특정 수신지까지 도달하기 위한 최적의 경로를 찾아 라우팅 테이블에 추가하려 노력하며 이를 위해 라우터끼리 서로 자신의 정보를 교환한다. 이때 사용되는 프로토콜이 <strong>(동적) 라우팅 프로토콜</strong>이다.
+  </li>
+</ul>
+
+<h4>라우터들의 집단 네트워크, AS</h4>
+<ul>
+  <li>
+    동일한 라우팅 정책으로 운용되는 라우터들의 집단 네트워크를 <strong>AS(Autonomous System)</strong>이라 한다.
+  </li>
+  <li>
+    AS마다 인터넷상에서 <strong>고유한 AS 번호(ASN: Autonomous System Number)</strong>가 할당된다.
+  </li>
+    <ul>
+      <li>
+        사설 IP 주소처럼 사설 AS 번호도 있지만, 일반적으로 AS 번호를 칭할 때는 고유한 번호를 의미하는 경우가 많다.
+      </li>
+    </ul>
+  <li>
+    한 AS 내에는 다수의 라우터가 있으며 라우터들은 AS 내부에서만 통신할 수도 있고, AS 외부와 통신할 수도 있다.
+  </li>
+    <ul>
+      <li>
+        AS 외부와 통신할 경우 AS 경계에서 AS 내외로 통신을 주고받을 수 있는 <strong>AS 경계 라우터(ASBR: Autonomous System Boundary Router)</strong>라는 특별한 라우터를 이용한다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>3-4. 라우팅 프로토콜</h2>
+<ul>
+  <li>
+    라우팅 프로토콜(routing protocol)은 라우터끼리 <strong>자신들의 정보를 교환</strong>하며 패킷이 이동할 <strong>최적의 경로</strong>를 찾기 위한 프로토콜이다.
+  </li>
+  <li>
+    라우팅 프로토콜은 AS 내부에서 수행되는 경우 <strong>IGP(Interior Gateway Protocol)</strong>, 외부에서 수행되는 경우 <strong>EGP(Exterior Gateway Protocol)</strong>이라 한다.
+  </li>
+    <ul>
+      <li>
+        IGP로는 대표적으로 RIP과 OSPF가 있다.
+      </li>
+      <li>
+        EGP로는 대표적으로 BGP가 있다.
+      </li>
+    </ul>
+</ul>
+
+<h3>3-4-1. IGP: RIP와 OSPF</h3>
+<ul>
+  <li>
+    대표적인 IGP로는 <strong>RIP(Routing Information Protocol)</strong>과 <strong>OSPF(Open Shortest Path First)</strong>가 있다.
+  </li>
+    <ul>
+      <li>
+        RIP는 최적 경로를 선정하는 과정에서 <strong>거리 벡터</strong>가 사용된다. 디스턴스 벡터라고 부르기도 한다.
+      </li>
+      <li>
+        OSPF는 최적 경로를 선정하는 과정에서 <strong>링크 상태</strong>를 사용한다. 링크 스테이트라고 부르기도 한다.
+      </li>
+    </ul>
+  <li>
+    RIP에서 사용하는 거리 벡터(distance vector) 라우팅 프로토콜의 거리는 패킷이 경유한 라우터 수, 즉 <strong>홉의 수</strong>를 의미한다.
+  </li>
+    <ul>
+      <li>
+        RIP는 인접한 라우터끼리 <strong>경로 정보를 주기적으로 교환</strong>하며 라우팅 테이블을 갱신하여 특정 수신지까지의 <strong>홉 수를 파악</strong>한다.
+      </li>
+      <li>
+        홉 수가 가장 적은 경로를 최적의 경로라 판단하며 홉 수가 적을수록 라우팅 테이블상의 메트릭 값도 작아진다.
+      </li>
+    </ul>
+  <li>
+    OSPF는 링크 상태(link state) 라우팅 프로토콜이다. 링크 정보를 비롯한 현재 네트워크의 상태를 <strong>그래프</strong>의 형태로 <strong>링크 상태 데이터베이스(ISDB; Link State Database)</strong>에 저장한다.
+  </li>
+    <ul>
+      <li>
+        링크 상태 데이터베이스에는 라우터들의 연결 관계, 연결 비용 등 현재 네트워크의 상태를 그래프로 표현하기 위한 데이터가 저장된다.
+      </li>
+      <li>
+        라우터는 링크 상태 데이터베이스를 기반으로 현재 네트워크 구성을 지도처럼 그리고 최적의 경로를 선택한다.
+      </li>
+      <li>
+        OSPF는 최적의 경로를 결정하기 위해 <strong>대역폭</strong>을 기반으로 메트릭을 게산한다.
+      </li>
+        <ul>
+          <li>
+            대역폭이 높은 링크일수록 메트릭이 낮은 경로로 인식한다.
+          </li>
+        </ul>
+      <li>
+        RIP처럼 주기적으로 라우팅 테이블을 갱신하지 않고 <strong>네트워크의 구성이 변경</strong>되었을 때 라우팅 테이블을 갱신한다.
+      </li>
+      <li>
+        네트워크 규모가 커지면 네트워크 구성이 변경될 때마다 링크 상태 데이터베이스에 모든 정보를 저장하기 어렵고 경로 갱신 연산 또한 부담이 커지는데 이 때문엗 OSPF는 AS를 <strong>에어리어(area)</strong>라는 단위로 나누고, 구분된 에어리어 내에서만 링크 상태를 공유한다.
+      </li>
+        <ul>
+          <li>
+            AS 내에는 여러 AREA가 있고 <strong>ABR(Area Border Router)</strong>가 AREA 간의 연결을 담당한다.
+          </li>
+        </ul>
+    </ul>
+  <li>
+    고급 거리 벡터 프로토콜과 링크 상태 프로토콜의 성격을 모두 띠는 라우팅 프로토콜도 있으며 이 경우 <strong>고급 거리 벡터 라우팅 프로토콜</strong> 혹은 <strong>하이브리드 라우팅 프로토콜</strong>이라고도 부른다.
+  </li>
+</ul>
+
+<h3>3-4-2. EGP: BGP</h3>
+<ul>
+  <li>
+    대표적으로 BGP(Border Gateway Protocol)가 있다. AS 간의 통신에서 사용되는 대표적인 프로토콜로 AS 간의 통신이 가능하고 AS 내 라우터 간 통신도 가능하다.
+  </li>
+    <ul>
+      <li>
+        AS 간의 통신을 위한 BGP는 <strong>eBGP(external BGP)</strong>라 하고, AS 내의 통신을 위한 BGP는 <strong>iBGP(internal BGP)</strong>라고도 한다.
+      </li>
+    </ul>
+  <li>
+    통신은 BGP 간에 BGP 메시지를 주고받으며 진행되는데 이때 BGP 메시지를 주고받을 수 있도록 연결된 BGP 라우터를 <strong>피어(peer)</strong>라고 정의한다.
+  </li>
+    <ul>
+      <li>
+        이렇게 피어 관계가 되도록 연결되는 과정을 <strong>피어링(peering)</strong>이라 한다.
+      </li>
+      <li>
+        동일한 AS 내의 피어를 내부 피어, 다른 AS 내의 피어를 외부 피어라 한다.
+      </li>
+    </ul>
+  <li>
+    BGP는 RIP와 OSPF에 비해 경로 결정 과정에서 수진지 주소에 더해 다양한 속성과 정책이 고려되기 때문에 최적 경로 결정이 어렵다.
+  </li>
+  <li>
+    BGP의 속성(attribute)이란 <strong>경로에 대한 일종의 부가 정보</strong>로 대표적으로는 <strong>AS-PATH</strong>, <strong>NEXT-HOP</strong>, <strong>LOCAL-PREF</strong>가 있다.
+  </li>
+    <ol>
+      <li>
+        AS-PATH 속성
+      </li>
+        <ul>
+          <li>
+            AS-PATH 속성은 메시지가 수신지에 이르는 과정에서 통과하는 <strong>AS들의 목록</strong>을 의미한다.
+          </li>
+          <li>
+            메시지가 AS를 거칠 때마다 AS-PATH에는 거쳐 간 AS가 추가된다.
+          </li>
+          <li>
+            BGP(eBGP)의 큰 특징은 다음 두 가지이다.
+          </li>
+            <ul>
+              <li>
+                BGP는 AS 간 라우팅을 할 때 거치게 될 '라우터'의 수가 아닌 '<strong>AS'의 수</strong>를 고려한다.
+              </li>
+                <ul>
+                  <li>
+                    즉 AS-PATH는 더 짧아도 홉 수는 더 많을 수 있다.
+                  </li>
+                </ul>
+              <li>
+                BGP는 RIP처럼 단순히 수신지에 이르는 '거리'가 아닌 메시지가 어디를 거쳐 어디로 이동하는지를 나타내는 <strong>'경로'</strong>를 고려한다.
+              </li>
+                <ul>
+                  <li>
+                    BGP가 경로 벡터(path vector) 라우팅 프로토콜의 일종으로 불리기도한다.
+                  </li>
+                </ul>
+            </ul>
+          <li>
+            BGP에서 거리가 아닌 경로를 고려하는 이유는 메시지가 같은 경로를 무한히 반복하며 이동하는 <strong>순환(loop)을 방지</strong>하기 위해서이다.
+          </li>
+            <ul>
+              <li>
+                BGP 라우터는 자신의 AS가 AS-PATH에 포함되어 있을 경우 순환으로 간주해 해당 메시지를 버린다.
+              </li>
+            </ul>
+        </ul>
+      <li>
+        NEXT-HOP 속성
+      </li>
+        <ul>
+          <li>
+            NEXT-HOP은 이름 그대로 다음 홉, 즉 <strong>다음으로 거칠 라우터의 IP 주소</strong>를 나타낸다.
+          </li>
+        </ul>
+      <li>
+        LOCAL-PREF 속성
+      </li>
+        <ul>
+          <li>
+            LOCAL-PREF는 지역 선호도, LOCAL PREFerence의 약자로 AS 외부 경로에 있어 AS 내부에서(local) <strong>어떤 경로를 선호할지(preference)</strong>에 대한 척도를 나타내는 속성이다.
+          </li>
+          <li>
+            일반적으로 LOCAL-PREF 값이 <strong>AS-PATH나 NEXT-HOP 속성보다 우선시</strong> 되고, LOCAL-PREF 값이 클수록 우선 선택된다.
+          </li>
+          <li>
+            LOCAL-PREF 값은 AS 관리 주체가 설정하는 <strong>정책의 영향</strong>을 받는다.
+          </li>
+            <ul>
+              <li>
+                정책적인 이유로 이 경로를 우선시한다 혹은 설령 이 경로가 다른 경로에 비해 비교적 비효율적일지라도 이 경로를 우선시하겠다라는 것과 같은 의미이다.
+              </li>
+            </ul>
+        </ul>
+    </ol>
+</ul>
+
+<h4>BGP의 정책</h4>
+<ul>
+  <li>
+    BGP의 정책(policy)은 AS 간 라우팅에 있어 경로를 선택하는 중요한 판단 기준이다. AS 관리 주체에 따라 상업적 및 정치적 목적으로 상이한 정책을 사용할 수 있어 최적의 경로를 선택하는 기준은 AS마다 다를 수 있다.
+  </li>
+  <li>
+    예를 들면 보안과 안정성을 우선시한다면 정책의 속도는 느릴 수 있지만 더 안전하고 안정적인 AS 경로를 선택하도록 한다.
+  </li>
 </ul>
