@@ -187,6 +187,55 @@
 <h4>포트 포워딩</h4>
 <ul>
   <li>
-    
+    포트 포워딩(port forwarding)이란 네트워크 내 <strong>특정 호스트에 IP 주소와 포트 번호를 미리 할당</strong>하고 해당 'IP 주소:포트 번호'를 통해 해당 호스트에게 패킷을 전달하는 기능이다.
   </li>
+  <li>
+    주로 네트워크 <strong>외부에서 네트워크 내부로 통신을 시작</strong>할 때 네트워크 내부의 서버를 외부에 서접속할 수 있게 <strong>접속 정보를 공개</strong>하기 위해 사용한다.
+  </li>
+</ul>
+
+<h4>ICMP</h4>
+<ul>
+  <li>
+    IP의 신뢰할 수 없는 전송 특성과 비연결형 전송 특성을 보완하기 위한 네트워크 계층의 프로토콜로 ICMP가 있다.
+  </li>
+  <li>
+    ICMP(Internet Control Message Protocol)는 IP 패킷의 전송 과정에 대한 <strong>피드백 메시지</strong>를 얻기 위해 사용되는 프로토콜이다.
+  </li>
+  <li>
+    ICMP 메시지의 종류는 크게 전송 과정에서 발생한 <strong>문제 상황에 대한 오류 보고</strong>를 하는 메시지와 네트워크에 대한 <strong>진단 정보(네트워크상의 정보 제공)</strong>에 대한 메시지 두 가지가 있다.
+  </li>
+  <li>
+    ICMP 메시지는 <strong>타입</strong>과 <strong>코드</strong>로 정의되며 타입과 코드는 <strong>패킷 헤더</strong>에 포함되는 정보이다.
+  </li>
+    <ul>
+      <li>
+        헤더의 타입(type) 필드에는 <strong>ICMP의 유형</strong>이 번호로 명시된다.
+      </li>
+      <li>
+        코드(code) 필드에는 <strong>구체적인 메시지 내용이 번호</strong>로 명시된다.
+      </li>
+      <li>
+        ICMP에는 IPv4에 사용되는 ICMPv4와 IPv6에 사용되는 ICMPv6가 있다.
+      </li>
+    </ul>
+  <li>
+    ICMP는 네트워크상의 간단한 문제를 진단 및 테스트하기 위해 사용되기도 한다.
+  </li>
+    <ul>
+      <li>
+        traceroute 또는 tracert 명령어 또한 ICMP 메시지를 기반으로 동작한다.
+      </li>
+      <li>
+        ping 또한 네트워크의 상태를 진단하는 가장 기본적인 명령어로 ICMP 기반의 명령어이다.
+      </li>
+    </ul>
+  <li>
+    유의할 점은 ICMP가 IP의 신뢰성을 보장하지는 않으며 어디까지나 도우미의 역할만 수행한다.
+  </li>
+    <ul>
+      <li>
+        IP 패킷이 수신지까지 도달하지 못하거나 ICMP 메시지를 담은 패킷이 송신지까지 되돌아오지 못하는 경우도 있다.
+      </li>
+    </ul>
 </ul>
