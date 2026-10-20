@@ -358,6 +358,175 @@
 <h2>2-2. TCP 연결 수립과 종료</h2>
 <ul>
   <li>
+    TCP는 통신 이전에는 <strong>연결을 수립</strong>하고, 통신 이후에는 <strong>연결을 종료</strong>한다.
+  </li>
+</ul>
+
+<h3>2-2-1. 연결 수립: 쓰리 웨이 핸드셰이크</h3>
+<ul>
+  <li>
+    TCP의 연결 수립은 <strong>쓰리 웨이 핸드셰이크(three-way handshake)</strong>라는 세 개의 단계로 이루어진다. (p214의 테이블 참고).
+  </li>
+  <li>
+    처음 연결을 시작하는 호스트의 연결 수립 과정을 <strong>액티브 오픈(active open)</strong>이라 한다.
+  </li>
+    <ul>
+      <li>
+        주로 서버-클라이언트 관계에서 <strong>클라이언트</strong>에 의해 수행된다.
+      </li>
+    </ul>
+  <li>
+    연결 요처을 받으면 요청에 따라 연결을 수립해 주는 호스트도 있으며 이 호스트의 연결 수립 과정을 <strong>패시브 오픈(passive open)</strong>이라 한다.
+  </li>
+</ul>
+
+<h3>2-2-2. 연결 종료</h3>
+<ul>
+  <li>
+    데이터 송수신이 끝나면 연결을 종료하며 이 과정은 <strong>송수신 호스트</strong>가 각자 한 번씩 <strong>FIN</strong>과 <strong>ACK</strong>를 주고받으며 이루어진다.
+  </li>
+    <ul>
+      <li>
+        '송신 호스트(FIN) &#8593; 수신 호스트(ACK) &#8593; 수신 호스트(FIN) &#8593; 송신 호스트(ACK)' 네 개의 단계로 이루어지기 때문에 포 웨이 핸드셰이크(four-way handshake)라고 부르기도 한다.
+      </li>
+    </ul>
+  <li>
+    <strong>액티브 클로즈(active close)</strong>는 먼저 연결을 종료하려는 호스트에 의해 수행된다.
+  </li>
+  <li>
+    <strong>패시브 클로즈(passive close)</strong>는 연결 종료 요청을 받아들이는 호스트에 의해 수행된다.
+  </li>
+</ul>
+
+<br>
+
+<h2>2-3. TCP 상태</h2>
+<ul>
+  <li>
+    TCP는 연결형 통신과 신뢰할 수 있는 통신을 유지하기 위해 다양한 <strong>상태(state)</strong>를 유지한다.
+  </li>
+    <ul>
+      <li>
+        여기서 상태란 현재 <strong>어떤 통신 과정</strong>에 있는지를 나타내는 정보이다.
+      </li>
+      <li>
+        TCP가 상태를 유지하고 활용한다는 점에서 <strong>스테이트풀(stateful) 프로토콜</strong>이라고도 불린다.
+      </li>
+    </ul>
+  <li>
+    상태에는 크게 연결이 수립되지 않은 상태, 연결 수립 과정에서 주로 보이는 상태, 연결 종료 과정에서 보이는 상태 세 가지로 나눌 수 있다. (p216).
+  </li>
+</ul>
+
+<h3>2-3-1. 연결이 수립되지 않은 상태</h3>
+<ul>
+  <li>
+    아직 연결 수립이 이루어지기 전의 호스트는 주로 <strong>CLOSED</strong>나 <strong>LISTEN</strong> 상태를 유지하고 있다.
+  </li>
+    <ul>
+      <li>
+        CLOSED: 아무런 연결이 없는 상태.
+      </li>
+      <li>
+        LISTEN: 일종의 연결 대기 상태.
+      </li>
+    </ul>
+  <li>
+    일반적으로 서버로서 동작하는 패시브 오픈 호스트는 LISTEN 상태를 유지한다.
+  </li>
+    <ul>
+      <li>
+        LISTEN 상태란 쓰리 웨이 핸드셰이크의 첫 번째 단계에서 액티브 오픈 호스트의 <strong>SYN 세그먼트</strong>를 기다리는 상태이다.
+      </li>
+    </ul>
+</ul>
+
+<h3>2-3-2. 연결 수립 상태</h3>
+<ul>
+  <li>
+    TCP 연결 수립 과정에서는 주로 SYN-SENT, SYN-RECEIVED, ESTABLISHED 상태를 볼 수 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>SYN-SENT</strong>: 액티브 오픈 호스트가 SYN 세그먼트를 보낸 뒤 이에 대한 응답인 SYN + ACK 세그먼트를 기다리는 상태.
+      </li>
+      <li>
+        <strong>SYN-RECEIVED</strong>: 패시브 오픈 호스트가 SYN + ACK 세그먼트를 보낸 뒤 그에 대한 ACK 세그먼트를 기다리는 상태.
+      </li>
+      <li>
+        <strong>ESTABLISHED</strong>: 연결이 확립되었음을 나타내는 상태이며 데이터를 송수신 할 수 있는 상태를 의미한다.
+      </li>
+        <ul>
+          <li>
+            쓰리 웨이 핸드셰이크 과정에서 두 호스트가 마지막 ACK 세그먼트를 주고받으면 ESTABLISHED 상태로 접어든다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+<h3>2-3-3. 연결 종료 상태</h3>
+<ul>
+  <li>
+    TCP 연결을 종료하는 과정에서는 주로 FIN-WAIT-1, CLOSE-WAIT, FIN-WAIT-2, LAST-ACK, TIME-WAITE, CLOSED 상태를 볼 수 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>FIN-WAIT-1</strong>: 일반적인 TCP 연결 종료의 첫 단계이다. FIN 세그먼트로서 연결 종료 요청을 보낸 액테브 클로즈 호스트가 FIN-WAIT-1 상태가 된다.
+      </li>
+      <li>
+        <strong>CLOSE-WAIT</strong>: 종료 요청인 FIN 세그먼트를 받은 패시브 클로즈 호스트가 그에 대한 응답으로 ACK 세그먼트를 보낸 후 대기하는 상태이다.
+      </li>
+      <li>
+        <strong>FIN-WAIT-2</strong>: FIN-WAIT-1 상태에서 ACK 세그먼트를 받게 되면 FIN-WAIT-2 상태가된다. 상대 호스트의 FIN 세그먼트를 기다린다.
+      </li>
+      <li>
+        <strong>LAST-ACK</strong>: CLOSE-WAIT 상태에서 FIN 세그먼트를 전송한 뒤 이에 대한 ACK 세그먼트를 기다리는 상태이다.
+      </li>
+      <li>
+        <strong>TIME-WAIT</strong>: 액티브 클로즈 호스트가 FIN 세그먼트를 수신한 뒤, 이에 대한 ACK 세그먼트를 전송한 후에 되는 상태이다.
+      </li>
+        <ul>
+          <li>
+            패시브 클로즈 호스트가 마지막 ACK 세그먼트를 수신하면 바로 CLOSED 상태로 전이되는 것과 반대로 <strong>일정 시간을 기다린 뒤</strong>에 CLOSED 상태로 전이한다.
+          </li>
+        </ul>
+    </ul>
+  <li>
+    <strong>CLOSING 상태</strong>는 보통 <strong>동시에 연결을 종료</strong>하려 할 때 전이되는 상태이다.
+  </li>
+    <ul>
+      <li>
+        예를 들어 이미 받은 요청에 대한 ACK 세그먼트는 보냈지만, 자신의 FIN 세그먼트에 대한 ACK를 받지 못하는 경우가 해당한다.
+      </li>
+      <li>
+        이 경우 ACK 세그먼트를 수신하면 각자 TIME-WAIT 상태로 접어든 뒤에 종료하게 된다.
+      </li>
+    </ul>
+  <li>
+    TCP의 다양한 상태는 맥OS나 리눅스에서 netstat을 통해 확인할 수 있다.
+  </li>
+</ul>
+
+<h4>TIME-WAIT 상태가 필요한 이유</h4>
+<ul>
+  <li>
+    가장 중요한 이유는 상대 호스트가 받았어야 할 마지막 ACK 세그먼트가 <strong>올바르게 전송되지 않았을 수 있기 때문</strong>이다.
+  </li>
+    <ul>
+      <li>
+        올바르게 전송하지 못하였다면 재전송을 해야하기 때문에 이를 기다린다.
+      </li>
+    </ul>
+  <li>
+    또 다른 이유는 한 연결을 종료하고 다른 연결을 수립하는 과정 사이에 대기 시간이 없다면 <strong>서로 다른 연결의 패킷들이 혼란을 야기</strong>할 수 있다.
+  </li>
+</ul>
+
+<br>
+
+<h2>2-4. UDP 데이터그램 구조</h2>
+<ul>
+  <li>
     
   </li>
 </ul>
