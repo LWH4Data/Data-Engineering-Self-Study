@@ -239,3 +239,125 @@
       </li>
     </ul>
 </ul>
+
+<br><br>
+
+<h1>2. TCP와 UDP</h1>
+<ul>
+  <li>
+    네트워크 계층에서 가장 중요한 프로토콜이 IP라면, 전송 계층에서 가장 중요한 프로토콜은 <strong>TCP</strong>와 <strong>UDP</strong>이다.
+  </li>
+    <ul>
+      <li>
+        TCP(Transmission Control Protocol)는 신뢰할 수 있는 통신을 위한 <strong>연결형 프로토콜</strong>이다.
+      </li>
+      <li>
+        UDP(User Datagram Protocol)는 TCP보다 신뢰성은 떨어지지만 비교적 빠른 통신이 가능한 <strong>비연결형 프로토콜</strong>이다.
+      </li>
+    </ul>
+  <li>
+    TCP가 통신의 시작과 끝맺는 과정, 오류 제어를 위한 재전송, 흐름 제어, 혼잡 제어 등의 기능이 더 많아 학습할 내용이 더 많다.
+  </li>
+</ul>
+
+<br>
+
+<h2>2-1. TCP 통신 단계와 세그먼트 구조</h2>
+<ul>
+  <li>
+    TCP 통신을 크게 세 단계로 나누면 <strong>연결 수립</strong>, <strong>데이터 송수신(재전송을 통한 오류 제어, 흐름 제어, 혼잡 제어)</strong>, <strong>연결 종료</strong>라 구분할 수 있다.
+  </li>
+  <li>
+    TCP 연결 수립과 종료를 이해하기 위해서는 가장 먼저 <strong>MSS</strong>라는 TCP의 세그먼트 구조를 이해해야한다.
+  </li>
+  <li>
+    MSS는 Maximum Segment Size의 약자로, TCP로 전송할 수 있는 <strong>최대 페이로드 크기</strong>를 의미한다.
+  </li>
+    <ul>
+      <li>
+        MTU는 헤더 크기까지 포함하지만 MSS는 TCP 헤더 크기를 제외한다는 차이가 있다.
+      </li>
+    </ul>
+  <li>
+    TCP의 기본 동작을 이해하기 위한 세그먼트 헤더의 필드들은 다음과 같다.
+  </li>
+    <ul>
+      <li>
+        <strong>송신지 포트(source port)와 수신지 포트(destination port)</strong>: 송신지 또는 수신지 애플리케이션을 식별하는 포트 번호.
+      </li>
+      <li>
+        <strong>순서 번호(sequence number)</strong>: 순서 번호가 명시되는 필드. 송수신되는 세그먼트의 올바른 순서를 보장하기 위해 세그먼트 데이터의 첫 바이트에 부여되는 번호이다.
+      </li>
+      <li>
+        <strong>확인 응답 번호(acknowledgment number)</strong>: 상대 호스트가 보낸 세그먼트에 대한 응답. 다음으로 수신하기를 기대하는 순서 번호가 명시된다.
+      </li>
+      <li>
+        <strong>제어 비트(control bits)</strong>: 플래그 비트(flag bits)라고도 부르며 현재 세그먼트에 대한 부가 정보를 나타낸다.
+      </li>
+      <li>
+        <strong>윈도우(window)</strong>: 수신 윈도우의 크기가 명시된다. 수신 윈도우란 한 번에 수신하고자 하는 데이터의 양을 나타낸다.
+      </li>
+    </ul>
+</ul>
+
+<h3>2-1-1. 제어 비트</h3>
+<ul>
+  <li>
+    <strong>제어 비트</strong>는 기본적으로 <strong>8비트</strong>로 구성되며 각 자리의 비트는 각기 다른 의미를 가진다. 자주 언급되는 세 개의 제어 비트는 다음과 같다.
+  </li>
+    <ul>
+      <li>
+        <strong>ACK</strong>: 세그먼트의 승인을 나타내기 위한 비트
+      </li>
+      <li>
+        <strong>SYN</strong>: 연결을 수립하기 위한 비트
+      </li>
+      <li>
+        <strong>FIN</strong>: 연결을 종료하기 위한 비트
+      </li>
+    </ul>
+</ul>
+
+<h3>2-1-2. 순서 번호와 확인 응답 번호</h3>
+<ul>
+  <li>
+    <strong>순서 번호 필드</strong>와 <strong>확인 응답 번호 필드</strong>는 TCP의 <strong>신뢰성을 보장</strong>하기 위해 사용되는 중요한 필드로 한 쌍으로 묶어 기억하는 것이 좋다.
+  </li>
+  <li>
+    순서 번호 필드의 순서 번호는 세그먼트의 올바른 <strong>송수신 순서를 보장</strong>하기 위한 번호로, 세그먼트 데이터의 <strong>첫 바이트</strong>에 부여되는 번호이다.
+  </li>
+  <li>
+    SYN 플래그가 1로 설정되어 연결이 시작되면 1로 설정된 세그먼트의 경우 순서 번호는 무작위 값이되며 이를 <strong>초기 순서 번호(ISN; Initial Sequence Number)</strong>라고 한다.
+  </li>
+    <ul>
+      <li>
+        초기 순서 번호로 시작한 뒤에 데이터를 송신하는 동안 순서 번호는 <strong>'초기 순서 번호 + 송신한 바이트 수'</strong>가 된다.
+      </li>
+      <li>
+        순서 번호는 세그먼트상에서 <strong>32비트(4바이트)</strong>로 표현된다. 만약 표현 가능한 수를 넘어선다면 <strong>0부터 다시 증가</strong>한다.
+      </li>
+    </ul>
+  <li>
+    순서 번호는 TCP 세그먼트의 순서를 나타내기 위한 정보이다.
+  </li>
+  <li>
+    확인 응답 번호 필드에 명시되는 <strong>확인 응답 번호</strong>는 <strong>순서 번호에 대한 응답</strong>이다.
+  </li>
+    <ul>
+      <li>
+        즉 수신자가 다음으로 받기를 기대하는 순서 번호이다. 일반적으로 순서 번호 + 1로 설정한다.
+      </li>
+    </ul>
+  <li>
+    확인 응답 번호 값을 보내기 위해서는 제어 비트에서 승인을 나타내는 비트인 <strong>ACK 플래그를 1</strong>로 설정해야 한다.
+  </li>
+</ul>
+
+<br>
+
+<h2>2-2. TCP 연결 수립과 종료</h2>
+<ul>
+  <li>
+    
+  </li>
+</ul>
