@@ -107,7 +107,7 @@
   </li>
     <ul>
       <li>
-        <strong>0 ~ 1023번</strong>까지의 포트 번호는 <strong>잘 알려진 포트(well known port)<strong> 혹은 <strong>시스템 포트(system port)</strong>로 범용적으로 사용되는 애플리케이션 프로토콜의 포트 번호를 의미한다. (p196).
+        <strong>0 ~ 1023번</strong>까지의 포트 번호는 <strong>잘 알려진 포트(well known port)</strong> 혹은 <strong>시스템 포트(system port)</strong>로 범용적으로 사용되는 애플리케이션 프로토콜의 포트 번호를 의미한다. (p196).
       </li>
       <li>
         <strong>1024 ~ 49151</strong>의 포트 번호는 <strong>등록된 포트(registered port) 번호</strong>로 well known보다는 덜 범용적이지만 흔히 사용되는 애플리케이션 프로토콜에 할당된다. (p196). 
@@ -525,6 +525,374 @@
 <br>
 
 <h2>2-4. UDP 데이터그램 구조</h2>
+<ul>
+  <li>
+    <strong>UDP</strong>는 비연결형 통신을 수행하는 신뢰할 수 없는 프로토콜이며 연결 수립 및 해제, 재전송을 통한 오류 제어, 혼잡 제어, 흐름 제어 등을 하지 않으며 TCP처럼 상태도 유지하지 않아 <strong>스테이트리스(stateless)프로토콜</strong>의 일종이라고도 한다.
+  </li>
+  <li>
+    UDP 데이터그램의 구조는 송신지 포트, 수신지 포트, 길이, 체크섬 네 가지로 단순하다.
+  </li>
+    <ul>
+      <li>
+        <strong>송신지 포트와 수신지 포트</strong>: 송수신지의 포트 번호가 담긴다.
+      </li>
+      <li>
+        <strong>길이</strong>: 헤더를 포함한 UDP 데이터그램의 바이트가 담긴다.
+      </li> 
+      <li>
+        <strong>체크섬</strong>: 데이터그램 전송 과정에서 오류가 발생했는지 검삭하기 위한 필드이다.
+      </li>
+        <ul>
+          <li>
+            <strong>데이터그램이 훼손</strong>되었는지를 나타내는 정보로 수신지까지 잘 도달했는지를 나타내는 신뢰성/비신뢰성과는 관련이 없다.
+          </li>
+        </ul>
+    </ul>
+  <li>
+    UDP는 패킷을 빠르게 마구 던지는 형식이기 때문에 이 과정에서 패킷이 손실되거나 순서가 바뀔 수도 있다.
+  </li>
+</ul>
+
+<br><br>
+
+<h1>3. TCP의 오류, 흐름, 혼잡 제어</h1>
+<ul>
+  <li>
+    TCP의 연결 수립과 연결 종료 사이의 데이터 송수신에서 이루어지는 오류 제어, 흐름 제어, 혼잡 제어에 대해 학습한다.
+  </li>
+</ul>
+
+<br>
+
+<h2>3-1. 오류 제어: 재전송 기법</h2>
+<ul>
+  <li>
+    TCP는 오류 제어를 위해 잘못된 세그먼트를 재전송하는 <strong>재전송 기반 오류 제어</strong>를 활용한다.
+  </li>
+</ul>
+
+<h3>3-1-1. 오류 검출과 재전송</h3>
+<ul>
+  <li>
+    TCP 세그먼트에는 오류를 검출하는 체크섬 필드가 있으나 이는 세그먼트의 웨손 여부만 나타낼 뿐 신뢰성을 보장하지는 않는다.
+  </li>
+    <ul>
+      <li>
+        호스트는 값이 잘못되었다면 해당 패킷을 읽지 않고 폐기한다.
+      </li>
+    </ul>
+  <li>
+    TCP가 신뢰성을 제대로 보장하기 위해서는 <strong>송신 호스트</strong>가 송신한 세그먼트에 <strong>문제가 발생했음을 인지</strong>할 수 있어야 하고, 오류를 감지했자면 해당 세그먼트를 <strong>재전송</strong>할 수 있어야 한다.
+  </li>
+  <li>
+    TCP가 오류를 검출하고 세그먼트를 재전송하는 상황은 크게 아래 두 가지가 있다.
+  </li>
+    <ol>
+      <li>
+        첫째, 중복된 ACK 세그먼트를 수신했을 때
+      </li>
+        <ul>
+          <li>
+            순차적으로 세그먼트를 보내고 그에 대한 ACK를 받은 뒤 다시 다음 순서 번호를 담은 세그먼트를 보내는 도중 수신 호스트에서 순서 번호 중에 <strong>누락</strong>이 있다면 <strong>수신 호스트는 다시 해당 패킷에 대한 ACK를 재전송</strong>한다.
+          </li>
+        </ul>
+      <li>
+        둘째, 타임아웃이 발생했을 때
+      </li>
+        <ul>
+          <li>
+            TCP 세그먼트를 송신하는 호스트는 모두 <strong>재전송 타이머(retransmission timer)</strong>라는 값을 유지한다.
+          </li>
+            <ul>
+              <li>
+                재전송 타이머의 카운트다운이 끝난 상황을 <strong>타임아웃(timeout)</strong>이라 한다.
+              </li>
+              <li>
+                타임아웃이 발생할 때까지 ACK 세그먼트를 받지 못하면 상대 호스트에게 정상적으로 도착하지 않았다고 간주하여 세그먼트를 재전송한다.
+              </li>
+            </ul>
+        </ul>
+    </ol>
+</ul>
+
+<h4>RTT</h4>
+<ul>
+  <li>
+    메시지를 전송한 뒤 그에 대한 답변을 답는 데까지 걸리는 시간을 <strong>RTT(Round Trip Time)</strong>라고 한다.
+  </li>
+  <li>
+    RTT는 ping 명령어로 쉽게 조회할 수 있다.
+  </li>
+</ul>
+
+<h3>3-1-2. ARQ: 재전송 기법</h3>
+<ul>
+  <li>
+    수신 호스트의 답변(ACK)과 타임아웃 발생을 토대로 문제를 진단하고, 문제가 생긴 메시지를 재전송하는 방법을 <strong>ARQ(Automatic Repeat Request, 자동 재전송 요구)</strong>라고 한다.
+  </li>
+  <li>
+    ARQ에는 대표적으로 세 가지 방법 <strong>Stop-and-Wait ARQ</strong>, <strong>Go-Back-N ARQ</strong>, <strong>Selective Repeat ARQ</strong>가 있다.
+  </li>
+</ul>
+
+<h3>3-1-3. Stop-and-Wait ARQ</h3>
+<ul>
+  <li>
+    <strong>Stop-and-Wait ARQ</strong>는 가장 간단한 방법으로 <strong>제대로 전달했음을 확인</strong>하기 전까지는 새로운 메시지를 보내지 않는 방식이다.
+  </li>
+  <li>
+    오늘날 인터넷 환경에서는 자주 사용하는 방식은 아니지만 높은 신뢰성을 보장한다.
+  </li>
+  <li>
+    하지만 송신 호스트와 수신 호스트 모두 한 번에 하나씩만 데이터를 주고받을 수 있기 때문에 <strong>네트워크 이용 효율</strong>이 낮아지고, 성능의 저하로 이어질 수 있다.
+  </li>
+</ul>
+
+<h3>3-1-4. Go-Back-N ARQ</h3>
+<ul>
+  <li>
+    Stop-and-Wait ARQ의 문제를 극복하기 위해서는 ACK 세그먼트가 도착하기 전에 여러 세그먼트를 보낼 수 있어야 한다. 이렇게 연속해서 메시지를 전송할 수 있는 기술을 <strong>파이프라이닝(pipelining)</strong>이라고 한다.
+  </li>
+    <ul>
+      <li>
+        오늘날 주로 쓰이는 Go-Back-N ARQ와 Selective Repeat ARQ가 파이프라이닝 기반으로 동작한다.
+      </li>
+    </ul>
+  <li>
+    Go-Back-N ARQ는 파이프라이닝 방식을 활용해 여러 세그먼트를 전송하고, 도중에 잘못 전송된 세그먼트가 발생할 경우 <strong>해당 세그먼트부터 다시 전송</strong>하는 방식이다.
+  </li>
+  <li>
+    문제가 발생하는 경우 해당 세그먼크부터 다시 전송하기 때문에 'n번만의' 확인 응답이 아니라 <strong>'n번까지의'</strong> 확인 응답이라 볼 수 있다.
+  </li>
+    <ul>
+      <li>
+        이러한 점에서 Go-Back-N ARQ의 ACK 세그먼트를 <strong>누적 확인 응답(CACK; Cumulative Acknowledgment)</strong>이라고 한다.
+      </li>
+    </ul>
+</ul>
+
+<h4>빠른 재전송</h4>
+<ul>
+  <li>
+    <strong>빠른 재전송(fast retransmit)</strong>이란 재전송 타이머가 만료되기 전이라도 <strong>세 번의 동일한 ACK 세그먼트</strong>가 수신되었다면 해당 세그먼트를 곧바로 재전송하는 기능이다.
+  </li>
+  <li>
+    즉 빠른 재전송은 시간 낭비를 줄이며 빠르게 손실된 세그먼트를 재전송(retransmit)하여 성능을 높이는 기술이다.
+  </li>
+</ul>
+
+<h3>3-1-5. Selective Repeat ARQ</h3>
+<ul>
+  <li>
+    Selective Repeat ARQ는 <strong>선택적으로 재전송</strong>하는 방법이다.
+  </li>
+    <ul>
+      <li>
+        Go-Back-N ARQ와 달리 Selective Repeat ARQ는 모든 세그먼트를 재전송하지 않는다는 장점이 있다.
+      </li>
+      <li>
+        Go-Back-N ARQ가 ACK 세그먼트 누적 확인 응답이라면, Selective Repeat ARQ의 ACK 세그먼트 <strong>개별 확인 응답(Selective Acknowledgment)</strong>이라 볼 수 있다.
+      </li>
+    </ul>
+  <li>
+    오늘날 대부분의 호스트는 TCP 통신에 Selective Repeat ARQ를 이용한다. 만약 불가하다면 그때 Go-Back-N ARQ를 사용한다.
+  </li>
+    <ul>
+      <li>
+        Selective Repeat ARQ 지원 여부는 TCP 세그먼트 헤더의 옵션 필드에 속한 <strong>SACK 허용(SACK-permitted) 필드</strong>를 통해할 수 있다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>3-2. 흐름 제어: 슬라이딩 윈도우</h2>
+<ul>
+  <li>
+    TCP의 두 번째 핵심 기능은 <strong>흐름 제어(flow control)</strong>이다. 
+  </li>
+    <ul>
+      <li>
+        호스트가 <strong>한 번에 받아서 처리할 수 있는 세그먼트의 양</strong>에는 한계가 있기 때문에 파이프라이닝을 활용하는 Go-Back-N ARQ와 Selective Repeat ARQ가 정상적으로 동작하기 위해서는 흐름 제어를 고려해야 한다.
+      </li>
+    </ul>
+  <li>
+    <strong>수신 버퍼</strong>는 수신된 세그먼트가 애플리케이션 프로세스에 의해 읽히기 전에 임시로 저장되는 공간이다.
+  </li>
+    <ul>
+      <li>
+        송신 호스트가 흐름 제어를 고려하지 않고 수신 버퍼의 크기보다 많은 데이터를 전송하면 일부 세그먼트가 처리되지 못하는 문제가 발생한다. 이와 같이 버퍼(buffer)가 넘치는(overflow) 문제 상황을 <strong>버퍼 오버플로(buffer overflow)</strong>라고 한다.
+      </li>
+      <li>
+        수신 버퍼가 있는 것과 같이 송신할 세그먼트가 저장되는 공간인 <strong>송신 버퍼</strong>도 존재한다.
+      </li>
+    </ul>
+  <li>
+    TCP 흐름 제어란 송신 호스트가 수신 호스트의 처리 속도를 고려하며 <strong>송수신 속도를 균일하게 유지</strong>하는 것을 의미한다.
+  </li>
+    <ul>
+      <li>
+        Stop-and-Wait ARQ는 연속적으로 통신하지 않기에 필요가 없지만 Go-Back-N ARQ와 Selective Repeat ARQ는 필요하다.
+      </li>
+    </ul>
+  <li>
+    오늘날 TCP에서는 흐름 제어로 <strong>슬라이딩 윈도우(sliding window)</strong>를 사용한다.
+  </li>
+    <ul>
+      <li>
+        <strong>윈도우(window)</strong>란 송신 호스트가 파이프라이닝 할 수 있는 최대량을 의미한다. 즉 확인 응답 없이 한 번에 전송 가능한 데이터 양이다.
+      </li>
+    </ul>
+  <li>
+    송신측 윈도우는 수신 호스트가 알려 주는 수신 측 윈도우를 토대로 알 수 있다.
+  </li>
+  <li>
+    수신 호스트는 <strong>TCP 헤더(윈도우 필드)</strong>를 통해 송신 호스트에게 자신이 받아들이고자 하는 데이터의 양을 알리면 송신 호스트는 이 정보를 바탕으로 <strong>호스트의 처리 속도에 맞춰 균일한 속도로 세그먼트를 전송</strong>한다.
+  </li>
+  <li>
+    파이프라이닝 과정에서 송수신 윈도우는 점차 오른쪽으로 미끄러지듯 움직이며 이러한 TCP의 흐름 제어를 <strong>슬라이딩 윈도우(sliding window)</strong>라고 한다.
+  </li>
+</ul>
+
+<br>
+
+<h2>3-3. 혼잡 제어</h2>
+<ul>
+  <li>
+    혼잡 제어에서 <strong>혼잡(congestion)</strong>이란 많은 트래픽으로 인해 패킷의 처리 속도가 늦어지거나 유실될 우려가 있는 네트워크 상황을 의미한다.
+  </li>
+    <ul>
+      <li>
+        예를 들어 하나의 라우터만 존재한다면 그것만으로도 세그먼트를 받아 처리하는데 부하가 존재하며 이 부하는 또 다른 재전송으로 이러질 수 있어 악순환이 되는 문제가 발생할 수 있다.
+      </li>
+      <li>
+        혼잡으로 인해 전송률이 크게 떨어지는 현상을 <strong>혼잡 붕괴(congestion collapse)</strong>라고 한다.
+      </li>
+    </ul>
+  <li>
+    TCP의 <strong>혼잡 제어(congestion control)</strong>는 이와 같은 혼잡을 제어한다.
+  </li>
+    <ul>
+      <li>
+        흐름 제어의 주체가 수신 호스트라면 혼잡 제어의 주체는 <strong>송신 호스트</strong>이다.
+      </li>
+      <li>
+        송신 호스트는 네트워크 혼잡도를 판단하고 혼잡한 정보에 맞춰 <strong>유동적으로 전송량을 조절</strong>하며 역할을 한다.
+      </li>
+    </ul>
+  <li>
+    혼잡 데어를 이해하기 위해서는 <strong>혼잡 윈도우(congestion window)</strong>에 대해 알아야한다. 혼잡 윈도우란 <strong>혼잡 없이 전송할 수 있을 법한 데이터의 양</strong>이다.
+  </li>
+  <li>
+    수신 윈도우는 수신 호스트가 송신 호스트에게 알려주지만 혼잡 윈도우의 크기는 송신 호스트가 직접 계산해야 한다.
+  </li>
+    <ul>
+      <li>
+        혼잡 윈도우는 송신자가 자체적으로 계산해야하기 때문에 TCP 헤더에 포함되지 않는다.
+      </li>
+    </ul>
+  <li>
+    <strong>혼잡 윈도우 크기</strong>는 혼잡 제어 알고리즘을 통해 결정할 수 있으며 혼잡 제어를 수행하는 일련의 방법을 <strong>혼잡 제어 알고리즘(congestion control algorithm)</strong>이라 한다.
+  </li>
+  <li>
+    가장 기본적인 혼잡 제어 알고리즘으로는 <strong>AIMD(Additive Increase/Multiplicative Decrease)</strong>가 있으며 아래의 과정을 반복한다.
+  </li>
+    <ul>
+      <li>
+        혼잡이 감지되지 않는다면 <strong>혼잡 윈도우</strong>를 RTT(Round Trip Time)마다 <strong>1씩 선형적으로 증가</strong>시킨다.
+      </li>
+      <li>
+        혼잡이 감지되면 혼잡 윈도우를 절반으로 떨어뜨린다.
+      </li>
+    </ul>
+  <li>
+    AIMD는 기본적인 알고리즘이며 더 정교한 알고리즘으로 <strong>느린 시작</strong>, <strong>혼잡 회피</strong>, <strong>빠른 회복</strong> 세 가지가 있다.
+  </li>
+</ul>
+
+<h4>a. 느린 시작 알고리즘</h4>
+<ul>
+  <li>
+    <strong>느린 시작(slow start) 알고리즘</strong>은 혼잡 윈도우를 <strong>1부터 시작</strong>해 문제없이 수신된 <strong>ACK 세그먼트</strong> 하나당 1씩 증가하는 방식이다.
+  </li>
+  <li>
+    결과적으로 혼잡 윈도우는 <strong>RTT마다 2배씩 지수적으로 증가</strong>하게 되며 AIMD보다 더 빠르게 혼잡 윈도우가 증가한다.
+  </li>
+  <li>
+    지수적으로 증가하면 기하급수적으로 혼잡 윈도우가 커질 수 있어 <strong>느린 시작 임계치(slow start threshold)</strong>라는 값을 사용한다.
+  </li>
+  <li>
+    혼잡 윈도우가 느린 시작 임계치 이상이 되거나 타임아웃이 발생하거나, 세 번의 중복된 ACK 세그먼트가 발생하면 다음 세 가지 중 하나의 방법을 선택한다.
+  </li>
+    <ul>
+      <li>
+        <strong>타임아웃 발생</strong> &rarr; 혼잡 윈도우 값을 1로, 느린 시작 임계치를 혼잡이 감지되었을 시점의 <strong>혼잡 윈도우 값의 절반</strong>으로 초기화한 뒤 느린 시작을 재개한다.
+      </li>
+      <li>
+        <strong>혼잡 윈도우 >= 느린 시작 임계치</strong> &rarr; 느린 시작을 종료하고, 혼잡 윈도우를 절반으로 초기화한 뒤 혼잡 회피를 수행한다.
+      </li>
+      <li>
+        <strong>세 번의 중복 ACK 발생</strong> &rarr; (빠른 재전송 후) 빠른 회북 수행.
+      </li>
+    </ul>
+</ul>
+
+<h4>b. 혼잡 회피 알고리즘</h4>
+<ul>
+  <li>
+    <strong>혼잡 회피(congestion avoidance) 알고리즘</strong>은 RTT마다 혼잡 윈도우를 <strong>1MSS(Maximum Segment Size)</strong>씩 증가시키는 알고리즘이다.  
+  </li>
+  <li>
+    혼잡 회피 알고리즘은 <strong>선형적</strong>으로 윈도우의 크기를 증가시킨다. 
+  </li>
+    <ul>
+      <li>
+        느린 시작 임계치를 넘어선 시점부터 혼잡이 발생할 우려가 있어 조심해서 혼잡 윈도우를 증가시키는 방식으로 볼 수 있다.
+      </li>
+    </ul>
+  <li>
+    혼잡 회피 도중 <strong>타임아웃</strong>이 발생하면 <strong>윈도우 값은 1</strong>로, 느린 시작 임계치는 혼잡이 감지된 시점의 혼잡 윈도우 값의 <strong>절반</strong>으로 초기화 한 뒤 다시 느린 시작을 수행한다.
+  </li>
+  <li>
+    혼잡 회피 중에 <strong>세 번의 중복 ACK 세그먼트</strong>가 발생하면 혼잡 윈도우 값과 느린 시작 임계치를 대략 <strong>절반</strong>으로 떨어뜨린 뒤 <strong>빠른 회복 알고리즘</strong>을 수행한다.
+  </li>
+  <li>
+    두 경우 모두 타임아웃이 발생한 세그먼트나 세 번의 중복 ACK 세그먼트가 발생한 세크먼트는 <strong>재전송</strong>한다.
+  </li>
+</ul>
+
+<h4>c. 빠른 회복 알고리즘</h4>
+<ul>
+  <li>
+    세 번의 중복된 ACK 세그먼트를 수신하면 빠른 재전송과 함께 빠른 회복 알고리즘이 수행된다.
+  </li>
+  <li>
+    빠른 회복(fast recovery) 알고리즘은 세 번의 중복 ACK 세그먼트를 수신했을 때 <strong>느린 시작은 건너뛰고 혼잡 회피</strong>를 수행하는 알고리즘이다.
+  </li>
+    <ul>
+      <li>
+        말 그대로 빠르게 전송률을 회복하기 위한 알고리즘이다.
+      </li>
+      <li>
+        빠른 회복 도중이라도 <strong>타임아웃</strong>이 발생하면 혼잡 윈도우 크기는 1로, 느린 시작 임계치는 혼잡이 감지된 시점의 절반으로 떨어뜨린 후 <strong>다시 느린 시작</strong>을 수행한다.
+      </li>
+    </ul>
+  <li>
+    중복된 ACK 세그먼트가 수신되면 <strong>빠른 회복</strong>과 <strong>함께 빠른 재전송</strong>이 수행된다는 점에서 이들을 묶어 <strong>혼잡 제어 방식의 일종</strong>으로 보기도 한다.
+  </li>
+</ul>
+
+<h4>수신 윈도웅, 혼잡 윈도우</h4>
+<ul>
+  <li>
+    수신 윈도우는 RWND(Receiver WINDow), 혼잡 윈도우는 CWND(Congestion WINDow), 느린 시작 입계치는 SSTHRESH(Slow Start THRESHold)라 부르기도 한다.
+  </li>
+  <li>
+    각 값들은 일반적으로 운영체제에서 <strong>TCP의 상태를 관리하는 상태 변수</strong>의 형태로 존재한다.
+  </li>
+</ul>
+
+<h4>ECN: 명시적 혼잡 알림</h4>
 <ul>
   <li>
     
