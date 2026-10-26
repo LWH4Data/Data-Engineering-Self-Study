@@ -256,5 +256,165 @@
       <li>
         foo &rarr; scheme
       </li>
+        <ul>
+          <li>
+            URL의 첫 부분으로 <strong>자원에 접근하는 방법</strong>을 의미하며 일반적으로 사용할 <strong>프로토콜</strong>이 명시된다.
+          </li>
+          <li>
+            HTTP를 사용할 때에는 http://를, HTTPS를 사용할 때에는 https://를 명시한다.
+          </li>
+        </ul>
+      <li>
+        www.example.com:8042 &rarr; authority
+      </li>
+        <ul>
+          <li>
+            authority는 <strong>호스트를 특정할 수 있는 정보</strong>, 예를 들어 IP 주소 혹은 도메인 네임이 명시되면 <strong>콜론(:) 뒤에 포트 번호</strong>를 덧붙일 수도 있다. 
+          </li>
+        </ul>
+      <li>
+        /over/there? &rarr; path
+      </li>
+        <ul>
+          <li>
+            path에는 <strong>자원이 위치한 경로</strong>가 명시된다. 
+          </li>
+          <li>
+            자원의 위치는 <strong>슬래시(/)</strong>를 기준으로 <strong>계층적으로 표현</strong>되고, 최상위 경로 또한 슬래시로 표현된다.
+          </li>
+        </ul>
+      <li>
+        ?name=ferret &rarr; query
+      </li>
+        <ul>
+          <li>
+            path까지만을 활용해서 자원의 위치를 식별할 수도 있지만, 더 많은 정보가 필요할 때도 있다. 이때 <strong>쿼리 문자열(query string)</strong>을 사용한다. 쿼리 문자열은 <strong>쿼리 파라미터(query parameter)</strong>라고도 부른다.
+          </li>
+          <li>
+            쿼리 문자열은 <strong>물음표(?)</strong>로 시작되는 <strong>&lt;키=값&gt;</strong> 형태의 데이터이며 <strong>앰퍼센트(&)</strong>를 사용해 여러 쿼리 문자열을 연결할 수도 있다.
+          </li>
+        </ul>
+      <li>
+        #nose &rarr; fragment
+      </li>
+        <ul>
+          <li>
+            <strong>자원의 한 조각</strong>을 가리키기 위한 정보이다. 흔히 HTML 파일과 같은 자원에서 특정 부분을 가리키기 위해 사용한다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+<h3>1-3-2. URN</h3>
+<ul>
+  <li>
+    자원의 위치가 변하면 기존 URL로는 자원을 식별할 수가 없다. 그러나 <strong>URN</strong>은 <strong>고유한 이름</strong>을 붙이는 이름 기반 식별자로 <strong>자원의 위치와 무관하게 자원을 식별</strong>할 수 있다는 장점이 있다.
+  </li>
+  <li>
+    다만 URL만큼 널리 사용되는 방식은 아니다.
+  </li>
+</ul>
+
+<h4>DNS 레코드 타입</h4>
+<ul>
+  <li>
+    네임 서버는 <strong>DNS 자원 레코드(DNS resource record)</strong>라 불리는 정보를 저장하고 관리한다.
+  </li>
+  <li>
+    이러한 레코드는 도메인 네임을 구입한 뒤, 웹 사이트에 도메인 네임을 적용시킬 때 자주 접하게 된다. 예를 들어 IP 주소 1.2.3.4인 호스트를 접속 가능한 웹 서비스로 만든 경우 도메인 네임에 IP 주소를 매핑한다.
+  </li>
+    <ul>
+      <li>
+        도메인 레코드를 추가하여 네임 서버에 IP가 도메인 네임에 매핑되었음을 알린다.
+      </li>
+    </ul>
+  <li>
+    각 레코드에는 <strong>레코드 유형</strong>이 정해져 있기 때문에 레코드의 유형이 달라지면 레코드의 이름과 값의 의미가 달라진다.
+  </li>
+</ul>
+
+<br><br>
+
+<h1>2. HTTP</h1>
+<ul>
+  <li>
+    HTTP에는 다음과 같은 중요한 네 가지 특성이 있다.
+  </li>
+    <ul>
+      <li>
+        HTTP는 요청과 응답을 기반으로 동작한다.
+      </li>
+      <li>
+        미디어 독립적이다.
+      </li>
+      <li>
+        상태를 유지하지 않는다.
+      </li>
+      <li>
+        지속 연결을 지원한다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>2-1. HTTP의 특성</h2>
+<ul>
+  <li>
+    HTTP(Hypertext Transfer Protocol)는 응용 계층에서 정보를 주고받는 데 사용되는 프로토콜이다.
+  </li>
+</ul>
+
+<h3>2-1-1. 요청-응답 기반 프로토콜</h3>
+<ul>
+  <li>
+    HTTP는 클라이언트와 서버가 서로 <strong>HTTP 요청 메시지</strong>와 <strong>HTTP 응답 메시지</strong>를 주고받는 구조로 동작한다.
+  </li>
+    <ul>
+      <li>
+        HTTP 요청 메시지와 HTTP 응답 메시지는 <strong>메시지 형태</strong>가 다르다.
+      </li>
+    </ul>
+  <li>
+    개발자 도구에서 <strong>[Network] 탭</strong>을 보면 해당 웹 사이트에서 주고받는 자원들을 확인할 수 있다.
+  </li>
+    <ul>
+      <li>
+        여기서 임의의 자원을 클릭하면 <strong>HTTP 요청 메시지 헤더(Request Headers)</strong>와 <strong>HTTP 응답 메시지 헤더(Response Headers)</strong>를 볼 수 있다.
+      </li>
+    </ul>
+</ul>
+
+<h3>2-1-2. 미디어 독립적 프로토콜</h3>
+<ul>
+  <li>
+    HTTP는 주고받을 <strong>자원의 특성과 무관</strong>하게 그저 자원을 <strong>주고받을 수단(인터페이스)</strong>의 역할만을 수행한다.
+  </li>
+    <ul>
+      <li>
+        실제로 HTTP를 통해 HTML, JPEG, PNG, JSON, XML, PDF 등 다양한 종류의 자원을 주고받을 수 있다.
+      </li>
+    </ul>
+  <li>
+    HTTP에서 메시지로 주고받는 자원의 종류를 <strong>미디어 타입(media tpye)</strong>이라 부른다. 혹은 <strong>MIME 타입(Multipurpose Internet Mail Extensions Type)</strong>이라고도 부른다.
+  </li>
+    <ul>
+      <li>
+        HTTP는 주고받을 미디어 타입에 특별히 제한을 두지 않는다.
+      </li>
+      <li>
+        미디어 타입이란 일종의 웹 세상의 확장자와 같은 개념이다.
+      </li>
+      <li>
+        HTTP를 통해 송수신하는 정보의 종류는 text/html(HTML), text/plain(일반 텍스트), image/png(PNG) 등으로 나타낼 수 있다. 
+      </li>
+    </ul>
+  <li>
+    미디어 타입은 기본적으로 슬래시를 기준으로 하는 <strong>타입/서브타입(type/subtype)</strong> 형식으로 구성된다.
+  </li>
+    <ul>
+      <li>
+        <strong>타입(type)</strong>은 <strong>데이터의 유형</strong>을 나타내고, <strong>서브타입(subtype)</strong>은 주어진 타입에 대한 <strong>세부 유형</strong>을 나타낸다. (type/subtype 형식).
+      </li>
     </ul>
 </ul>
