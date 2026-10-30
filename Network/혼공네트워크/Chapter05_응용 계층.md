@@ -416,5 +416,130 @@
       <li>
         <strong>타입(type)</strong>은 <strong>데이터의 유형</strong>을 나타내고, <strong>서브타입(subtype)</strong>은 주어진 타입에 대한 <strong>세부 유형</strong>을 나타낸다. (type/subtype 형식).
       </li>
+      <li>
+        타입 목록에 대해서는 p276 참고.
+      </li>
+    </ul>
+  <li>
+    미디어 타입에는 부가적인 설명을 위해 선택적으로 <strong>매개변수</strong>가 포함될 수 있다.
+  </li>
+    <ul>
+      <li>
+        매개변수는 <strong>'타입/서브타입;매개변수=값'</strong> 형식으로 표현된다.
+      </li>
     </ul>
 </ul>
+
+<h3>2-1-3. 스테이트리스 프로토콜</h3>
+<ul>
+  <li>
+    HTTP는 상태를 유지하지 않는 <strong>스테이트리스(stateless)</strong> 프로토콜로 통신을 하는데 있어 <strong>상태를 기억하지 않는다</strong>.
+  </li>
+    <ul>
+      <li>
+        상태를 기억하지 않기 때문에 같은 요청을 여러 번 받을 때에는 불리하다.
+      </li>
+      <li>
+        하지만 많은 클라이언트의 요청을 받을 때 모든 클라이언트의 상태를 저장하는 것이 더 부담이 되기때문에 장점으로 작용하는 경우가 많다.
+      </li>
+      <li>
+        또한 두 개 이상의 여러 개의 서버로 구축될 수 있고 이 경우에도 상태를 기억한다면 여러 서버를 운용하기 어려워진다. (클라이언트가 특정 서버에 종속될 수 있음).
+      </li>
+        <ul>
+          <li>
+            만약 한 서버에 문제가 발생하면 HTTP 통신 내역을 잃어버릴 수도 있다.
+          </li>
+        </ul>
+    </ul>
+  <li>
+    HTTP가 처음 만들어졌을 때부터 오늘날까지 이어지는 중요한 설계 목표는 <strong>확장성(scalability)</strong>과 <strong>견고성(robustness)</strong>이며 stateless 설계는 이를 잘 보장한다.
+  </li>
+  <li>
+    물론 HTTP의 stateless 특성을 보완하기 위한 여러 방법들도 존재한다.
+  </li>
+</ul>
+
+<h3>2-1-4. 지속 연결 프로토콜</h3>
+<ul>
+  <li>
+    HTTP는 지속적으로 발전 중인 프로토콜로 여러 버전이 존재한다.
+  </li>
+    <ul>
+      <li>
+        HTTP는 TCP 상에서 동작한다. HTTP는 비연결형 프로토콜이지만 TCP는 연결형 프로토콜이므로 초기 HTTP 버전(1.0 이하)은 쓰리 웨이 핸드셰이크로 TCP 연결을 수립한 후, 요청에 대한 응답을 받으면 종료하는 식으로 동작했다.
+      </li>
+      <li>
+        최근 HTTP 3.0은 UDP상에 동작한다.
+      </li>
+    </ul>
+  <li>
+    최근 대중적으로 사용되는 HTTP 1.1 이상의 버전에서는 <strong>지속 연결(persistent connection)</strong>이라는 기술을 제공한다. 다른 표현으로 <strong>킵 얼라이브(keep-alive)</strong>라고도 부른다.
+  </li>
+    <ul>
+      <li>
+        이는 하나의 TCP 연결상에서 여러 개의 요청-응답을 주고받을 수 있는 기술이다.
+      </li>
+      <li>
+        해당 기술을 지원하지 않는 경우 HTTP는 매번 새롭게 연결을 수립하고 종료해야 하는 비지속 연결 방식을 이용해야 한다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>2-2. HTTP 메시지 구조</h2>
+<ul>
+  <li>
+    HTTP 1.1 버전의 메시지를 위주로 학습을 진행한다.
+  </li>
+  <li>
+    HTTP 메시지는 <strong>시작 라인</strong>, <strong>필드 라인</strong>, <strong>메시지 본문</strong>으로 이루어져 있다.
+  </li>
+    <ul>
+      <li>
+        필드 라인은 없거나 여러 개 있을 수 있다.
+      </li>
+      <li>
+        필드 라인과 메시지 본문 사이에는 빈 줄 바꿈이 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>시작 라인(start-line)</strong>은 HTTP 요청 메시지일 경우 <strong>요청 라인</strong>, HTTP 응답 메시지일 경우 <strong>상태 라인</strong>이 된다.
+  </li>
+    <ul>
+      <li>
+        요청 라인(request-line)의 형식은 다음과 같다.
+      </li>
+        <ul>
+          <li>
+            <strong>메서드(method)</strong>는 클라이언트가 서버의 자원(요청 대상)에 대해 <strong>수행할 작업의 종류</strong>를 의미한다.
+          </li>
+            <ul>
+              <li>
+                GET, POST, PUT, DELETE 등이 있다.
+              </li>
+            </ul>
+          <li>
+            <strong>요청 대상(request-target)</strong>은 HTTP 요청을 보낼 서버의 <strong>자원</strong>을 의미하며 보통 (쿼리가 포함된) <strong>URI의 경로(path)</strong>가 명시된다.
+          </li>
+            <ul>
+              <li>
+                "http://www.example.com/hello?q=world"로 요청을 보낸 경우 요청 대상은 "/hello?q=world"가 된다.
+              </li>
+              <li>
+                하위 경로가 없더라도 요청 대상은 슬래시(/)로 표기해야 한다. 예를 들어 "http://www.example.com"으로 요청을 하여도 요청 대상은 "/"가 된다.
+              </li>
+            </ul>
+          <li>
+            HTTP 버전(HTTP-version)
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+```text
+시작 라인 (줄바꿈)
+필드 라인 (줄바꿈)
+(줄 바꿈)
+메시지 본문
+```
