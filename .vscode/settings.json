@@ -1,5 +1,12 @@
 {
   "editor.snippetSuggestions": "top",
   "editor.tabCompletion": "on",
+  "[markdown]": {
+    "editor.insertSpaces": true,
+    "editor.tabSize": 2,
+    "editor.detectIndentation": false,
+    "editor.wrappingIndent": "same",
+    "editor.accessibilitySupport": "off"
+  },
   "C_Cpp.default.compilerPath": "C:/msys64/ucrt64/bin/gcc.exe"
 }
