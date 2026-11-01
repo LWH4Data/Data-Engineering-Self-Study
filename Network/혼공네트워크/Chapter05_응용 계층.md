@@ -588,6 +588,9 @@
         존재하지 않을 수도 있으며 JSON 그리고 HTML과 같은 다양한 콘텐츠 타입이 사용될 수 있다.
       </li>
     </ul>
+  <li>
+    어떤 URL로 어떤 요청을 받았을 때 서버는 어떻게 응답할 것인가를 결정하며 이를 가장 잘 보여주는 문서가 API 문서이다.
+  </li>
 </ul>
 
 ```text
@@ -613,7 +616,7 @@ Accept: text/html
   </li>
 </ul>
 
-<h3>2-3-1. GET-가져다주세요</h3>
+<h3>2-3-1. GET - 가져다주세요</h3>
 <ul>
   <li>
     <strong>GET 메서드</strong>는 <strong>특정 자원을 조회</strong>할 때 사용되는 메서드이다. 자원은 HTML, JSON, 이미지 파일, 일반 텍스트 등 다양한 것들이 될 수 있다.
@@ -654,7 +657,262 @@ HostL www.example.com
 Accept: *
 ```
 
-<h3>2-3-2. HEAD-헤더만 가져다주세요</h3>
+<h3>2-3-2. HEAD - 헤더만 가져다주세요</h3>
+<ul>
+  <li>
+    HEAD 메서드는 사실상 GET 메서드와 동일한 역할을 한다. 유일한 차이점은 응답 메시지에 <strong>메시지 본문이 포함되지 않는다는 것</strong> 이다.
+  </li>
+    <ul>
+      <li>
+        즉 HEAD 메서드는 서버 요청에 대한 응답으로 <strong>응답 메시지의 헤더</strong>만을 반환한다.
+      </li>
+    </ul>
+</ul>
+
+```http
+# 1. 요청 메시지==========
+HEAD /example-page HTTP/1.1
+Host: www.example.com
+Accept: *
+
+# 2. 응답 메시지==========
+HTTP/1.1 200 OK
+Content-Type: text/html
+Content-Length: 1234
+```
+
+<h3>2-3-3. POST - 처리해 주세요</h3>
+<ul>
+  <li>
+    POST 메서드는 서버로 하여금 <strong>특정 작업을 처리</strong>하도록 요청하는 메서드이며 <strong>범용성이 매우 넓은 메서드</strong>이다.
+  </li>
+  <li>
+    처리할 대상은 흔히 <strong>메시지 본문</strong>으로 명시된다.
+  </li>
+  <li>
+    범용성이 넓기는 하지만 주로 클라이언트가 <strong>서버에 새로운 자원을 생성</strong>하고자 할 때 사용된다.
+  </li>
+  <li>
+    성공적으로 POST 요청이 처리되어 새로운 자원이 생성되면 서버는 응답 메시지의 <strong>Location 헤더</strong>를 통해 새로 생성된 자원의 위치를 클라이언트에게 알려줄 수 있다.
+  </li>
+</ul>
+
+```http
+# 1. 응답 메시지============
+HTTP/1.1 201 Created
+Content-Type: application/json
+Content-Length: 100
+Date: Mon, 14 Oct 2024 16:35:00 PST
+Location: /posting/1
+
+{
+    "id": 1,
+    "Title": "오늘도 즐거운 날입니다."
+    "Contents": "재미있는 글 보고 가세요~"
+}
+```
+
+<h3>2-3-4. PUT - 덮어써 주세요</h3>
+<ul>
+  <li>
+    PUT 메서드는 <strong>덮어쓰기</strong>를 요청하는 메서드이다.
+  </li>
+    <ul>
+      <li>
+        요청 자원이 없다면 메시지 본문으로 <strong>자원을 새롭게 생성</strong>한다.
+      </li>
+      <li>
+        이미 자원이 존재한다면 메시지 본문으로 <strong>자원을 완전히 대체</strong>한다.
+      </li>
+    </ul>
+</ul>
+
+<h3>2-3-5. PATCH - 일부 수정해 주세요</h3>
+<ul>
+  <li>
+    PUT 메서드가 완전한 대체에 가깝다면 PATCH 메서드는 <strong>부분적 수정</strong>에 가깝다.
+  </li>
+    <ul>
+      <li>
+        예를 들어 Title과 Contents가 있는데 Title만 보내는 경우 PUT은 Contents 자체가 없어지지만, PATCH는 Contents는 유지한 채로 Title만 수정된다.
+      </li>
+    </ul>
+</ul>
+
+<h3>2-3-6. DELETE - 삭제해 주세요</h3>
+<ul>
+  <li>
+    DELETE 메서드는 <strong>특정 자원을 삭제</strong>하고 싶을 때 사용하는 메서드이다.
+  </li>
+</ul>
+
+```http
+# 1. 요청 메시지============
+DELETE /texts/a.txt HTTP/1.1
+Host: example.com
+```
+
+<br>
+
+<h2>2-4. HTTP 상태 코드</h2>
+<ul>
+  <li>
+    상태 코드는 <strong>요청에 대한 결과</strong>를 나타내는 세 자리 정수이며 200, 201, 304, 404, 505 등 다양한 종류가 존재한다.
+  </li>
+  <li>
+    상태 코드의 종류는 <strong>백의 자리 수</strong>를 기준으로 유형을 구분할 수 있다.
+  </li>
+    <ul>
+      <li>
+        100번대: 정보성 상태 코드
+      </li>
+      <li>
+        200번대: 성공 상태 코드
+      </li>
+      <li>
+        300번대: 리다이렉션 상태 코드
+      </li>
+      <li>
+        400번대: 클라이언트 에러 상태 코드
+      </li>
+      <li>
+        500번대: 서버 에러 상태 코드
+      </li>
+    </ul>
+</ul>
+
+<h3>2-4-1. 200번대: 성공 상태 코드</h3>
+<ul>
+  <li>
+    200번대 상태 코드는 <strong>요청이 성공</strong>했음을 의미한다. 주로 사용되는 상태 코드는 200(OK), 201(Created), 202(Accepted), 204(No Content)이다.
+  </li>
+    <ul>
+      <li>
+        200(OK): 요청이 성공함.
+      </li>
+      <li>
+        201(Created): 요청 성공, 자원이 생성됨.
+      </li>
+      <li>
+        202(Accepted): 요청 성공, 아직 요청한 작업을 끝내지 못함.
+      </li>
+      <li>
+        204(No Content): 요청 성공, 메시지 본문으로 표시할 데이터가 없음.
+      </li>
+    </ul>
+</ul>
+
+<h3>2-4-2. 300번대: 리다이렉션 상태 코드</h3>
+<ul>
+  <li>
+    300번대 상태 코드는 <strong>리다이렉션(redirection)</strong>과 관련된 상태 코드이다.
+  </li>
+  <li>
+    리다이렉션이란 클라이언트가 요청한 <strong>자원이 다른 곳</strong>에 있을 때, 클라이언트의 요청을 <strong>다른 곳으로 이동</strong>시키는 것을 의미한다.
+  </li>
+    <ul>
+      <li>
+        클라이언트가 요청한 자원이 다른 URL에 있는 경우 서버는 응답 메시지의 <strong>Location 헤더</strong>를 통해 <strong>요청한 자원이 위치한 URL</strong>을 안내할 수 있다. 이후 해당 위치로 즉시 재요청을 보내 URL에 대한 응답을 받게 된다.
+      </li>
+    </ul>
+  <li>
+    리다이렉션의 유형으로는 크게 <strong>영구적인 리다이렉션</strong>과 <strong>일시적인 리다이렉션</strong>이 있다.
+  </li>
+    <ul>
+      <li>
+        <strong>영구적인 리다이렉션(permanent redirection)</strong>은 자원이 <strong>완전히 새로운 곳</strong>으로 이동하여 경로가 <strong>영구적으로 재지정</strong>되는 것을 의미한다.
+      </li>
+        <ul>
+          <li>
+            이 경우 기존의 URL에 요청 메시지를 보내면 항상 새로운 URL로 리다이렉트 된다.
+          </li>
+          <li>
+            서버가 도메인을 이전하는 등 웹 사이트의 큰 개편이 있을 때 이런 영구적인 리다이렉션을 접할 수 있다.
+          </li>
+          <li>
+            대표적인 상태 코드로 <strong>301(Moved Permanently)</strong>과 <strong>308(Permanent Redirect)</strong>이 있다.
+          </li>
+            <ul>
+              <li>
+                301은 클라이언트가 보내는 두 번째 요청의 메서드가 첫 번째 메서드와 달리 바뀔 수 있다는 애매한 점이 있다.
+              </li>
+              <li>
+                308은 301의 애매한 점을 보완하여 두 번째 메서드가 첫 번째 메서드와 달리 바뀔 수 없다.
+              </li>
+            </ul>
+        </ul>
+      <li>
+        <strong>일시적인 리다이렉션(temporary redirection)</strong>은 자원의 위치가 <strong>임시로 변경</strong>되었거나 <strong>임시로 사용할 URL이 필요</strong>한 경우 주로 사용된다.
+      </li>
+        <ul>
+          <li>
+            이번에 이동한 주소가 <strong>다음번에도 올바른 목적지라는 보장</strong>이 없기 때문에 원래 URL 주소를 기억하고 있어야 한다.
+          </li>
+          <li>
+            일시적인 리다이렉션과 관련한 상태 코드는 302(Found), 303(See Other), 307(Temporary Redirect)이 있다.
+          </li>
+            <ul>
+              <li>
+                <strong>302(Found)</strong>는 요청한 자원이 <strong>임시로 다른 곳으로 이동</strong>했음을 나타낸다. 이때 두 번째 요청의 메서드가 바뀔 수 있다.
+              </li>
+              <li>
+                <strong>307(Temporary Redirect)</strong>는 302의 애매함을 보완하여 <strong>두 번째 메서드가 바뀌지 않는다</strong>.
+              </li>
+              <li>
+                <strong>303(See Other)</strong>은 두 번째 메서드가 바뀌기는 하지만 이동할 주소를 <strong>GET</strong> 또는 <strong>HEAD</strong>로만 조회하도록 한다.
+              </li>
+            </ul>
+        </ul>
+    </ul>
+  <li>
+    리다이렉션은 클라이언트가 요청한 자원이 다른 곳에 있을 때 요청을 다른 곳으로 이동시킨다. 이때 다른 곳이란 <strong>URL</strong>이 될 수도 있고 혹은 <strong>캐시</strong>가 될 수도 있다.
+  </li>
+</ul>
+
+<h3>2-4-3. 400번대: 클라이언트 에러 상태 코드</h3>
+<ul>
+  <li>
+    400번대 상태 코드는 <strong>클라이언트에 의한 에러</strong>가 있음을 알려주는 상태 코드이다.
+  </li>
+    <ul>
+      <li>
+        서버가 처리할 수 없는 형태로 요청이 오는 경우.
+      </li>
+      <li>
+        존재하지 않는 자원에 대해 요청을 보내는 경우.
+      </li>
+    </ul>
+  <li>
+    <strong>400(Bad Request)</strong>은 <strong>클라이언트의 요청이 잘못</strong>되었음을 아렬 주는 상태 코드이다.
+  </li>
+  <li>
+    <strong>401(Unauthorized)</strong> 상태 코드는 특정 자원에 접근하기 위한 <strong>인증</strong>이 필요할 때의 상태 코드이다.
+  </li>
+    <ul>
+      <li>
+        서버 상태 코드 401(Unauthorized)는 반드시 <strong>WWW-Authenticate라는 헤더</strong>를 통해 인증 방법을 알려 주어야 한다.
+      </li>
+      <li>
+        만약 클라이언트의 <strong>권한이 충분하지 않다면</strong> 상태 코드 <strong>403(Forbidden)을 응답</strong>한다. 즉 자원에 접근할 권한이 없음을 의미한다.
+      </li>
+    </ul>
+  <li>
+    401(Unauthorized)는 인증(Authentication)으로 <strong>자신이 누구인지를 증명</strong>하는 것을 의미한다.
+  </li>
+    <ul>
+      <li>
+        주의할 점은 403(Forbidden)은 <strong>권한 부여(Authorization)</strong>으로 인증된 주체에게 <strong>작업을 허용하는 것</strong>을 의미하며 <strong>인가</strong>라고도 부른다.
+      </li>
+    </ul>
+  <li>
+    <strong>404(Not Found)</strong>는 접근하고자 하는 자원이 <strong>존재하지 않음</strong>을 알리는 상태 코드이다. 혹은 자원이 존재하더라도 <strong>공개하지 않는 자원</strong>에 대해 404(Not Found)를 응답하는 경우도 있다.
+  </li>
+  <li>
+    어떤 URI(URL)에 어떤 메서드로 요청 받았을 때 서버가 어떻게 행동(응답)해야 하는지 설계하는 것은 개발자의 몫이며 이때 구현되지 않은 메서드로 요청을 보낸다면 <strong>상태 코드 405(Method Not Allowed)</strong>를 통해 <strong>메서드의 미지원</strong>을 알릴 수 있다.
+  </li>
+</ul>
+
+<h3>2-4-4. 500번대: 서버 에러 상태 코드</h3>
 <ul>
   <li>
     
