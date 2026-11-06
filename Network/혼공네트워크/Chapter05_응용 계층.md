@@ -1036,6 +1036,216 @@ Host: example.com
 <h2>3-1. HTTP 헤더</h2>
 <ul>
   <li>
+    HTTP 헤더의 종류는 매우 많기 때문에 도서에서는 <strong>HTTP 요청</strong> 시 주로 사용되는 헤더, <strong>HTTP 응답</strong> 시 주로 사용되는 해더, <strong>HTTP 요청과 응답 모두</strong>에서 자주 활용되는 헤더순으로 설명한다.
+  </li>
+</ul>
+
+<h3>3-1-1. 요청 시 활용되는 HTTP 헤더</h3>
+<ul>
+  <li>
+    HTTP 요청 시 주로 활용되는 헤더는 'Host', 'User-Agent', 'Referer', 'Authorization' 헤더가 있다.
+  </li>
+  <li>
+    <strong>Host</strong>는 요청을 보내는 <strong>호스트</strong>를 나타내는 헤더이다.
+  </li>
+    <ul>
+      <li>
+        호스트는 주로 <strong>도메인 네임</strong>으로 명시되며 <strong>포트 번호</strong>가 포함될 수 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>User-Agent</strong>는 웹 브라우저와 같이 <strong>HTTP 요청을 시작</strong>하는 클라이언트 측의 프로그램을 의미한다.
+  </li>
+    <ul>
+      <li>
+        <strong>User-Agent 헤더</strong>에는 <strong>요청 메시지 생성</strong>에 관여한 <strong>클라이언트 프로그램</strong>과 관련된 다양한 정보가 명시된다.
+      </li>
+      <li>
+        예를 들어 운영체제, 브라우저 종류 및 버전, 렌더링 엔진과 같은 정보가 해당한다.
+      </li>
+    </ul>
+  <li>
+    <strong>Referer 헤더</strong>에는 클라이언트가 요청을 보낼 때 <strong>머무르고 잇던 URL</strong>을 명시한다.
+  </li>
+    <ul>
+      <li>
+        Referer를 통해 클라이언트의 <strong>유입 경로</strong>를 파악해 볼 수 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>Authorization 헤더</strong>는 클라이언트의 <strong>인증 정보</strong>를 담는 헤더이다.
+  </li>
+    <ul>
+      <li>
+        <strong>인증 타입(type)</strong>과 인증을 위한 <strong>정보(credentials)</strong>가 차례로 명시된다.
+      </li>
+      <li>
+        가장 기본적은 HTTP 인증 타입은 Basic으로 <strong>username:password 구조</strong>를 사용한다. 이 값은 <strong>Base64 인코딩</strong>을 하여 인증 정보(credential)로 삼는다.
+      </li>
+    </ul>
+</ul>
+
+```text
+# 1. Host 예시
+GET /hypertext/WWW/TheProject.html HTTP/1.1
+Host: info.cern.ch
+...
+
+# 2. User-Agent 예시
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.9) Gecko/20100101 Firefox/109.9
+
+# 3. Referer 예시
+Referer: https://en.wikipedia.org/
+
+# 4. Authorization 헤더 예시
+Authorization: <type> <credentials>
+```
+
+<h3>3-1-2. 응답 시 활용되는 HTTP 헤더</h3>
+<ul>
+  <li>
+    HTTP 응답 시 주로 활용되는 헤더는 'Server', 'Allow', 'Retry-After', 'Location', 'WWW-Authenticate' 헤더이다.
+  </li>
+  <li>
+    <strong>Server 헤더</strong>는 요청을 처리하는 <strong>서버 측</strong>의 소프트웨어와 관련된 정보를 명시한다.
+  </li>
+  <li>
+    <strong>Allow 헤더</strong>는 클라이언트에게 <strong>허용된 HTTP 메서드 목록</strong>을 알려 주기 위해 사용된다.
+  </li>
+    <ul>
+      <li>
+        상태 코드 <strong>405(Method Not Allowed)</strong>는 요청한 메서드를 지원하지 않음을 의미하며 Allow 헤더가 함께 사용된다.
+      </li>
+    </ul>
+  <li>
+    <strong>Retry-After</strong>는 자원을 사용할 수 있는 <strong>날짜</strong> 혹은 <strong>시각</strong>을 나타낸다.
+  </li>
+  <li>
+    <strong>Location 헤더</strong>는 클라이언트에게 <strong>자원의 위치</strong>를 알려 주기 위해 사용되는 헤더로 주로 <strong>리다이렉션</strong>이 발생했을 때나 <strong>새로운 자원이 생성</strong>되었을 때 사용된다.
+  </li>
+    <ul>
+      <li>
+        상태 코드 503(Service Unavailable)은 현재는 요청을 처리할 수 없으나 추후 가능할 수도 있다는 상태 메시지로 함께 사용된다.
+      </li>
+    </ul>
+  <li>
+    <strong>WWW-Authenticate</strong>는 요청한 자원에 대한 유효한 인증이 없을 때 응답하는 코드인 <strong>401(Unauthorized)</strong>과 함께 사용된다.
+  </li>
+    <ul>
+      <li>
+        WWW-Authenticate 헤더는 자원에 접근하기 위한 <strong>인증 방식</strong>을 설명하는 헤더이다.
+      </li>
+      <li>
+        실제로는 <strong>보안 영역(realm)</strong>이나 인증에 사용될 <strong>문자집합(charset)</strong> 등도 함께 알려줄 수 있다.
+      </li>
+      <li>
+        Authorization과 WWW-Authenticate 헤더를 통해 인증되지 않은 클라이언트가 HTTP 인증(Basic 인증)을 수행하는 과정을 p313 에서 참고.
+      </li>
+    </ul>
+</ul>
+
+```text
+# 1. Server 헤더 예시
+Server: Apache/2.4.1 (Unix)
+
+# 2. Allow 헤더 예시
+Allow: POST, OPTIONS
+
+# 3. Retry-After 헤더 예시
+Retry-After: Fri, 23 Aug 2024 09:00:00 GMT
+Retry-After: 120
+```
+
+<h4>영역(region)이란?</h4>
+<ul>
+  <li>
+    WWW-Authenticate 헤더에서 realm은 보안이 적용될 영역을 의미한다.
+  </li>
+  <li>
+    영역이 달라지면 요구되는 권한도 달라질 수 있다.
+  </li>
+</ul>
+
+<h3>3-1-3. 요청과 응답 모두에서 활용되는 HTTP 헤더</h3>
+<ul>
+  <li>
+    <strong>Date</strong>는 메시지가 <strong>생성된 날짜</strong>와 <strong>시각</strong>에 관련된 정보를 담은 헤더이다.
+  </li>
+  <li>
+    <strong>Connection 헤더</strong>는 클라이언트의 요청과 응답 간의 <strong>연결 방식</strong>을 설정하는 헤더이다.
+  </li>
+    <ul>
+      <li>
+        HTTP의 <strong>지속 연결 프로토콜</strong>이 Connection에 명시되는 대표적인 연결 방식이다.
+      </li>
+      <li>
+        <strong>Connection: keep-alive 헤더</strong>를 통해 상대방에게 <strong>지속 연결을 희망</strong>함을 알릴 수 있다.
+      </li>
+      <li>
+        반대로 <strong>Connection: close</strong>를 통해 연결 종료를 희망함을 알릴 수 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>Content-Length 헤더</strong>는 본문의 바이트 단위 크기(길이)를 나타낸다.
+  </li>
+  <li>
+    Content-Type, Content-Language, Content-Encoding과 같은 헤더들은 전송하려는 메시지 본문의 <strong>표현 방식</strong>을 설명하는 헤더이다.
+  </li>
+    <ul>
+      <li>
+        이 헤더들은 표현 헤더(representation header)의 일종이라고도 부른다.
+      </li>
+      <li>
+        <strong>Content-Type 헤더</strong>는 메시지 본문에 사용된 미티어 타입을 나타낸다.
+      </li>
+      <li>
+        <strong>Content-Language 헤더</strong>는 메시지 본문에 사용된 자연어를 명시한다.
+      </li>
+        <ul>
+          <li>
+            첫 번째 서브 태그는 언어 코드로 <strong>특정 언어</strong>를 의미하는 언어 코드가 명시된다.
+          </li>
+          <li>
+            두 번째 서브 태그는 국가 코드로 <strong>특정 국가</strong>를 의미하는 국가 코드가 명시된다.
+          </li>
+          <li>
+            예를 들어 ko-KR은 한국에서 사용하는 한국어를 의미한다.
+          </li>
+        </ul>
+      <li>
+        <strong>Content-Encoding 헤더</strong>는 메시지 본문을 압축하거나 변환한 방식이 명시된다.
+      </li>
+        <ul>
+          <li>
+            HTTP를 통해 송수신되는 데이터는 전송 속도 개선을 위해 종종 압축이나 변환이 되며 이를 위해 존재하는 헤더이다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+```text
+# 1. Date 헤더 예시.
+Date: Tue, 15 Nov 1994 08:12:31 GMT
+
+# 2. Connection 헤더 예시
+Connection: keep-alive
+Connection: close
+
+# 3. Content-Encoding 헤더 예시
+Content-Encoding: gzip
+Content-Encoding: compress
+Content-Encoding: deflate
+Content-Encoding: br
+
+# 여러 인코딩이 사용된 경우 적용된 순서대로 명시한다.
+Content-Encoding: deflate, gzip
+```
+
+<br>
+
+<h2>3-2. 캐시</h2>
+<ul>
+  <li>
     
   </li>
 </ul>
