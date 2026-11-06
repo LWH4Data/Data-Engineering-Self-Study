@@ -915,6 +915,127 @@ Host: example.com
 <h3>2-4-4. 500번대: 서버 에러 상태 코드</h3>
 <ul>
   <li>
+    500번대 상태 코드의 원인은 <strong>서버</strong>이다. 즉 클라이언트가 올바르게 요청을 보냈을지라도 발생할 수 있는 서버 에러에 대한 상태 코드이다.
+  </li>
+  <li>
+    <strong>500(Internal Server Error)</strong>은 <strong>서버의 예기치 못한 상황</strong>으로 인해 요청을 처리할 수 없음을 의미한다.
+  </li>
+    <ul>
+      <li>
+        다소 포괄적인 표현이며 서버 내 에너를 통칭하기도 한다.
+      </li>
+    </ul>
+  <li>
+    <strong>502(Bad Gateway)</strong>는 클라이언트와 서버 사이에 위치한 <strong>중간 서버의 통신 오류</strong>를 나타내는 상태 코드이다.
+  </li>
+  <li>
+    <strong>503(Service Unabailable)</strong>은 현재 <strong>서비스를 일시적으로 이용할 수 없음</strong>을 의미한다.
+  </li>
+</ul>
+
+<h4>HTTP의 발전: HTTP/0.9에서 HTTP/3.0 까지</h4>
+<ul>
+  <li>
+    HTTP/0.9
+  </li>
+    <ul>
+      <li>
+        지금은 거의 사용하지 않는 <strong>초창기 HTTP 버전</strong>이다.
+      </li>
+      <li>
+        사용가능한 메서드는 <strong>GET</strong> 하나였으며 요청 메시지는 한 줄로 구성되어 있었다.
+      </li>
+    </ul>
+  <li>
+    HTTP/1.0
+  </li>
+    <ul>
+      <li>
+        HTTP/1.0부터는 <strong>HEAD</strong>와 <strong>POST</strong> 같은 GET 이외의 메서드가 도입되었다.
+      </li>
+      <li>
+        <strong>헤더</strong>가 지원되기 시작하여 더 다양한 정보블 주고받을 수 있게 되었다.
+      </li>
+      <li>
+        여전히 <strong>지속 연결(persistent connection)</strong>을 지원하지 않아 HTTP 메시지를 주고받을 때 <strong>연결 수립과 종료를 반복</strong>하였다.
+      </li>
+    </ul>
+  <li>
+    HTTP/1.1
+  </li>
+    <ul>
+      <li>
+        HTTP/1.1부터 <strong>지속 연결</strong>이 공식적으로 지원되었다.
+      </li>
+      <li>
+        특정 요청에 대한 응답이 수신되기 전에 다음 요청을 보낼 수 있는 파이프라이닝 기능과 협상 기능 등 다양한 기능 및 사용 가능한 헤더가 추가되어 <strong>오늘날까지 널리 사용되는 버전</strong>이다.
+      </li>
+    </ul>
+  <li>
+    HTTP/2.0
+  </li>
+    <ul>
+      <li>
+        HTTP/2.0은 HTTP/1.1의 효율과 성능을 높이기 위한 버전이다.
+      </li>
+      <li>
+        송서신 효율을 높이기 위해 <strong>헤더를 압축</strong>하여 전송한다.
+      </li>
+      <li>
+        이전 버전에는 텍스트 기반의 메시지를 송수신하였지만 HTTP/2.0부터는 <strong>바이너리 데이터 기반</strong>의 메시지를 송수신한다.
+      </li>
+      <li>
+        클라이언트가 요청하지 않았더라도 미래에 필요할 것으로 예상되는 자원을 미리 전송해 주는 <strong>서버 푸시(server push)</strong> 기능을 제공한다.
+      </li>
+      <li>
+        HTTP/1.1까지 고질적인 문제였던 HOL 블로킹(Head-Of-Line blocking) 문제를 완화한 버전이다.
+      </li>
+        <ul>
+          <li>
+            HOL 블로킹이란 같은 큐에 대기하여 순차적으로 처리되는 여러 패킷이 있을 때, 첫 번째 패킷의 처리 지연으로 인해 <strong>나머지 패킷들의 처리도 모두 지연</strong>되는 문제를 의미한다.
+          </li>
+          <li>
+            HTTP/2.0은 이 문제에 있어 <strong>멀티플렉싱(multiplexing) 기법</strong>을 도입해 완화하였다. 이는 요청과 응답을 주고받는 단위는 하나의 <strong>스트림</strong>에서 이루어지고 이런 스트림을 <strong>동시에 독립적으로 송수신 가능</strong>하며 일정한 순서를 유지할 필요가 없는 방법이다.
+          </li>
+        </ul>
+    </ul>
+  <li>
+    HTTP/3.0
+  </li>
+    <ul>
+      <li>
+        지금까지 언급한 HTTP 버전들은 모두 TCP를 기반으로 동작하지만 <strong>HTTP/3.0</strong>은 <strong>UDP</strong>를 기반으로 동작한다.
+      </li>
+        <ul>
+          <li>
+            정확히는 UDP를 기반으로 구현된 <strong>QUIC(Quick UDP Internet Connections) 프로토콜</strong>이다.
+          </li>
+        </ul>
+      <li>
+        속도 측면에서 TCP에 비해 빠르다는 장점이 있으며 현재 빠르게 성장하고 있다.
+      </li>
+    </ul>
+</ul>
+
+<br><br>
+
+<h1>3. HTTP 헤더와 HTTP 기반 기술</h1>
+<ul>
+  <li>
+    이번 절에서는 필드 라인에 대해 학습한다.
+  </li>
+    <ul>
+      <li>
+        필드 라인에는 다양한 HTTP 헤더들이 명시된다.
+      </li>
+    </ul>
+</ul>
+
+<br>
+
+<h2>3-1. HTTP 헤더</h2>
+<ul>
+  <li>
     
   </li>
 </ul>
