@@ -1362,6 +1362,139 @@ If-None-Match: "abc"
 <h2>3-3. 쿠키</h2>
 <ul>
   <li>
-    
+    HTTP는 스테이트리스 프로토콜이기 때문에 상태를 활용하기 위해 <strong>쿠키(cookie)</strong>를 활용한다. 쿠키란 <strong>서버에서 생성</strong>되어 클라이언트 측에 전달되는 데이터이다.
+  </li>
+    <ul>
+      <li>
+        쿠키는 기본적으로 &lt;이름, 값&gt; 쌍의 형태를 띠고 추가로 적용 범위와 만료 기간 등 다양한 속성을 가질 수 있다.
+      </li>
+    </ul>
+  <li>
+    서버는 쿠키를 생성하여 클라이언트에게 전송하고, 클라이언트는 전달받은 쿠키를 저장해 두었다가 추후 <strong>동일한 서버</strong>에 보내는 요청 메시지에 <strong>쿠키를 포함하여 전송</strong>한다.
+  </li>
+    <ul>
+      <li>
+        서버는 쿠키 정보를 참고해 요청이 같은 클라이언트에게서 왔는지, 로그인 상태를 유지하는지 등을 알 수 있다.
+      </li>
+    </ul>
+  <li>
+    쿠키는 각각 <strong>응답 메시지의 Set-Cookie 헤더</strong>와 <strong>요청 메시지의 Cookie 헤더</strong>를 통해 전달된다.
+  </li>
+    <ul>
+      <li>
+        응답 메시지의 Set-Cookie 헤더를 통해 <strong>쿠키의 이름</strong>, <strong>값</strong>과 더불어 세미 콜론(;)으로 구분된 속성(들)</strong>을 전달할 수 있다.
+      </li>
+      <li>
+        한 응답 메시지에 전달할 쿠키가 여러 개라면 여러 개의 Set-Cookie를 사용하기도 한다.
+      </li>
+    </ul>
+  <li>
+    <strong>요청 메시지의 Cookie 헤더</strong> 값은 서버에 전달할 <strong>쿠키의 이름</strong>과 <strong>값</strong>을 나타내는 헤더이다.
+  </li>
+    <ul>
+      <li>
+        여러 개의 쿠키 값을 서버에 전달해야 할 때는 <strong>'Cookie: 이름=값; 이름=값;'</strong>과 같이 세미 콜론(;)을 통해 여러 쿠키의 이름-값을 나타낼 수 있다.
+      </li>
+    </ul>
+  <li>
+    쿠키는 <strong>브라우저</strong>에 저장되고 관리되며 크롬 브라우저에서 개발자 도구를 열고 '[Application] → [Storage] → [Cookies]'에서 확인할 수 있다.
+  </li>
+  <li>
+    쿠키는 발급 받은 서버 외에 다른 서버에 전송되면 안되기 때문에 사용 가능한 <strong>도메인</strong>이 정해져 있다. 도메인은 Set-Cookie 헤더의 <strong>'domain' 속성</strong>으로 정해진다.
+  </li>
+    <ul>
+      <li>
+        같은 도메인이라도 <strong>경로별로 쿠키를 구분</strong>하여 사용하고 싶을 때가 있는데 이때에는 <strong>"path"</strong>를 활용하여 <strong>쿠키가 적용될 경로</strong>를 명시한다.
+      </li>
+    </ul>
+  <li>
+    쿠키에는 <strong>Expires/Max-Age 열</strong>이 있는데 이는 <strong>쿠키의 유효 기간</strong>을 나타낸다.
+  </li>
+    <ul>
+      <li>
+        Expires는 <strong>[요일, DD-MM-YY HH:MM:SS GMT] 형식</strong>으로 표기되는 쿠키 만료 시점을 의미한다.
+      </li>
+      <li>
+        Max-Age는 <strong>초 단위 유효 기간</strong>을 의미한다.
+      </li>
+    </ul>
+  <li>
+    쿠키는 정보가 쉽게 노출되거나 조작될 수 있다는 <strong>보안적 한계</strong>를 가진다. 이를 보완하기 위해서 쿠키는 <strong>Secure</strong>와 <strong>HttpOnly</strong> 속성을 가진다.
+  </li>
+    <ul>
+      <li>
+        Secure는 <strong>HTTPS 프로토콜</strong>이 사용되는 경우에만 쿠키를 전송하도록 하는 속성이다.
+      </li>
+      <li>
+        HttpOnly는 <strong>HTTP 송수신</strong>을 통해서만 쿠키를 이용하도록 제한하는 속성이다. 대표적으로 <strong>자바스크립트</strong>에서 쿠키에 접근하지 못하도록 하는 속성이다.
+      </li>
+    </ul>
+</ul>
+
+```http
+# 1. 요청 메시지 예시.
+Cookie: 이름=값; 이름=값;
+
+# 2. 응답 메시지 예시.
+HTTP/1.1 200 OK
+Content-Type: text/html
+Set-Cookie: name=minchul
+Set-Cookie: phone=100-100
+Set-Cookie: message=Hello
+# ... 헤더 후략 ...
+# ... 메시지 본문 생략 ...
+
+# 3. 2번 응답 메시지를 활용한 요청 메시지
+GET /next_page HTTP/1.1
+Host: example.com
+Cookie: name=minchul; phone=100-100; message=Hello
+# ... 헤더 후략 ...
+```
+
+<h4>세션 인증</h4>
+<ul>
+  <li>
+    쿠키를 통해 전달되는 대표적인 정보로는 <strong>세션 아이디(session id)</strong>가 있다. 
+  </li>
+  <li>
+    세션 아이디를 이해하기 위해서는 <strong>세션 인증(session authentication)</strong>을 이해해야한다. 세션 인증은 다음의 순서로 이루어지는 <strong>인증 방식</strong>이다. 
+  </li>
+    <ol>
+      <li>
+        클라이언트는 서버에게 (아이디, 비밀번호와 같은) 인증 정보를 전송한다.
+      </li>
+      <li>
+        인증 정보가 올바르다면, 서버는 세션 아이디를 생성해 클라이언트에게 전송한다.
+      </li>
+      <li>
+        서버는 생성한 세션 아아디를 데이터베이스 등에 저장한다.
+      </li>
+      <li>
+        클라이언트는 추후 요청을 보낼 때 쿠키 내에 세션 아이디를 포함하여 전송한다.
+      </li>
+      <li>
+        서버는 쿠키 속 세션 아이디와 저장된 세션 아이디를 비교하여 클라이언트를 식별한다.
+      </li>
+    </ol>
+</ul>
+
+<h4>웹 스토리지: 로컬 스토리지와 세션 스토리지</h4>
+<ul>
+  <li>
+    쿠키 이외에도 클라이언트가 저장하고 클라이언트의 상태를 추측할 수 있는 &lt;키-값&gt; 쌍 형태의 정보인 <strong>웹 스토리지(web storage)</strong>가 있다.
+  </li>
+  <li>
+    웹 스토리지는 <strong>웹 브라우저 내의 저장 공간</strong>으로 일반적으로 <strong>쿠키보다 더 큰 데이터</strong>를 저장할 수 있다.
+  </li>
+    <ul>
+      <li>
+        쿠키는 자동으로 서버에 전송되지만, 웹 스토리지의 정보는 서버로 자동 전송되지 않으며 필요할 때 조회할 수 있다.
+      </li>
+      <li>
+        웹 스토리지는 '[Application] → [Storage]'를 통해 확인할 수 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>세션 스토리지</strong>는 <strong>세션이 유지</strong>되는 동안 유지되는 정보이고, <strong>로컬 스토리지</strong>는 별도로 삭제하지 않는 한 <strong>영구적으로 저장</strong>이 가능한 정보이다.
   </li>
 </ul>
