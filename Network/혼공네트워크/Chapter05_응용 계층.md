@@ -1246,6 +1246,122 @@ Content-Encoding: deflate, gzip
 <h2>3-2. 캐시</h2>
 <ul>
   <li>
+    클라이언트가 같은 자원을 요청하는 요청을 지속적으로 보내는 경우 <strong>HTTP 캐시</strong>를 활용해 응답받은 내용을 사본으로 임시로 저장하여 활용한다.
+  </li>
+    <ul>
+      <li>
+        캐시(cache)란 불필요한 대역폭 낭비와 응답 지연을 방지하기 위해 정보의 사본을 임시로 저장하는 기술이다.
+      </li>
+      <li>
+        정보의 사본을 임시로 저장하는 것 자체를 캐시(cache)한다 혹은 캐싱(caching)한다라고도 표현한다.
+      </li>
+      <li>
+        캐시를 활용하면 불필요한 대역폭 낭비를 줄일 수 있고, 더 빠르게 데이터에 접근할 수 있다.
+      </li>
+    </ul>
+  <li>
+    <strong>웹 브라우저</strong>에 저장되는 캐시를 개인 <strong>전용 캐시(private cache)</strong>, 클라이언트와 서버 사이에 위치한 <strong>중앙 서버</strong>에 저장되는 캐시를 <strong>공용 캐시(public cache)</strong>라고 한다.
+  </li>
+  <li>
+    캐시에 저장된 사본 데이터가 최신 원본 데이터의 최신 상태를 유지하고 있는지를 <strong>캐시 신선도(cache freshness)</strong>라 표현한다.
+  </li>
+    <ul>
+      <li>
+        캐시 신선도를 유지하는 가장 기본적인 방법은 캐시된 데이터에 <strong>유효 기간</strong>을 설정하는 방법이다.
+      </li>
+      <li>
+        유효 기간을 부여하는 방법으로는 <strong>응답 메시지의 Expires 헤더(날짜)</strong>와 <strong>Cache-Control 헤더의 Max-Age 값(초)</strong>을 이용할 수 있다.
+      </li>
+    </ul>
+  <li>
+    캐시의 <strong>유효 기간이 만료</strong>된 경우 클라이언트는 캐시된 자원이 <strong>여전히 최신 상태의 정보인지 재검사</strong>를 진행한다.
+  </li>
+    <ul>
+      <li>
+        <strong>날짜</strong>를 기반으로 재검사하는 방식은 클라이언트가 <strong>If-Modified-Since 헤더</strong>를 통해 서버에게 특정 시점 이후로 원본 데이터가 원경 되었는지 묻는 방법이다. 명시된 시점 이후로 원본에 변경이 있다면 새 자원으로 응답하도록 서버에 요청한다.
+      </li>
+      <li>
+        서버 입장에서 If-Modified-Since 헤더가 포함된 요청 메시지를 수신한 경우 서버의 <strong>자원 상태</strong>는 크게 다음 세 가지이다.
+      </li>
+        <ul>
+          <li>
+            요청받은 자원이 변경되었다면 <strong>상태 코드 200(OK)</strong>과 함께 <strong>새로운 자원</strong>을 반환한다.
+          </li>
+          <li>
+            요청받은 자원이 변경되지 않았다면 서버는 메시지 없는 <strong>상태 코드 304(Not Modified)</strong>를 통해 클라이언트에게 자원이 변경되지 않았음을 알림.
+          </li>
+            <ul>
+              <li>
+                즉 캐시된 자원이 있으니 캐시된 자원을 사용하라는 것을 의미한다.
+              </li>
+            </ul>
+          <li>
+            요청받은 자원이 삭제되었다면 <strong>상태 코드 404(Not Found)</strong>를 통해 요청한 자원이 존재하지 않음을 알린다.
+          </li>
+        </ul>
+      <li>
+       서버는 상태 코드 304(Not Modified)를 통한 자원의 변경 여부뿐만 아니라 <strong>Last-Modified 헤더</strong>를 통해 <strong>자원의 마지막 시점</strong>도 클라이언트에 알려 줄 수 있다.
+      </li>
+      <li>
+        <strong>엔티티 태그(Entity Tag, Etag)</strong>를 사용하는 방법은 자원의 <strong>버전(version)</strong>을 식별하기 위한 정보이다.
+      </li>
+        <ul>
+          <li>
+            Etag와 일치하는 자원이 있는지 확인할 때에는 <strong>If-None-Match</strong>를 이용한다.
+          </li>
+        </ul>
+      <li>
+        Etag를 이용하는 경우에도 서버의 자원은 하래 셋 중 하나의 상황을 따른다.
+      </li>
+        <ul>
+          <li>
+            요청한 자원이 <strong>변경된 경우</strong> Etag 값도 변경된 것이기에 <strong>상태 코드 200(OK)</strong>과 함께 변경된 데이터와 Etag 값을 응답한다.
+          </li>
+          <li>
+            요청한 <strong>자원이 변경되지 않은 경우</strong> Etag도 변경되지 않은 것이기에 <strong>304(Not Modified)</strong>를 응답한다.
+          </li>
+          <li>
+            요청한 자원이 <strong>삭제</strong>된 경우 <strong>상태 코드 404(Not Found)</strong>를 응답한다.
+          </li>
+        </ul>
+    </ul>
+</ul>
+
+```http
+# 1. Expires 헤더를 통한 유효 기간 설정.
+HTTP/1.1 200 OK
+Date: Mon, 05 Feb 2024 12:00:00 GMT
+Content-type: text/plain
+Content-length: 100
+# 유효 기간
+Expires: Tue, 06 Feb 2024 12:00:00 GMT
+# -- 본문 생략 --
+
+# 2. Cache-Control 헤더를 통한 유효 기간 설정.
+HTTP/1.1 200 OK
+Date: Mon, 05 Feb 2024 12:00:00 GMT
+Content-type: text/plain
+Content-length: 100
+# 유효 기간
+Cache-Control: max-age=1200
+# -- 본문 생략 --
+
+# 3. If-Modified-Since를 통한 최신 상태 재점검.
+GET /index.html HTTP/1.1
+Host: www.example.com
+If-Modified-Since: Fri, 23 Aug 2024 09:00:00 GMT
+
+# 4. Etag를 활용한 자원 확인.
+GET /index.html HTTP/1.1
+Host: www.example.com
+If-None-Match: "abc"
+```
+
+<br>
+
+<h2>3-3. 쿠키</h2>
+<ul>
+  <li>
     
   </li>
 </ul>
