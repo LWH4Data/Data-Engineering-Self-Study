@@ -1498,3 +1498,56 @@ Cookie: name=minchul; phone=100-100; message=Hello
     <strong>세션 스토리지</strong>는 <strong>세션이 유지</strong>되는 동안 유지되는 정보이고, <strong>로컬 스토리지</strong>는 별도로 삭제하지 않는 한 <strong>영구적으로 저장</strong>이 가능한 정보이다.
   </li>
 </ul>
+
+<br>
+
+<h2>3-4. 콘텐츠 협상과 표현</h2>
+<ul>
+  <li>
+    HTTP의 <strong>콘텐츠 협상(content negotiation)</strong>은 같은 URI에 대해 <strong>가장 적합한 자원의 형태</strong>를 제공하는 메커니즘을 의미한다.
+  </li>
+    <ul>
+      <li>
+        예를 들어 같은 URI로 식별 가능한 HTML 문서라 해도 영어로 요청하면 영어로된 형태로 결과를 제공하고, 한국어로 요청하면 한국어로 된 결과를 제공하는 것이다.
+      </li>
+      <li>
+        콘텐츠 협상에서 송수신 가능한 자원의 형태를 <strong>자원의 표현(representation)</strong>이라 한다.
+      </li>
+    </ul>
+  <li>
+    자원의 표현을 사용하면 GET 메서드를 더 엄밀히 정의할 수 있다. 이전에 GET 메서드를 자원을 습득하기 위한 메서드라 정의했다면 표현을 사용하면 <strong>자원의 특정 표현을 습득하기 위한 메서드</strong>로 정의할 수 있다.
+  </li>
+    <ul>
+      <li>
+        자원에 대한 다양한 표현 중 클라이언트가 선호하는 표현을 반영하고자 <strong>콘텐츠 협상 관련 HTTP 헤더</strong>들이 사용된다.
+      </li>
+      <li>
+        주요 헤더로는 선호하는 미디어 타입을 나타내는 Accept 헤더, 선호하는 언어를 나타내는 Accept-Language 헤더, 선호하는 문자 인코딩과 압축 방식을 나타내기 위한 Accept-Charset과 Accept-Encoding 헤더 등이 있다.
+      </li>
+      <li>
+        예를 들어 한국어라면 'Accept-Language: ko'를 헤더에 추가하여 서버로 요청을 보내면 서버는 선호 언어를 인식하여 한국어로 자원을 보내준다.
+      </li>
+    </ul>
+  <li>
+    콘텐츠 협상에서 중요한 점은 선호도에 <strong>우선순위</strong>를 반영할 수 있다는 것이다.
+  </li>
+    <ul>
+      <li>
+        선호도는 <strong>q 값</strong>으로 표현된다. 이때 q는 <strong>Quality Value</strong>의 약자로 범위는 <strong>0부터 1까지</strong>이며 값이 클수록 우선순위가 높다.
+      </li>
+    </ul>
+</ul>
+
+```http
+# 1. 콘텐츠 선호도를 활용한 요청 예시
+GET /index.html HTTP/1.1
+Host: example.com
+Accept-Language: ko
+Accept: text/html
+
+# 2. 선호도 우선순위를 적용한 요청 메시지 예시.
+GET /index.html HTTP/1.1
+Host: example.com
+Accept-Language: ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7
+Accept: text/html,application/xml;q=0.9,text/plain;q=0.6,*/*;q=0.5
+```
